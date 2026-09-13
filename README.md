@@ -1,4 +1,5 @@
-This is my Homepage.
-Nothing to write here.
-Please follow the license.
-(I know nobody interested in this subject lol)
+# Jurina's Homepage
+
+Just a small corner of the internet where I share a little about myself, my interests, and the music I enjoy.
+
+Thanks for stopping by :D
