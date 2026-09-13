@@ -117,14 +117,24 @@ document.body.classList.add("reveal-ready");
 document.querySelectorAll("#current-year").forEach((year) => { year.textContent = new Date().getFullYear(); });
 
 const setLanguage = (language) => {
-  const selected = translations[language] ? language : "en";
+  const selected = Object.hasOwn(translations, language) ? language : "en";
   currentLanguage = selected;
   const content = translations[selected];
   document.documentElement.lang = selected;
-  document.title = content[document.body.dataset.titleKey || "homeTitle"];
-  document.querySelectorAll("[data-i18n]").forEach((element) => { if (content[element.dataset.i18n]) element.innerHTML = content[element.dataset.i18n]; });
-  document.querySelectorAll("[data-i18n-alt]").forEach((element) => { element.alt = content[element.dataset.i18nAlt]; });
-  document.querySelectorAll("[data-i18n-aria-label]").forEach((element) => { element.setAttribute("aria-label", content[element.dataset.i18nAriaLabel]); });
+  const title = content[document.body.dataset.titleKey || "homeTitle"];
+  if (typeof title === "string") document.title = title;
+  document.querySelectorAll("[data-i18n]").forEach((element) => {
+    const value = content[element.dataset.i18n];
+    if (typeof value === "string") element.innerHTML = value;
+  });
+  document.querySelectorAll("[data-i18n-alt]").forEach((element) => {
+    const value = content[element.dataset.i18nAlt];
+    if (typeof value === "string") element.alt = value;
+  });
+  document.querySelectorAll("[data-i18n-aria-label]").forEach((element) => {
+    const value = content[element.dataset.i18nAriaLabel];
+    if (typeof value === "string") element.setAttribute("aria-label", value);
+  });
   languageButtons.forEach((button) => {
     const active = button.dataset.language === selected;
     button.classList.toggle("is-active", active);
@@ -159,7 +169,7 @@ else systemTheme.addListener(handleSystemTheme);
 
 const urlLanguage = new URLSearchParams(window.location.search).get("lang");
 const savedLanguage = readSetting("language", "");
-const initialLanguage = translations[urlLanguage] ? urlLanguage : (savedLanguage || (navigator.language.toLowerCase().startsWith("ja") ? "ja" : "en"));
+const initialLanguage = Object.hasOwn(translations, urlLanguage) ? urlLanguage : (Object.hasOwn(translations, savedLanguage) ? savedLanguage : (navigator.language.toLowerCase().startsWith("ja") ? "ja" : "en"));
 setLanguage(initialLanguage);
 languageButtons.forEach((button) => button.addEventListener("click", () => setLanguage(button.dataset.language)));
 
