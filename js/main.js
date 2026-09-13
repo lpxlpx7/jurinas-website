@@ -1,135 +1,222 @@
-const header = document.querySelector(".site-header");
-const year = document.querySelector("#current-year");
-const revealItems = document.querySelectorAll(".reveal");
-const languageButtons = document.querySelectorAll(".language-button");
-
 const translations = {
   en: {
-    pageTitle: "Jurina's Homepage",
-    brand: "Jurina's Homepage",
-    navAbout: "About",
-    navInterests: "Interests",
-    navMusic: "Music",
-    heroEyebrow: "Thanks for finding me.",
-    heroTitle: "Nice to meet you.<br><span>I'm Jurina.</span>",
-    heroLead: "My interests are all over the place, from Japanese music to virtual skies and video games. Hope you're doing great.",
-    pronouns: "She/Her or They/Them",
-    avatarLabel: "My avatar",
-    avatarFrom: "From BanG Dream! Ave Mujica",
-    interestsEyebrow: "A few things I love",
-    interestsTitle: "A few things<br>I'm into.",
-    musicKicker: "Now playing",
-    musicTitle: "J-Tracks, always.",
-    musicBody: "I'm especially into J-Pop. My all-time favorite singer is <a href=\"https://www.universal-music.co.jp/yuika/\" target=\"_blank\" rel=\"noopener noreferrer\">Yuika ↗</a>.",
-    flightKicker: "Virtual aviation",
-    flightTitle: "Cleared for takeoff.",
+    brand: "Jurina's Homepage", navHome: "Home", navProjects: "Projects", navContact: "Contact", navLinks: "Links",
+    themeLabel: "Switch color theme", menuOpen: "Open menu", menuClose: "Close menu", menuTitle: "Navigate",
+    menuNote: "A small collection of things I like and make.",
+    homeTitle: "Jurina's Homepage", projectsPageTitle: "Projects | Jurina's Homepage", contactPageTitle: "Contact | Jurina's Homepage", friendsPageTitle: "Links | Jurina's Homepage",
+    heroEyebrow: "Thanks for finding me.", heroTitle: "Nice to meet you.<br><span>I'm Jurina.</span>",
+    heroLead: "My interests are all over the place, from Japanese music to flight simulation and video games. Hope you're doing great.",
+    pronouns: "She/Her or They/Them", avatarLabel: "My avatar", avatarFrom: "From BanG Dream! Ave Mujica",
+    localTime: "Local time", utcTime: "UTC",
+    retroNote: "I have a soft spot for the Heisei era, especially 2013??015.",
+    friendName: "??????", friendBody: "They're a really nice person, and their liveries look great.", friendLinkLabel: "Visit koten.top",
+    interestsEyebrow: "A few things I love", interestsTitle: "A few things<br>I'm into.",
+    musicKicker: "Now playing", musicTitle: "J-Pop on repeat.",
+    musicBody: "I'm especially into J-Pop. My all-time favorite singer is <a href=\"https://www.universal-music.co.jp/yuika/\" target=\"_blank\" rel=\"noopener noreferrer\">Yuika ??/a>.",
+    flightKicker: "Flight simulation", flightTitle: "Cleared for takeoff.",
     flightBody: "I'm a C1-rated controller in VATUSA, and I also fly on VATSIM and IVAO with Microsoft Flight Simulator and X-Plane. Airliners and business jets are my favorites.",
-    gamesKicker: "Gaming",
-    gamesTitle: "One more match.",
-    gamesBody: "I enjoy FPS games, especially Overwatch. Sometimes competitive, mostly just having fun.",
-    gamesAlt: "Overwatch 2 logo",
-    playlistEyebrow: "My favorite album",
-    playlistTitle: "No music,<br>no life.",
-    playlistBody: "<strong>紺色に憧れて</strong> is my favorite album, and one I always come back to.",
-    playlistButton: "Listen on Apple Music",
-    playlistAlt: "紺色に憧れて album artwork",
-    albumLinkLabel: "Open 紺色に憧れて on Apple Music",
-    footerNote: "Built somewhere between flights and playlists.",
-    source: "Source on GitHub",
-    pride: "Stands with the LGBTQIA+ community",
+    gamesKicker: "Gaming", gamesTitle: "One more game.",
+    gamesBody: "I enjoy FPS games, especially Overwatch. I like learning the game and having a good time with friends.", gamesAlt: "Overwatch 2 logo",
+    playlistEyebrow: "My favorite album", playlistTitle: "No music,<br>no life.",
+    playlistBody: "<strong>?????????</strong> is my favorite album, and one I always come back to.", playlistButton: "Listen on Apple Music",
+    playlistAlt: "????????? album artwork", albumLinkLabel: "Open ????????? on Apple Music",
+    footerNote: "Built somewhere between flights and playlists.", source: "Source on GitHub", pride: "Stands with the LGBTQIA+ community",
+    projectsEyebrow: "Selected work", projectsTitle: "Things I've<br><span>been building.</span>",
+    projectsIntro: "Small tools and services made around aviation, automation, and the communities I spend time in.",
+    projectIndex: "Project index", projectOneShort: "Flight planning", projectTwoShort: "ATC automation", projectThreeShort: "Discord bot",
+    projectOpen: "Open project", projectCode: "View source", projectStatus: "Live",
+    dispatcherType: "Flight operations", dispatcherName: "Japan Flight Dispatcher",
+    dispatcherBody: "A flight-dispatching service focused on Japanese operations and practical planning workflows.",
+    znyType: "Air traffic control", znyName: "ZNY Departure Director",
+    znyBody: "An automated delivery tool built for New York ARTCC departure operations.",
+    botType: "Community tools", botName: "Jurina's Bot",
+    botBody: "A home for my bot project and the services it provides to online communities.",
+    projectsAsideTitle: "Built for real use.", projectsAsideBody: "Each project started with a problem I wanted to solve for myself or a community I care about.",
+    contactEyebrow: "Say hello", contactTitle: "Let's keep<br><span>in touch.</span>",
+    contactIntro: "Questions, project ideas, or just want to say hi? Email is the easiest way to reach me.",
+    emailLabel: "Email", emailButton: "Send an email", responseLabel: "Usually", responseValue: "I reply when I can.",
+    contactCardTitle: "Open to a good conversation.", contactCardBody: "Aviation, web projects, music, games, or something completely different are all welcome.",
+    contactNote: "Please don't send spam or unsolicited advertising. Thanks!",
+    linksEyebrow: "Links", linksTitle: "Around the<br><span>internet.</span>", linksIntro: "A small collection of websites worth visiting.",
   },
   ja: {
-    pageTitle: "Jurinaのホームページ",
-    brand: "Jurinaのホームページ",
-    navAbout: "私について",
-    navInterests: "好きなこと",
-    navMusic: "音楽",
-    heroEyebrow: "見つけてくれて、ありがとう。",
-    heroTitle: "はじめまして。<br><span>Jurinaです。</span>",
-    heroLead: "日本の音楽、バーチャルな空、そしてゲーム。好きなものはいろいろあります。仲良くしてくれるとうれしいです。よろしくお願いします。",
-    pronouns: "She/Her または They/Them",
-    avatarLabel: "私のアバター",
-    avatarFrom: "『BanG Dream! Ave Mujica』より",
-    interestsEyebrow: "私の好きなもの",
-    interestsTitle: "好きなものを、<br>少しだけ。",
-    musicKicker: "再生中",
-    musicTitle: "いつでも、J-Tracks。",
-    musicBody: "特にJ-Popが大好きです。いちばん好きなアーティストは<a href=\"https://www.universal-music.co.jp/yuika/\" target=\"_blank\" rel=\"noopener noreferrer\">ユイカ ↗</a>。",
-    flightKicker: "バーチャル航空",
-    flightTitle: "離陸を許可します。",
-    flightBody: "VATUSAでC1管制官として活動しています。VATSIMやIVAOで、Microsoft Flight SimulatorとX-Planeを使って飛ぶことも。旅客機とビジネスジェットが好きです。",
-    gamesKicker: "ゲーム",
-    gamesTitle: "あと一戦だけ。",
-    gamesBody: "FPSが好きで、特にOverwatchを遊んでいます。真剣なときもあるけれど、だいたいは楽しく。",
-    gamesAlt: "Overwatch 2のロゴ",
-    playlistEyebrow: "いちばん好きなアルバム",
-    playlistTitle: "音楽のない人生<br>なんて。",
-    playlistBody: "<strong>『紺色に憧れて』</strong>は、私がいちばん好きで、何度でも聴きたくなるアルバムです。",
-    playlistButton: "Apple Musicで聴く",
-    playlistAlt: "アルバム『紺色に憧れて』のアートワーク",
-    albumLinkLabel: "Apple Musicで『紺色に憧れて』を開く",
-    footerNote: "フライトとプレイリストの合間に作りました。",
-    source: "GitHubでソースを見る",
-    pride: "LGBTQIA+コミュニティと共に",
+    brand: "Jurina???????????, navHome: "?????, navProjects: "?????????", navContact: "?????, navLinks: "??????",
+    themeLabel: "??????????????????", menuOpen: "???????????, menuClose: "????????????", menuTitle: "??????",
+    menuNote: "???????????????????????????????,
+    homeTitle: "Jurina???????????, projectsPageTitle: "????????? | Jurina???????????, contactPageTitle: "?????| Jurina???????????, friendsPageTitle: "?????? | Jurina???????????,
+    heroEyebrow: "??????????????????????, heroTitle: "???????????br><span>Jurina?????/span>",
+    heroLead: "?????????????????????????????????????????????????????????????????????????????????????????????????????????,
+    pronouns: "She/Her ?????They/Them", avatarLabel: "?????????", avatarFrom: "??anG Dream! Ave Mujica?????,
+    localTime: "?????????", utcTime: "UTC",
+    retroNote: "?????????????????????????5???????7?????????????,
+    friendName: "??????", friendBody: "?????????????????????????????????????, friendLinkLabel: "koten.top?????,
+    interestsEyebrow: "???????????, interestsTitle: "???????????br>????????,
+    musicKicker: "???", musicTitle: "J-Pop???????????,
+    musicBody: "???J-Pop????????????????????????????????a href=\"https://www.universal-music.co.jp/yuika/\" target=\"_blank\" rel=\"noopener noreferrer\">???????/a>??,
+    flightKicker: "??????????????????", flightTitle: "??????????????????????,
+    flightBody: "VATUSA??1??????????????????????ATSIM??VAO????icrosoft Flight Simulator??-Plane???????????????????????????????????????????,
+    gamesKicker: "?????, gamesTitle: "????????????????,
+    gamesBody: "FPS???????????verwatch????????????????????????????????????????????????????, gamesAlt: "Overwatch 2?????,
+    playlistEyebrow: "?????????????????, playlistTitle: "???????????br>???????,
+    playlistBody: "<strong>?????????????/strong>?????????????????????????????????????????????, playlistButton: "Apple Music?????,
+    playlistAlt: "?????????????????????????????", albumLinkLabel: "Apple Music???????????????????",
+    footerNote: "????????????????????????????????, source: "GitHub???????????, pride: "LGBTQIA+??????????????,
+    projectsEyebrow: "?????????", projectsTitle: "??????????????br><span>????????/span>",
+    projectsIntro: "?????????????????????????????????????????????????????????????????????,
+    projectIndex: "?????????????, projectOneShort: "???????????????", projectTwoShort: "????????, projectThreeShort: "Discord Bot",
+    projectOpen: "??????????????, projectCode: "?????????", projectStatus: "?????,
+    dispatcherType: "?????????????????, dispatcherName: "Japan Flight Dispatcher",
+    dispatcherBody: "???????????????????????????????????????????????????????????,
+    znyType: "??????", znyName: "ZNY Departure Director",
+    znyBody: "New York ARTCC????????????????????????????????????????????,
+    botType: "??????????????, botName: "Jurina's Bot",
+    botBody: "?????????????????????Bot??????????????????????????????????,
+    projectsAsideTitle: "????????????????, projectsAsideBody: "?????????????????????????????????????????????????????????????????????????,
+    contactEyebrow: "?????", contactTitle: "???????br><span>????????????????/span>",
+    contactIntro: "????????????????????????????????????????????????????????????,
+    emailLabel: "?????, emailButton: "?????????", responseLabel: "?????????", responseValue: "???????????????????????,
+    contactCardTitle: "??????????????????????, contactCardBody: "?????eb?????????????????????????????????????????????,
+    contactNote: "??????????????????????????????????????????????????,
+    linksEyebrow: "??????", linksTitle: "????????????<br><span>????????/span>", linksIntro: "????????eb????????????????????????????,
   },
+};
+
+const languageButtons = document.querySelectorAll(".language-button");
+const themeButton = document.querySelector(".theme-button");
+const themeColor = document.querySelector('meta[name="theme-color"]');
+const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
+let currentLanguage = "en";
+
+const readSetting = (key, fallback) => {
+  try {
+    return localStorage.getItem(key) || fallback;
+  } catch (error) {
+    return fallback;
+  }
+};
+
+const saveSetting = (key, value) => {
+  try {
+    localStorage.setItem(key, value);
+  } catch (error) {
+    // Local files and privacy modes can block storage; the setting still works for this page view.
+  }
+};
+
+const updatePageLinks = () => {
+  document.querySelectorAll('a[href*=".html"]').forEach((link) => {
+    const url = new URL(link.getAttribute("href"), window.location.href);
+    if (window.location.protocol !== "file:" && url.origin !== window.location.origin) return;
+    url.searchParams.set("lang", currentLanguage);
+    url.searchParams.set("theme", document.documentElement.dataset.themePreference || "system");
+    link.href = url.href;
+  });
 };
 
 document.body.classList.add("reveal-ready");
-year.textContent = new Date().getFullYear();
+document.querySelectorAll("#current-year").forEach((year) => { year.textContent = new Date().getFullYear(); });
 
 const setLanguage = (language) => {
   const selected = translations[language] ? language : "en";
+  currentLanguage = selected;
+  const content = translations[selected];
   document.documentElement.lang = selected;
-  document.title = translations[selected].pageTitle;
-
-  document.querySelectorAll("[data-i18n]").forEach((element) => {
-    element.innerHTML = translations[selected][element.dataset.i18n];
-  });
-
-  document.querySelectorAll("[data-i18n-alt]").forEach((element) => {
-    element.alt = translations[selected][element.dataset.i18nAlt];
-  });
-
-  document.querySelectorAll("[data-i18n-aria-label]").forEach((element) => {
-    element.setAttribute("aria-label", translations[selected][element.dataset.i18nAriaLabel]);
-  });
-
+  document.title = content[document.body.dataset.titleKey || "homeTitle"];
+  document.querySelectorAll("[data-i18n]").forEach((element) => { if (content[element.dataset.i18n]) element.innerHTML = content[element.dataset.i18n]; });
+  document.querySelectorAll("[data-i18n-alt]").forEach((element) => { element.alt = content[element.dataset.i18nAlt]; });
+  document.querySelectorAll("[data-i18n-aria-label]").forEach((element) => { element.setAttribute("aria-label", content[element.dataset.i18nAriaLabel]); });
   languageButtons.forEach((button) => {
-    const isActive = button.dataset.language === selected;
-    button.classList.toggle("is-active", isActive);
-    button.setAttribute("aria-pressed", isActive);
+    const active = button.dataset.language === selected;
+    button.classList.toggle("is-active", active);
+    button.setAttribute("aria-pressed", active);
   });
-
-  localStorage.setItem("language", selected);
+  saveSetting("language", selected);
+  updatePageLinks();
 };
 
-const savedLanguage = localStorage.getItem("language");
-const initialLanguage = savedLanguage || (navigator.language.toLowerCase().startsWith("ja") ? "ja" : "en");
-setLanguage(initialLanguage);
+const applyTheme = (theme) => {
+  const resolved = theme === "system" ? (systemTheme.matches ? "dark" : "light") : theme;
+  document.documentElement.dataset.theme = resolved;
+  document.documentElement.dataset.themePreference = theme;
+  if (themeButton) themeButton.querySelector(".theme-icon").textContent = resolved === "dark" ? "??" : "??;
+  if (themeColor) themeColor.content = resolved === "dark" ? "#09090b" : "#f5f5f7";
+  updatePageLinks();
+};
 
-languageButtons.forEach((button) => {
-  button.addEventListener("click", () => setLanguage(button.dataset.language));
+const urlTheme = new URLSearchParams(window.location.search).get("theme");
+const savedTheme = readSetting("theme", "system");
+const initialTheme = ["light", "dark", "system"].includes(urlTheme) ? urlTheme : savedTheme;
+saveSetting("theme", initialTheme);
+applyTheme(initialTheme);
+themeButton?.addEventListener("click", () => {
+  const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+  saveSetting("theme", next);
+  applyTheme(next);
 });
+const handleSystemTheme = () => { if (readSetting("theme", "system") === "system") applyTheme("system"); };
+if (systemTheme.addEventListener) systemTheme.addEventListener("change", handleSystemTheme);
+else systemTheme.addListener(handleSystemTheme);
 
-const updateHeader = () => {
-  header.classList.toggle("is-scrolled", window.scrollY > 12);
+const urlLanguage = new URLSearchParams(window.location.search).get("lang");
+const savedLanguage = readSetting("language", "");
+const initialLanguage = translations[urlLanguage] ? urlLanguage : (savedLanguage || (navigator.language.toLowerCase().startsWith("ja") ? "ja" : "en"));
+setLanguage(initialLanguage);
+languageButtons.forEach((button) => button.addEventListener("click", () => setLanguage(button.dataset.language)));
+
+const updateClocks = () => {
+  const localClock = document.querySelector("#local-clock");
+  const utcClock = document.querySelector("#utc-clock");
+  if (!localClock || !utcClock) return;
+  const now = new Date();
+  const locale = currentLanguage === "ja" ? "ja-JP" : "en-US";
+  const timeOptions = { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false };
+  const dateOptions = { month: "short", day: "numeric", weekday: "short" };
+  localClock.textContent = new Intl.DateTimeFormat(locale, timeOptions).format(now);
+  utcClock.textContent = new Intl.DateTimeFormat(locale, { ...timeOptions, timeZone: "UTC" }).format(now);
+  document.querySelector("#local-date").textContent = new Intl.DateTimeFormat(locale, dateOptions).format(now);
+  document.querySelector("#utc-date").textContent = new Intl.DateTimeFormat(locale, { ...dateOptions, timeZone: "UTC" }).format(now);
+  const era = document.querySelector("#local-era");
+  if (era) {
+    era.hidden = currentLanguage !== "ja";
+    era.textContent = new Intl.DateTimeFormat("ja-JP-u-ca-japanese", { era: "long", year: "numeric", month: "long", day: "numeric" }).format(now);
+  }
 };
 
+updateClocks();
+window.setInterval(updateClocks, 1000);
+
+const menuButton = document.querySelector(".menu-button");
+const mobileMenu = document.querySelector(".mobile-menu");
+const menuScrim = document.querySelector(".menu-scrim");
+const closeMenu = () => {
+  document.body.classList.remove("menu-open");
+  menuButton?.setAttribute("aria-expanded", "false");
+  mobileMenu?.setAttribute("aria-hidden", "true");
+  if (menuScrim) menuScrim.hidden = true;
+};
+const openMenu = () => {
+  if (menuScrim) menuScrim.hidden = false;
+  requestAnimationFrame(() => document.body.classList.add("menu-open"));
+  menuButton?.setAttribute("aria-expanded", "true");
+  mobileMenu?.setAttribute("aria-hidden", "false");
+};
+menuButton?.addEventListener("click", openMenu);
+document.querySelector(".menu-close")?.addEventListener("click", closeMenu);
+menuScrim?.addEventListener("click", closeMenu);
+document.addEventListener("keydown", (event) => { if (event.key === "Escape") closeMenu(); });
+
+const header = document.querySelector(".site-header");
+const updateHeader = () => header?.classList.toggle("is-scrolled", window.scrollY > 12);
 updateHeader();
 window.addEventListener("scroll", updateHeader, { passive: true });
 
+const revealItems = document.querySelectorAll(".reveal");
 if ("IntersectionObserver" in window) {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-      entry.target.classList.add("is-visible");
-      observer.unobserve(entry.target);
-    });
-  }, {
-    threshold: 0.12,
-    rootMargin: "0px 0px -40px",
-  });
-
+  const observer = new IntersectionObserver((entries) => entries.forEach((entry) => {
+    if (!entry.isIntersecting) return;
+    entry.target.classList.add("is-visible");
+    observer.unobserve(entry.target);
+  }), { threshold: 0.1, rootMargin: "0px 0px -32px" });
   revealItems.forEach((item) => observer.observe(item));
 } else {
   revealItems.forEach((item) => item.classList.add("is-visible"));

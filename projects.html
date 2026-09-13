@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Projects by Jurina, including aviation and community tools.">
+  <meta name="theme-color" content="#f5f5f7">
+  <title>Projects | Jurina's Homepage</title>
+  <script src="js/theme-init.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/main.js" defer></script>
+</head>
+<body data-title-key="projectsPageTitle">
+  <header class="site-header">
+    <nav class="nav shell" aria-label="Primary navigation">
+      <a class="brand" href="index.html" data-i18n="brand">Jurina's Homepage</a>
+      <div class="nav-right">
+        <div class="nav-links"><a href="index.html" data-i18n="navHome">Home</a><a class="is-active" href="projects.html" data-i18n="navProjects">Projects</a><a href="contact.html" data-i18n="navContact">Contact</a><a href="friends.html" data-i18n="navLinks">Links</a></div>
+        <div class="language-switch" role="group" aria-label="Language"><button class="language-button is-active" type="button" data-language="en" aria-pressed="true">EN</button><span aria-hidden="true">/</span><button class="language-button" type="button" data-language="ja" aria-pressed="false">?????/button></div>
+        <button class="theme-button" type="button" aria-label="Switch color theme" data-i18n-aria-label="themeLabel"><span class="theme-icon" aria-hidden="true">??/span></button>
+        <button class="menu-button" type="button" aria-label="Open menu" aria-expanded="false" data-i18n-aria-label="menuOpen"><span></span><span></span></button>
+      </div>
+    </nav>
+  </header>
+  <div class="menu-scrim" hidden></div>
+  <aside class="mobile-menu" aria-hidden="true"><div class="mobile-menu-head"><span data-i18n="menuTitle">Navigate</span><button class="menu-close" type="button" aria-label="Close menu" data-i18n-aria-label="menuClose">?</button></div><div class="mobile-language language-switch" role="group" aria-label="Language"><button class="language-button is-active" type="button" data-language="en" aria-pressed="true">EN</button><span aria-hidden="true">/</span><button class="language-button" type="button" data-language="ja" aria-pressed="false">?????/button></div><nav class="mobile-nav"><a href="index.html"><span data-i18n="navHome">Home</span><span>01</span></a><a class="is-active" href="projects.html"><span data-i18n="navProjects">Projects</span><span>02</span></a><a href="contact.html"><span data-i18n="navContact">Contact</span><span>03</span></a><a href="friends.html"><span data-i18n="navLinks">Links</span><span>04</span></a></nav><p class="mobile-menu-note" data-i18n="menuNote">A small collection of things I like and make.</p></aside>
+
+  <main class="inner-main shell">
+    <header class="page-intro reveal"><p class="eyebrow" data-i18n="projectsEyebrow">Selected work</p><h1 data-i18n="projectsTitle">Things I've<br><span>been building.</span></h1><p class="hero-lead" data-i18n="projectsIntro">Small tools and services made around aviation, automation, and the communities I spend time in.</p></header>
+    <div class="projects-layout">
+      <aside class="project-sidebar reveal"><p class="sidebar-label" data-i18n="projectIndex">Project index</p><nav><a href="#dispatcher" data-i18n="projectOneShort">Flight planning</a><a href="#zny" data-i18n="projectTwoShort">ATC automation</a><a href="#bot" data-i18n="projectThreeShort">Discord bot</a></nav></aside>
+      <div>
+        <section class="project-list">
+          <article class="project-card project-dispatcher reveal" id="dispatcher"><div class="project-meta"><span class="project-type" data-i18n="dispatcherType">Flight operations</span><span class="status-pill" data-i18n="projectStatus">Live</span></div><h2 data-i18n="dispatcherName">Japan Flight Dispatcher</h2><p data-i18n="dispatcherBody">A flight-dispatching service focused on Japanese operations and practical planning workflows.</p><div class="project-actions"><a class="text-link primary" href="https://jprt.lpxlpx7.top/" target="_blank" rel="noopener noreferrer"><span data-i18n="projectOpen">Open project</span> ??/a><a class="text-link" href="https://github.com/lpxlpx7/japan-flight-dispatcher" target="_blank" rel="noopener noreferrer"><span data-i18n="projectCode">View source</span> ??/a></div></article>
+          <article class="project-card project-zny reveal" id="zny"><div class="project-meta"><span class="project-type" data-i18n="znyType">Air traffic control</span><span class="status-pill" data-i18n="projectStatus">Live</span></div><h2 data-i18n="znyName">ZNY Departure Director</h2><p data-i18n="znyBody">An automated delivery tool built for New York ARTCC departure operations.</p><div class="project-actions"><a class="text-link primary" href="https://nydep.lpxlpx7.top/" target="_blank" rel="noopener noreferrer"><span data-i18n="projectOpen">Open project</span> ??/a><a class="text-link" href="https://github.com/lpxlpx7/ZNY-ATCT-Auto-Delivery" target="_blank" rel="noopener noreferrer"><span data-i18n="projectCode">View source</span> ??/a></div></article>
+          <article class="project-card project-bot reveal" id="bot"><div class="project-meta"><span class="project-type" data-i18n="botType">Community tools</span><span class="status-pill" data-i18n="projectStatus">Live</span></div><h2 data-i18n="botName">Jurina's Bot</h2><p data-i18n="botBody">A home for my bot project and the services it provides to online communities.</p><div class="project-actions"><a class="text-link primary" href="https://bot.lpxlpx7.top/" target="_blank" rel="noopener noreferrer"><span data-i18n="projectOpen">Open project</span> ??/a><a class="text-link" href="https://github.com/lpxlpx7/Jurinas-Bot-Website" target="_blank" rel="noopener noreferrer"><span data-i18n="projectCode">View source</span> ??/a></div></article>
+        </section>
+        <aside class="projects-aside reveal"><h2 data-i18n="projectsAsideTitle">Built for real use.</h2><p data-i18n="projectsAsideBody">Each project started with a problem I wanted to solve for myself or a community I care about.</p></aside>
+      </div>
+    </div>
+  </main>
+  <footer class="site-footer shell"><div class="footer-top"><p data-i18n="footerNote">Built somewhere between flights and playlists.</p><a href="https://github.com/lpxlpx7" target="_blank" rel="noopener noreferrer"><span data-i18n="source">Source on GitHub</span> ??/a></div><div class="footer-bottom"><p>? <span id="current-year">2026</span> Jurina</p><div class="pride-note"><span data-i18n="pride">Stands with the LGBTQIA+ community</span><span class="pride-stripe" aria-hidden="true"></span></div></div></footer>
+</body>
+</html>
