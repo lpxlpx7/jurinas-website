@@ -8,7 +8,10 @@ const translations = {
     heroLead: "My interests are all over the place, from Japanese music to flight simulation and video games. Hope you're doing great.",
     pronouns: "She/Her or They/Them", avatarLabel: "My avatar", avatarFrom: "From BanG Dream! Ave Mujica",
     localTime: "Local time", utcTime: "UTC",
-    retroNote: "I have a soft spot for the Heisei era, especially 2013–2015.",
+    retroEyebrow: "A small nostalgia", retroTitle: "A quiet fondness<br>for the Heisei years.", retroBody: "I'm drawn to the atmosphere around 2013–2015: the colors, the music, and the slightly imperfect digital texture of that time.",
+    timeEyebrow: "Current time", timeTitle: "Local and UTC.",
+    reiwaEyebrow: "Reiwa, in pictures", reiwaTitle: "The present,<br>kept quietly.", reiwaBody: "A small collection of moments from the Reiwa years.",
+    lightboxClose: "Close image viewer", lightboxPrevious: "Previous image", lightboxNext: "Next image",
     friendName: "大切な人", friendBody: "They're a really nice person, and their liveries look great.", friendLinkLabel: "Visit koten.top",
     interestsEyebrow: "A few things I love", interestsTitle: "A few things<br>I'm into.",
     musicKicker: "Now playing", musicTitle: "J-Pop on repeat.",
@@ -20,6 +23,12 @@ const translations = {
     playlistEyebrow: "My favorite album", playlistTitle: "No music,<br>no life.",
     playlistBody: "<strong>紺色に憧れて</strong> is my favorite album, and one I always come back to.", playlistButton: "Listen on Apple Music",
     playlistAlt: "紺色に憧れて album artwork", albumLinkLabel: "Open 紺色に憧れて on Apple Music",
+    musicShowcaseLabel: "Music picks", musicControlsLabel: "Choose a music page", previousSlide: "Previous page", nextSlide: "Next page",
+    yuikaEyebrow: "My favorite artist", yuikaTitle: "『ユイカ』", yuikaBody: "<strong>紺色に憧れて</strong> is my favorite album, and one I always come back to.",
+    yuikaButton: "Visit her official homepage", albumLink: "Album on Apple Music",
+    naotaroEyebrow: "Another favorite artist", naotaroTitle: "森山直太朗", naotaroBody: "His music is another favorite of mine. I put together a playlist of the songs I return to most.",
+    naotaroButton: "Listen to my selection", naotaroLinkLabel: "Open my Naotaro Moriyama playlist", naotaroAlt: "素晴らしい世界 album artwork",
+    recentEyebrow: "A playlist in motion", recentTitle: "Recently<br>liked.", recentBody: "A changing collection of songs I've been enjoying lately.", recentButton: "Open the playlist", recentTab: "Recent",
     footerNote: "Built somewhere between flights and playlists.", source: "Source on GitHub", pride: "Stands with the LGBTQIA+ community",
     projectsEyebrow: "Selected work", projectsTitle: "Things I've<br><span>been building.</span>",
     projectsIntro: "Small tools and services made around aviation, automation, and the communities I spend time in.",
@@ -48,7 +57,10 @@ const translations = {
     heroLead: "日本の音楽、フライトシミュレーション、そしてゲーム。好きなものはいろいろあります。仲良くしてくれるとうれしいです。よろしくお願いします。",
     pronouns: "She/Her または They/Them", avatarLabel: "私のアバター", avatarFrom: "『BanG Dream! Ave Mujica』より",
     localTime: "現在地の時刻", utcTime: "UTC",
-    retroNote: "平成の雰囲気が好きです。特に平成25年〜平成27年がお気に入り。",
+    retroEyebrow: "平成の記憶", retroTitle: "あの頃の空気を、<br>少しだけ。", retroBody: "平成25年から平成27年頃の、色や音、少し不完全なデジタルの質感に惹かれます。懐かしさというより、なぜか落ち着く時代です。",
+    timeEyebrow: "現在時刻", timeTitle: "ローカルとUTC。",
+    reiwaEyebrow: "令和の記録", reiwaTitle: "今の時間を、<br>静かに残す。", reiwaBody: "令和の日々から、残しておきたい景色を少しずつ。",
+    lightboxClose: "画像を閉じる", lightboxPrevious: "前の画像", lightboxNext: "次の画像",
     friendName: "大切な人", friendBody: "とてもいい人で、作っている機体塗装もきれいです。", friendLinkLabel: "koten.topを開く",
     interestsEyebrow: "私の好きなもの", interestsTitle: "好きなものを、<br>少しだけ。",
     musicKicker: "音楽", musicTitle: "J-Popを聴きながら。",
@@ -60,6 +72,12 @@ const translations = {
     playlistEyebrow: "いちばん好きなアルバム", playlistTitle: "音楽のない人生<br>なんて。",
     playlistBody: "<strong>『紺色に憧れて』</strong>は、私がいちばん好きで、何度でも聴きたくなるアルバムです。", playlistButton: "Apple Musicで聴く",
     playlistAlt: "アルバム『紺色に憧れて』のアートワーク", albumLinkLabel: "Apple Musicで『紺色に憧れて』を開く",
+    musicShowcaseLabel: "おすすめの音楽", musicControlsLabel: "音楽ページを選ぶ", previousSlide: "前のページ", nextSlide: "次のページ",
+    yuikaEyebrow: "いちばん好きなアーティスト", yuikaTitle: "『ユイカ』", yuikaBody: "<strong>『紺色に憧れて』</strong>は、私がいちばん好きで、何度でも聴きたくなるアルバムです。",
+    yuikaButton: "公式ホームページを見る", albumLink: "Apple Musicでアルバムを聴く",
+    naotaroEyebrow: "もう一人の好きなアーティスト", naotaroTitle: "森山直太朗", naotaroBody: "森山直太朗も、とても好きなアーティストです。よく聴く曲を集めたプレイリストを作りました。",
+    naotaroButton: "私のセレクションを聴く", naotaroLinkLabel: "森山直太朗のセレクションを開く", naotaroAlt: "アルバム『素晴らしい世界』のアートワーク",
+    recentEyebrow: "更新していくプレイリスト", recentTitle: "最近<br>好きな曲。", recentBody: "最近よく聴いている曲を、気ままに集めています。", recentButton: "プレイリストを開く", recentTab: "最近好き",
     footerNote: "フライトとプレイリストの合間に作りました。", source: "GitHubでソースを見る", pride: "LGBTQIA+コミュニティと共に",
     projectsEyebrow: "制作したもの", projectsTitle: "作っているものを、<br><span>いくつか。</span>",
     projectsIntro: "航空、オートメーション、そして大切なコミュニティのために作った小さなツールやサービスです。",
@@ -135,10 +153,15 @@ const setLanguage = (language) => {
     const value = content[element.dataset.i18nAriaLabel];
     if (typeof value === "string") element.setAttribute("aria-label", value);
   });
-  languageButtons.forEach((button) => {
-    const active = button.dataset.language === selected;
-    button.classList.toggle("is-active", active);
-    button.setAttribute("aria-pressed", active);
+  document.querySelectorAll(".language-switch").forEach((switcher) => {
+    const previous = switcher.dataset.currentOption || switcher.querySelector(".language-button:checked")?.getAttribute("c-option") || "1";
+    const target = switcher.querySelector(`.language-button[value="${selected}"]`);
+    if (target && !target.checked) switcher.setAttribute("c-previous", previous);
+    if (target) {
+      target.checked = true;
+      switcher.dataset.currentOption = target.getAttribute("c-option") || "1";
+      switcher.dataset.activeOption = switcher.dataset.currentOption;
+    }
   });
   saveSetting("language", selected);
   updatePageLinks();
@@ -171,7 +194,26 @@ const urlLanguage = new URLSearchParams(window.location.search).get("lang");
 const savedLanguage = readSetting("language", "");
 const initialLanguage = Object.hasOwn(translations, urlLanguage) ? urlLanguage : (Object.hasOwn(translations, savedLanguage) ? savedLanguage : (navigator.language.toLowerCase().startsWith("ja") ? "ja" : "en"));
 setLanguage(initialLanguage);
-languageButtons.forEach((button) => button.addEventListener("click", () => setLanguage(button.dataset.language)));
+document.querySelectorAll(".language-switch").forEach((switcher) => {
+  switcher.dataset.currentOption = switcher.querySelector(".language-button:checked")?.getAttribute("c-option") || "1";
+});
+requestAnimationFrame(() => {
+  requestAnimationFrame(() => document.querySelectorAll(".language-switch").forEach((switcher) => switcher.classList.add("is-ready")));
+});
+languageButtons.forEach((button) => button.addEventListener("change", () => {
+  if (!button.checked) return;
+  const switcher = button.closest(".language-switch");
+  if (switcher) {
+    switcher.setAttribute("c-previous", switcher.dataset.currentOption || "1");
+    switcher.dataset.currentOption = button.getAttribute("c-option") || "1";
+    switcher.dataset.activeOption = switcher.dataset.currentOption;
+    switcher.classList.remove("is-switching");
+    void switcher.offsetWidth;
+    switcher.classList.add("is-switching");
+    window.setTimeout(() => switcher.classList.remove("is-switching"), 460);
+  }
+  setLanguage(button.value);
+}));
 
 const updateClocks = () => {
   const localClock = document.querySelector("#local-clock");
@@ -195,6 +237,155 @@ const updateClocks = () => {
 updateClocks();
 window.setInterval(updateClocks, 1000);
 
+const loadGallery = async (sectionSelector, gallerySelector, basePath, prefix, count) => {
+  const section = document.querySelector(sectionSelector);
+  const gallery = document.querySelector(gallerySelector);
+  if (!section || !gallery) return;
+
+  const images = await Promise.all(Array.from({ length: count }, async (_, index) => {
+    const number = String(index + 1).padStart(2, "0");
+    const candidates = ["jpg", "jpeg", "png", "webp"];
+    for (const extension of candidates) {
+      const source = `${basePath}/${prefix}-${number}.${extension}`;
+      try {
+        const response = await fetch(source, { method: "HEAD" });
+        if (response.ok) return source;
+      } catch (error) {
+        // A missing optional gallery must not affect the rest of the page.
+      }
+    }
+    return null;
+  }));
+
+  images.filter(Boolean).forEach((source) => {
+    const image = document.createElement("img");
+    image.src = source;
+    image.alt = "";
+    image.loading = "lazy";
+    gallery.appendChild(image);
+  });
+
+  if (gallery.children.length) section.hidden = false;
+};
+
+loadGallery(".reiwa-section", ".reiwa-gallery", "img/reiwa", "reiwa", 20);
+
+const musicTrack = document.querySelector(".music-track");
+const musicSlides = document.querySelectorAll(".music-slide");
+const musicDots = document.querySelectorAll(".music-dot");
+const musicPrevious = document.querySelector(".music-prev");
+const musicNext = document.querySelector(".music-next");
+let activeMusicSlide = 0;
+
+const setMusicSlide = (index) => {
+  if (!musicTrack || !musicSlides.length) return;
+  activeMusicSlide = (index + musicSlides.length) % musicSlides.length;
+  const controls = document.querySelector(".music-controls");
+  if (controls) controls.setAttribute("c-previous", String(Number(controls.dataset.activeSlide || 0) + 1));
+  musicTrack.style.transform = `translate3d(-${activeMusicSlide * 100}%, 0, 0)`;
+  musicSlides.forEach((slide, slideIndex) => {
+    slide.classList.toggle("is-active", slideIndex === activeMusicSlide);
+    slide.classList.toggle("is-before", slideIndex < activeMusicSlide);
+    slide.classList.toggle("is-after", slideIndex > activeMusicSlide);
+  });
+  musicDots.forEach((dot, dotIndex) => {
+    const active = dotIndex === activeMusicSlide;
+    dot.classList.toggle("is-active", active);
+    dot.setAttribute("aria-selected", active);
+    dot.tabIndex = active ? 0 : -1;
+  });
+  if (controls) {
+    const activeDot = musicDots[activeMusicSlide];
+    const dotsBounds = document.querySelector(".music-dots")?.getBoundingClientRect();
+    const dotBounds = activeDot?.getBoundingClientRect();
+    if (dotsBounds && dotBounds) {
+      controls.style.setProperty("--indicator-x", `${dotBounds.left - dotsBounds.left}px`);
+      controls.style.setProperty("--indicator-width", `${dotBounds.width}px`);
+      const previous = Number(controls.dataset.activeSlide || 0);
+      controls.style.setProperty("--indicator-origin", previous < activeMusicSlide ? "left" : "right");
+      controls.style.setProperty("--indicator-animation", activeMusicSlide === 1 ? "liquid-middle-pulse 440ms ease" : "liquid-edge-pulse 440ms ease");
+    }
+    controls.dataset.activeSlide = String(activeMusicSlide);
+  }
+};
+
+setMusicSlide(0);
+
+musicDots.forEach((dot) => dot.addEventListener("click", () => setMusicSlide(Number(dot.dataset.slideTo))));
+musicPrevious?.addEventListener("click", () => setMusicSlide(activeMusicSlide - 1));
+musicNext?.addEventListener("click", () => setMusicSlide(activeMusicSlide + 1));
+window.addEventListener("resize", () => setMusicSlide(activeMusicSlide));
+
+let musicTouchStart = 0;
+musicTrack?.addEventListener("touchstart", (event) => { musicTouchStart = event.touches[0].clientX; }, { passive: true });
+musicTrack?.addEventListener("touchend", (event) => {
+  const distance = event.changedTouches[0].clientX - musicTouchStart;
+  if (Math.abs(distance) > 50) setMusicSlide(activeMusicSlide + (distance < 0 ? 1 : -1));
+}, { passive: true });
+
+document.querySelector(".music-showcase")?.addEventListener("keydown", (event) => {
+  if (event.key === "ArrowLeft") setMusicSlide(activeMusicSlide - 1);
+  if (event.key === "ArrowRight") setMusicSlide(activeMusicSlide + 1);
+});
+
+const lightbox = document.querySelector(".gallery-lightbox");
+const lightboxImage = document.querySelector(".lightbox-image");
+const lightboxCount = document.querySelector(".lightbox-count");
+let activeGalleryImage = 0;
+let lightboxTouchStart = 0;
+
+const getGalleryImages = () => Array.from(document.querySelectorAll(".retro-gallery img, .reiwa-gallery img"));
+
+const showGalleryImage = (index) => {
+  const galleryImages = getGalleryImages();
+  if (!galleryImages.length || !lightboxImage) return;
+  activeGalleryImage = (index + galleryImages.length) % galleryImages.length;
+  lightboxImage.src = galleryImages[activeGalleryImage].src;
+  if (lightboxCount) lightboxCount.textContent = `${activeGalleryImage + 1} / ${galleryImages.length}`;
+};
+
+const openLightbox = (index) => {
+  if (!lightbox) return;
+  showGalleryImage(index);
+  lightbox.hidden = false;
+  lightbox.setAttribute("aria-hidden", "false");
+  document.body.classList.add("lightbox-open");
+  document.querySelector(".lightbox-close")?.focus();
+};
+
+const closeLightbox = () => {
+  if (!lightbox) return;
+  lightbox.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("lightbox-open");
+  window.setTimeout(() => { lightbox.hidden = true; }, 240);
+};
+
+document.querySelectorAll(".retro-gallery, .reiwa-gallery").forEach((gallery) => {
+  gallery.querySelectorAll("img").forEach((image) => {
+    image.tabIndex = 0;
+    image.setAttribute("role", "button");
+  });
+  gallery.addEventListener("click", (event) => {
+    if (!(event.target instanceof HTMLImageElement)) return;
+    openLightbox(getGalleryImages().indexOf(event.target));
+  });
+  gallery.addEventListener("keydown", (event) => {
+    if (!(event.target instanceof HTMLImageElement) || (event.key !== "Enter" && event.key !== " ")) return;
+    event.preventDefault();
+    openLightbox(getGalleryImages().indexOf(event.target));
+  });
+});
+document.querySelector(".lightbox-close")?.addEventListener("click", closeLightbox);
+document.querySelector(".lightbox-prev")?.addEventListener("click", () => showGalleryImage(activeGalleryImage - 1));
+document.querySelector(".lightbox-next")?.addEventListener("click", () => showGalleryImage(activeGalleryImage + 1));
+document.querySelector(".lightbox-backdrop")?.addEventListener("click", closeLightbox);
+lightbox?.addEventListener("touchstart", (event) => { lightboxTouchStart = event.touches[0].clientX; }, { passive: true });
+lightbox?.addEventListener("touchend", (event) => {
+  const distance = event.changedTouches[0].clientX - lightboxTouchStart;
+  if (Math.abs(distance) > 50) showGalleryImage(activeGalleryImage + (distance < 0 ? 1 : -1));
+}, { passive: true });
+
+
 const menuButton = document.querySelector(".menu-button");
 const mobileMenu = document.querySelector(".mobile-menu");
 const menuScrim = document.querySelector(".menu-scrim");
@@ -213,7 +404,14 @@ const openMenu = () => {
 menuButton?.addEventListener("click", openMenu);
 document.querySelector(".menu-close")?.addEventListener("click", closeMenu);
 menuScrim?.addEventListener("click", closeMenu);
-document.addEventListener("keydown", (event) => { if (event.key === "Escape") closeMenu(); });
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    closeMenu();
+    closeLightbox();
+  }
+  if (!lightbox?.hidden && event.key === "ArrowLeft") showGalleryImage(activeGalleryImage - 1);
+  if (!lightbox?.hidden && event.key === "ArrowRight") showGalleryImage(activeGalleryImage + 1);
+});
 
 const header = document.querySelector(".site-header");
 const updateHeader = () => header?.classList.toggle("is-scrolled", window.scrollY > 12);

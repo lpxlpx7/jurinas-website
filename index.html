@@ -6,9 +6,10 @@
   <meta name="description" content="Jurina's personal homepage, interests, music, and a small hello from the internet.">
   <meta name="theme-color" content="#f5f5f7">
   <title>Jurina's Homepage</title>
-  <script src="js/theme-init.js?v=20260914-2"></script>
-  <link rel="stylesheet" href="css/style.css?v=20260914-2">
-  <script src="js/main.js?v=20260914-2" defer></script>
+  <script src="js/theme-init.js?v=20260914-3"></script>
+  <link rel="stylesheet" href="css/style.css?v=20260914-3">
+  <script src="js/liquid-glass.js?v=20260914-3" defer></script>
+  <script src="js/main.js?v=20260914-3" defer></script>
 </head>
 <body>
   <header class="site-header">
@@ -21,11 +22,7 @@
           <a href="contact.html" data-i18n="navContact">Contact</a>
           <a href="friends.html" data-i18n="navLinks">Links</a>
         </div>
-        <div class="language-switch" role="group" aria-label="Language">
-          <button class="language-button is-active" type="button" data-language="en" aria-pressed="true">EN</button>
-          <span aria-hidden="true">/</span>
-          <button class="language-button" type="button" data-language="ja" aria-pressed="false">日本語</button>
-        </div>
+        <fieldset class="language-switch liquid-switcher" data-options="2" c-previous="1" aria-label="Language"><legend>Language</legend><label class="language-option"><input class="language-button" type="radio" name="language-desktop" value="en" c-option="1" checked><span>EN</span></label><label class="language-option"><input class="language-button" type="radio" name="language-desktop" value="ja" c-option="2"><span>日本語</span></label></fieldset>
         <button class="theme-button" type="button" aria-label="Switch color theme" data-i18n-aria-label="themeLabel"><span class="theme-icon" aria-hidden="true">◐</span></button>
         <button class="menu-button" type="button" aria-label="Open menu" aria-expanded="false" data-i18n-aria-label="menuOpen"><span></span><span></span></button>
       </div>
@@ -34,7 +31,7 @@
   <div class="menu-scrim" hidden></div>
   <aside class="mobile-menu" aria-hidden="true">
     <div class="mobile-menu-head"><span data-i18n="menuTitle">Navigate</span><button class="menu-close" type="button" aria-label="Close menu" data-i18n-aria-label="menuClose">×</button></div>
-    <div class="mobile-language language-switch" role="group" aria-label="Language"><button class="language-button is-active" type="button" data-language="en" aria-pressed="true">EN</button><span aria-hidden="true">/</span><button class="language-button" type="button" data-language="ja" aria-pressed="false">日本語</button></div>
+    <fieldset class="mobile-language language-switch liquid-switcher" data-options="2" c-previous="1" aria-label="Language"><legend>Language</legend><label class="language-option"><input class="language-button" type="radio" name="language-mobile" value="en" c-option="1" checked><span>EN</span></label><label class="language-option"><input class="language-button" type="radio" name="language-mobile" value="ja" c-option="2"><span>日本語</span></label></fieldset>
     <nav class="mobile-nav" aria-label="Mobile navigation">
       <a class="is-active" href="index.html"><span data-i18n="navHome">Home</span><span>01</span></a>
       <a href="projects.html"><span data-i18n="navProjects">Projects</span><span>02</span></a>
@@ -64,21 +61,6 @@
           <span class="trans-mark" aria-hidden="true"></span>
           <span data-i18n="pronouns">She/Her or They/Them</span>
         </div>
-        <div class="clock-panel" aria-label="Local and UTC time">
-          <div class="clock-item">
-            <span class="clock-label" data-i18n="localTime">Local time</span>
-            <time id="local-clock">--:--:--</time>
-            <span class="clock-date" id="local-date">---</span>
-            <span class="clock-era" id="local-era" hidden>---</span>
-          </div>
-          <div class="clock-divider" aria-hidden="true"></div>
-          <div class="clock-item">
-            <span class="clock-label" data-i18n="utcTime">UTC</span>
-            <time id="utc-clock">--:--:--</time>
-            <span class="clock-date" id="utc-date">---</span>
-          </div>
-        </div>
-        <p class="retro-note" data-i18n="retroNote">I have a soft spot for the Heisei era, especially 2013–2015.</p>
       </div>
 
       <aside class="portrait-card reveal" aria-label="Avatar information">
@@ -123,35 +105,134 @@
         </article>
 
         <article class="interest-card games-card reveal">
-          <img class="games-art" src="img/Overwatch_2_full_logo.svg.webp" alt="Overwatch 2 logo" data-i18n-alt="gamesAlt">
-          <div class="games-overlay" aria-hidden="true"></div>
-          <div class="card-icon" aria-hidden="true">＋</div>
-          <p class="card-kicker" data-i18n="gamesKicker">Gaming</p>
-          <h3 data-i18n="gamesTitle">One more game.</h3>
-          <p data-i18n="gamesBody">I enjoy FPS games, especially Overwatch. I like learning the game and having a good time with friends.</p>
+          <div class="games-copy">
+            <div class="card-icon" aria-hidden="true">＋</div>
+            <p class="card-kicker" data-i18n="gamesKicker">Gaming</p>
+            <h3 data-i18n="gamesTitle">One more game.</h3>
+            <p data-i18n="gamesBody">I enjoy FPS games, especially Overwatch. I like learning the game and having a good time with friends.</p>
+          </div>
+          <div class="games-logo-wrap">
+            <span class="games-glow" aria-hidden="true"></span>
+            <img class="games-logo" src="img/Overwatch_2_full_logo.svg.webp" alt="Overwatch 2 logo" data-i18n-alt="gamesAlt">
+          </div>
         </article>
       </div>
     </section>
 
-    <section class="playlist-section shell reveal" id="music">
-      <div class="playlist-card">
-        <a class="playlist-art" href="https://music.apple.com/jp/album/longing-for-navy-blue/1748508425" target="_blank" rel="noopener noreferrer" aria-label="Open 紺色に憧れて on Apple Music" data-i18n-aria-label="albumLinkLabel">
-          <div class="vinyl" aria-label="紺色に憧れて album artwork" data-i18n-aria-label="playlistAlt">
-            <img src="img/紺色に憧れて.png" alt="">
-            <span aria-hidden="true"></span>
-          </div>
-        </a>
-        <div class="playlist-copy">
-          <p class="eyebrow" data-i18n="playlistEyebrow">My favorite album</p>
-          <h2 data-i18n="playlistTitle">No music,<br>no life.</h2>
-          <p data-i18n="playlistBody"><strong>紺色に憧れて</strong> is my favorite album, and one I always come back to.</p>
-          <a class="button button-light" href="https://music.apple.com/jp/album/longing-for-navy-blue/1748508425" target="_blank" rel="noopener noreferrer">
-            <span data-i18n="playlistButton">Listen on Apple Music</span> <span aria-hidden="true">↗</span>
-          </a>
+    <section class="music-showcase reveal" id="music" tabindex="0" aria-label="Music picks" data-i18n-aria-label="musicShowcaseLabel">
+      <div class="music-viewport">
+        <div class="music-track">
+          <article class="music-slide music-slide-yuika" data-slide="0">
+            <img class="music-backdrop" src="img/yuika.png" alt="" aria-hidden="true">
+            <div class="music-vignette" aria-hidden="true"></div>
+            <div class="music-slide-inner shell">
+              <a class="playlist-art" href="https://music.apple.com/jp/album/longing-for-navy-blue/1748508425" target="_blank" rel="noopener noreferrer" aria-label="Open 紺色に憧れて on Apple Music" data-i18n-aria-label="albumLinkLabel">
+                <div class="vinyl" aria-label="紺色に憧れて album artwork" data-i18n-aria-label="playlistAlt"><img src="img/紺色に憧れて.png" alt=""><span aria-hidden="true"></span></div>
+              </a>
+              <div class="playlist-copy">
+                <p class="eyebrow" data-i18n="yuikaEyebrow">My favorite artist</p>
+                <h2 data-i18n="yuikaTitle">『ユイカ』</h2>
+                <p data-i18n="yuikaBody"><strong>紺色に憧れて</strong> is my favorite album, and one I always come back to.</p>
+                <div class="music-actions">
+                  <a class="button button-light" href="https://www.universal-music.co.jp/yuika/" target="_blank" rel="noopener noreferrer"><span data-i18n="yuikaButton">Visit her official homepage</span> <span aria-hidden="true">↗</span></a>
+                  <a class="album-text-link" href="https://music.apple.com/jp/album/longing-for-navy-blue/1748508425" target="_blank" rel="noopener noreferrer"><span data-i18n="albumLink">Album on Apple Music</span> ↗</a>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="music-slide music-slide-naotaro" data-slide="1">
+            <img class="music-backdrop" src="img/naotaro.jpg" alt="" aria-hidden="true">
+            <div class="music-vignette" aria-hidden="true"></div>
+            <div class="music-slide-inner shell">
+              <a class="album-cover" href="https://music.apple.com/jp/playlist/%E6%A3%AE%E5%B1%B1%E7%9B%B4%E5%A4%AA%E6%9C%97/pl.u-zPyLl43u85yxJMz" target="_blank" rel="noopener noreferrer" aria-label="Open my Naotaro Moriyama playlist" data-i18n-aria-label="naotaroLinkLabel">
+                <img src="https://naotaro.com/img/disco/thumb/subarashisekai_tsujou.jpg" alt="素晴らしい世界 album artwork" data-i18n-alt="naotaroAlt">
+              </a>
+              <div class="playlist-copy">
+                <p class="eyebrow" data-i18n="naotaroEyebrow">Another favorite artist</p>
+                <h2 data-i18n="naotaroTitle">森山直太朗</h2>
+                <p data-i18n="naotaroBody">His music is another favorite of mine. I put together a playlist of the songs I return to most.</p>
+                <a class="button button-light" href="https://music.apple.com/jp/playlist/%E6%A3%AE%E5%B1%B1%E7%9B%B4%E5%A4%AA%E6%9C%97/pl.u-zPyLl43u85yxJMz" target="_blank" rel="noopener noreferrer"><span data-i18n="naotaroButton">Listen to my selection</span> <span aria-hidden="true">↗</span></a>
+              </div>
+            </div>
+          </article>
+
+          <article class="music-slide music-slide-recent" data-slide="2">
+            <div class="recent-backdrop" aria-hidden="true"><span></span><span></span><span></span></div>
+            <div class="music-vignette" aria-hidden="true"></div>
+            <div class="music-slide-inner music-slide-centered shell">
+              <div class="recent-art" aria-hidden="true"><span>♪</span></div>
+              <div class="playlist-copy">
+                <p class="eyebrow" data-i18n="recentEyebrow">A playlist in motion</p>
+                <h2 data-i18n="recentTitle">Recently<br>liked.</h2>
+                <p data-i18n="recentBody">A changing collection of songs I've been enjoying lately.</p>
+                <a class="button button-light" href="https://music.apple.com/jp/playlist/%E6%9C%80%E8%BF%91%E3%81%AE%E6%AD%8C/pl.u-4JomXNJtXe6mvMB" target="_blank" rel="noopener noreferrer"><span data-i18n="recentButton">Open the playlist</span> <span aria-hidden="true">↗</span></a>
+              </div>
+            </div>
+          </article>
         </div>
+      </div>
+
+      <div class="music-controls" c-previous="1" aria-label="Choose a music page" data-i18n-aria-label="musicControlsLabel">
+        <button class="music-arrow music-prev" type="button" aria-label="Previous page" data-i18n-aria-label="previousSlide">‹</button>
+        <div class="music-dots" role="tablist" aria-label="Music pages">
+          <button class="music-dot is-active" type="button" role="tab" aria-selected="true" c-option="1" data-slide-to="0"><span>ユイカ</span></button>
+          <button class="music-dot" type="button" role="tab" aria-selected="false" c-option="2" data-slide-to="1"><span>森山直太朗</span></button>
+          <button class="music-dot" type="button" role="tab" aria-selected="false" c-option="3" data-slide-to="2"><span data-i18n="recentTab">Recent</span></button>
+        </div>
+        <button class="music-arrow music-next" type="button" aria-label="Next page" data-i18n-aria-label="nextSlide">›</button>
+      </div>
+    </section>
+
+    <section class="retro-section shell reveal" id="retro">
+      <div class="retro-number" aria-hidden="true">25—27</div>
+      <div class="retro-copy">
+        <p class="eyebrow" data-i18n="retroEyebrow">A small nostalgia</p>
+        <h2 data-i18n="retroTitle">A quiet fondness<br>for the Heisei years.</h2>
+        <p data-i18n="retroBody">I'm drawn to the atmosphere around 2013–2015: the colors, the music, and the slightly imperfect digital texture of that time.</p>
+      </div>
+      <div class="retro-gallery" aria-label="Heisei photo gallery">
+        <img src="img/Retro/1.png" alt="" loading="lazy">
+        <img src="img/Retro/2.png" alt="" loading="lazy">
+        <img src="img/Retro/3.png" alt="" loading="lazy">
+        <img src="img/Retro/4.png" alt="" loading="lazy">
+        <img src="img/Retro/5.png" alt="" loading="lazy">
+        <img src="img/Retro/6.png" alt="" loading="lazy">
+        <img src="img/Retro/7.png" alt="" loading="lazy">
+        <img src="img/Retro/8.png" alt="" loading="lazy">
+        <img src="img/Retro/9.png" alt="" loading="lazy">
+      </div>
+    </section>
+
+    <section class="reiwa-section shell reveal" id="reiwa" hidden>
+      <div class="reiwa-heading">
+        <p class="eyebrow" data-i18n="reiwaEyebrow">Reiwa, in pictures</p>
+        <h2 data-i18n="reiwaTitle">The present,<br>kept quietly.</h2>
+        <p data-i18n="reiwaBody">A small collection of moments from the Reiwa years.</p>
+      </div>
+      <div class="reiwa-gallery" aria-label="Reiwa photo gallery"></div>
+    </section>
+
+    <section class="time-section shell reveal" aria-label="Local and UTC time">
+      <div class="time-heading"><p class="eyebrow" data-i18n="timeEyebrow">Current time</p><h2 data-i18n="timeTitle">Local and UTC.</h2></div>
+      <div class="clock-panel">
+        <div class="clock-item"><span class="clock-label" data-i18n="localTime">Local time</span><time id="local-clock">--:--:--</time><span class="clock-date" id="local-date">---</span><span class="clock-era" id="local-era" hidden>---</span></div>
+        <div class="clock-divider" aria-hidden="true"></div>
+        <div class="clock-item"><span class="clock-label" data-i18n="utcTime">UTC</span><time id="utc-clock">--:--:--</time><span class="clock-date" id="utc-date">---</span></div>
       </div>
     </section>
   </main>
+
+  <div class="gallery-lightbox" hidden aria-hidden="true">
+    <div class="lightbox-backdrop"></div>
+    <div class="lightbox-stage" role="dialog" aria-modal="true" aria-label="Image viewer">
+      <img class="lightbox-image" src="" alt="">
+      <button class="lightbox-control lightbox-close" type="button" aria-label="Close" data-i18n-aria-label="lightboxClose">×</button>
+      <button class="lightbox-control lightbox-prev" type="button" aria-label="Previous image" data-i18n-aria-label="lightboxPrevious">‹</button>
+      <button class="lightbox-control lightbox-next" type="button" aria-label="Next image" data-i18n-aria-label="lightboxNext">›</button>
+      <div class="lightbox-count" aria-live="polite"></div>
+    </div>
+  </div>
 
   <footer class="site-footer shell">
     <div class="footer-top">
