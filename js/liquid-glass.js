@@ -42,7 +42,7 @@
 
   const groups = [
     [".nav", "nav-distortion-glass"],
-    [".portrait-card, .interest-card, .project-card, .friend-card, .contact-card, .contact-side-card, .project-sidebar, .retro-section, .reiwa-section", "shader-glass-panel"],
+    [".portrait-card, .interest-card, .project-card, .friend-card, .contact-card, .contact-side-card, .project-sidebar, .retro-section, .reiwa-section, .clock-panel", "shader-glass-panel"],
     [".button, .text-link, .theme-button, .music-arrow, .lightbox-control, .lightbox-count, .menu-button, .menu-close", "transparent-glass-control"],
   ];
 
