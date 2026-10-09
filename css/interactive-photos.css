@@ -1,4 +1,12 @@
 /* One transform per object; hover never modifies position. */
+@font-face {
+  font-family: "Caramel Local";
+  src: url("../fort/Caramel-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 .portrait-stage {
   position: relative;
   width: min(100%, 520px);
@@ -49,6 +57,8 @@
 [data-theme="dark"] .portrait-stage .portrait-card { background: #34312c; border-color: #454138; box-shadow: 0 18px 35px #0008; }
 [data-theme="dark"] .portrait-stage .portrait-card img { filter: brightness(.8); }
 [data-theme="dark"] .portrait-stage .portrait-reference { color: #ccc4b4; }
+.portrait-stage .portrait-reference { font-family: "Caramel Local", "Segoe Print", "Bradley Hand", cursive; font-size: 21px; font-weight: 400; letter-spacing: .02em; }
+.portrait-stage .portrait-reference span:last-child { font-family: var(--font); font-size: 18px; }
 
 .retro-section { width: min(1280px, calc(100% - 48px)); }
 .retro-gallery {
