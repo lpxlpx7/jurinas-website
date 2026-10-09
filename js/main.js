@@ -1,18 +1,17 @@
 const translations = {
   en: {
-    brand: "Jurina's Homepage", navHome: "Home", navProjects: "Projects", navContact: "Contact", navLinks: "Links",
+     brand: "Jurina's Homepage", navHome: "Home", navProjects: "Projects", navContact: "Contact", navLinks: "Links",
     themeLabel: "Switch color theme", menuOpen: "Open menu", menuClose: "Close menu", menuTitle: "Navigate",
     menuNote: "A small collection of things I like and make.",
     homeTitle: "Jurina's Homepage", projectsPageTitle: "Projects | Jurina's Homepage", contactPageTitle: "Contact | Jurina's Homepage", friendsPageTitle: "Links | Jurina's Homepage",
-    heroEyebrow: "Thanks for finding me.", heroTitle: "Nice to meet you.<br><span>I'm Jurina.</span>",
-    heroLead: "My interests are all over the place, from Japanese music to flight simulation and video games. Hope you're doing great.",
+     heroEyebrow: "", heroTitle: "Hello.<br><span>I'm Jurina.</span>", heroLead: "",
     pronouns: "She/Her or They/Them", avatarLabel: "My avatar", avatarFrom: "From BanG Dream! Ave Mujica",
-    localTime: "Local time", utcTime: "UTC",
-    retroEyebrow: "A small nostalgia", retroTitle: "A quiet fondness<br>for the Heisei years.", retroBody: "I'm drawn to the atmosphere around 2013–2015: the colors, the music, and the slightly imperfect digital texture of that time.",
-    timeEyebrow: "Current time", timeTitle: "Local and UTC.",
+     localTime: "Your time", utcTime: "UTC",
+     retroEyebrow: "2013 — 2015", retroTitle: "The Heisei years.", retroBody: "",
+     timeEyebrow: "", timeTitle: "",
     reiwaEyebrow: "Reiwa, in pictures", reiwaTitle: "The present,<br>kept quietly.", reiwaBody: "A small collection of moments from the Reiwa years.",
     lightboxClose: "Close image viewer", lightboxPrevious: "Previous image", lightboxNext: "Next image",
-    friendName: "大切な人", friendBody: "They're a really nice person, and their liveries look great.", friendLinkLabel: "Visit koten.top",
+     friendName: "大切な人", friendBody: "They're a really nice person, and their liveries look great.", friendLinkLabel: "Visit koten.top",
     interestsEyebrow: "A few things I love", interestsTitle: "A few things<br>I'm into.",
     musicKicker: "Now playing", musicTitle: "MUSIC",
     musicBody: "J-Pop and <a href=\"https://www.universal-music.co.jp/yuika/\" target=\"_blank\" rel=\"noopener noreferrer\">Yuika ↗</a>.",
@@ -30,8 +29,9 @@ const translations = {
     naotaroButton: "Listen to my selection", naotaroLinkLabel: "Open my Naotaro Moriyama playlist", naotaroAlt: "素晴らしい世界 album artwork",
     recentEyebrow: "A playlist in motion", recentTitle: "Recently<br>liked.", recentBody: "A changing collection of songs I've been enjoying lately.", recentButton: "Open the playlist", recentTab: "Recent",
     footerNote: "Built somewhere between flights and playlists.", source: "Source on GitHub", pride: "Stands with the LGBTQIA+ community",
-    projectsEyebrow: "Selected work", projectsTitle: "Things I've<br><span>been building.</span>",
-    projectsIntro: "Small tools and services made around aviation, automation, and the communities I spend time in.",
+     projectsEyebrow: "Selected work", projectsTitle: "Things I've<br><span>been building.</span>", productTitle: "Made for what I love.",
+     projectsIntro: "Small tools and services made around aviation, automation, and the communities I spend time in.",
+     vatsysKicker: "For the controller in you.", vatsysBody: "My collection of plugins for VATSYS.", explorePlugins: "Explore the plugins",
     projectIndex: "Project index", projectOneShort: "Flight planning", projectTwoShort: "ATC automation", projectThreeShort: "Discord bot",
     projectOpen: "Open project", projectCode: "View source", projectStatus: "Live",
     dispatcherType: "Flight operations", dispatcherName: "Japan Route Finder",
@@ -41,24 +41,25 @@ const translations = {
     botType: "Community tools", botName: "Jurina's Bot",
     botBody: "A home for my bot project and the services it provides to online communities.",
     projectsAsideTitle: "Built for real use.", projectsAsideBody: "Each project started with a problem I wanted to solve for myself or a community I care about.",
-    contactEyebrow: "Say hello", contactTitle: "Let's keep<br><span>in touch.</span>",
-    contactIntro: "Questions, project ideas, or just want to say hi? Email is the easiest way to reach me.",
+      contactEyebrow: "", contactTitle: "How can I help?",
+      contactIntro: "For project questions, ideas, or a simple hello, start here.", contactGeneralLabel: "General questions", contactDevelopmentLabel: "Development",
     emailLabel: "Email", emailButton: "Send an email", responseLabel: "Usually", responseValue: "I reply when I can.",
-    contactCardTitle: "Open to a good conversation.", contactCardBody: "Aviation, web projects, music, games, or something completely different are all welcome.",
-    contactNote: "Please don't send spam or unsolicited advertising. Thanks!",
-    linksEyebrow: "Links", linksTitle: "Around the<br><span>internet.</span>", linksIntro: "A small collection of websites worth visiting.",
+     contactCardTitle: "", contactCardBody: "",
+     contactNote: "Please don't send spam or unsolicited advertising. Thanks!",
+     contactProjectsLink: "See what I make ›", contactGithubLink: "Open my work ›", contactProjectsEyebrow: "Before you write", contactProjectsTitle: "A little context helps.", contactProjectsBody: "If your message is about a project, including a link or a few details makes it easier for me to understand.", contactNoteEyebrow: "A small note", contactNoteTitle: "Say what you need.", contactNoteBody: "Short messages are welcome. I read everything and get back to messages when I have something useful to say.",
+      linksEyebrow: "Links", linksTitle: "Around the<br><span>internet.</span>", linksIntro: "A small collection of websites worth visiting.", homeLinksTitle: "Good company.<br>Worth a visit.", footerShop: "Explore", footerTools: "Tools", footerConnect: "Connect", footerLinks: "Links", footerOther: "Other", footerContact: "Contact",
   },
   ja: {
     brand: "Jurinaのホームページ", navHome: "ホーム", navProjects: "プロジェクト", navContact: "連絡先", navLinks: "リンク集",
     themeLabel: "カラーテーマを切り替える", menuOpen: "メニューを開く", menuClose: "メニューを閉じる", menuTitle: "メニュー",
     menuNote: "好きなものと、作っているものを少しずつ。",
     homeTitle: "Jurinaのホームページ", projectsPageTitle: "プロジェクト | Jurinaのホームページ", contactPageTitle: "連絡先 | Jurinaのホームページ", friendsPageTitle: "リンク集 | Jurinaのホームページ",
-    heroEyebrow: "見つけてくれて、ありがとう。", heroTitle: "はじめまして。<br><span>Jurinaです。</span>",
-    heroLead: "日本の音楽、フライトシミュレーション、そしてゲーム。好きなものはいろいろあります。仲良くしてくれるとうれしいです。よろしくお願いします。",
+      heroEyebrow: "", heroTitle: "こんにちは。<br><span>Jurinaです。</span>",
+     heroLead: "",
     pronouns: "She/Her または They/Them", avatarLabel: "私のアバター", avatarFrom: "『BanG Dream! Ave Mujica』より",
-    localTime: "現在地の時刻", utcTime: "UTC",
-    retroEyebrow: "平成の記憶", retroTitle: "あの頃の空気を、<br>少しだけ。", retroBody: "平成25年から平成27年頃の、色や音、少し不完全なデジタルの質感に惹かれます。懐かしさというより、なぜか落ち着く時代です。",
-    timeEyebrow: "現在時刻", timeTitle: "ローカルとUTC。",
+     localTime: "あなたの時刻", utcTime: "UTC",
+     retroEyebrow: "平成25年 — 平成27年", retroTitle: "2013 — 2015", retroBody: "",
+     timeEyebrow: "", timeTitle: "",
     reiwaEyebrow: "令和の記録", reiwaTitle: "今の時間を、<br>静かに残す。", reiwaBody: "令和の日々から、残しておきたい景色を少しずつ。",
     lightboxClose: "画像を閉じる", lightboxPrevious: "前の画像", lightboxNext: "次の画像",
     friendName: "大切な人", friendBody: "とてもいい人で、作っている機体塗装もきれいです。", friendLinkLabel: "koten.topを開く",
@@ -79,8 +80,9 @@ const translations = {
     naotaroButton: "私のセレクションを聴く", naotaroLinkLabel: "森山直太朗のセレクションを開く", naotaroAlt: "アルバム『素晴らしい世界』のアートワーク",
     recentEyebrow: "更新していくプレイリスト", recentTitle: "最近<br>好きな曲。", recentBody: "最近よく聴いている曲を、気ままに集めています。", recentButton: "プレイリストを開く", recentTab: "最近好き",
     footerNote: "フライトとプレイリストの合間に作りました。", source: "GitHubでソースを見る", pride: "LGBTQIA+コミュニティと共に",
-    projectsEyebrow: "制作したもの", projectsTitle: "作っているものを、<br><span>いくつか。</span>",
-    projectsIntro: "航空、オートメーション、そして大切なコミュニティのために作った小さなツールやサービスです。",
+     projectsEyebrow: "制作したもの", projectsTitle: "作っているものを、<br><span>いくつか。</span>", productTitle: "好きなものを、形に。",
+     projectsIntro: "航空、オートメーション、そして大切なコミュニティのために作った小さなツールやサービスです。",
+     vatsysKicker: "管制官のために。", vatsysBody: "VATSYSのために作っているプラグイン集です。", explorePlugins: "プラグインを見る",
     projectIndex: "プロジェクト一覧", projectOneShort: "フライトプランニング", projectTwoShort: "管制自動化", projectThreeShort: "Discord Bot",
     projectOpen: "プロジェクトを開く", projectCode: "ソースを見る", projectStatus: "公開中",
     dispatcherType: "フライトオペレーション", dispatcherName: "Japan Route Finder",
@@ -90,12 +92,13 @@ const translations = {
     botType: "コミュニティツール", botName: "Jurina's Bot",
     botBody: "オンラインコミュニティ向けのBotと、そのサービスを紹介するプロジェクトです。",
     projectsAsideTitle: "実際に使えるものを。", projectsAsideBody: "どのプロジェクトも、自分や大切なコミュニティの困りごとを解決したいというところから始まりました。",
-    contactEyebrow: "ご連絡", contactTitle: "気軽に、<br><span>話しかけてください。</span>",
-    contactIntro: "質問やプロジェクトのアイデア、ちょっとした挨拶でも。メールがいちばん確実です。",
+      contactEyebrow: "", contactTitle: "何をお手伝いできますか。",
+      contactIntro: "プロジェクトの質問、アイデア、簡単な挨拶はこちらからどうぞ。", contactGeneralLabel: "一般のお問い合わせ", contactDevelopmentLabel: "開発について",
     emailLabel: "メール", emailButton: "メールを送る", responseLabel: "返信について", responseValue: "時間のあるときにお返事します。",
-    contactCardTitle: "いろいろなお話を歓迎します。", contactCardBody: "航空、Webプロジェクト、音楽、ゲーム、それ以外の話題でも大丈夫です。",
-    contactNote: "迷惑メールや一方的な広告はご遠慮ください。よろしくお願いします。",
-    linksEyebrow: "リンク集", linksTitle: "インターネットの<br><span>いろいろ。</span>", linksIntro: "おすすめのWebサイトを、ここで少しずつ紹介します。",
+     contactCardTitle: "", contactCardBody: "",
+     contactNote: "迷惑メールや一方的な広告はご遠慮ください。よろしくお願いします。",
+     contactProjectsLink: "作ったものを見る ›", contactGithubLink: "制作物を見る ›", contactProjectsEyebrow: "送る前に", contactProjectsTitle: "少しだけ詳しく。", contactProjectsBody: "プロジェクトについての場合は、リンクや状況を少し書いてもらえると助かります。", contactNoteEyebrow: "ひとこと", contactNoteTitle: "用件を教えてください。", contactNoteBody: "短いメッセージでも大丈夫です。内容を読んで、必要なときに返信します。",
+      linksEyebrow: "リンク", linksTitle: "インターネットの<br><span>いろいろ。</span>", linksIntro: "おすすめのWebサイトを、ここで少しずつ紹介します。", homeLinksTitle: "大切な人。<br>訪れてみてください。", footerShop: "Explore", footerTools: "Tools", footerConnect: "Connect", footerLinks: "リンク", footerOther: "その他", footerContact: "連絡先",
   },
 };
 
@@ -154,13 +157,9 @@ const setLanguage = (language) => {
     if (typeof value === "string") element.setAttribute("aria-label", value);
   });
   document.querySelectorAll(".language-switch").forEach((switcher) => {
-    const previous = switcher.dataset.currentOption || switcher.querySelector(".language-button:checked")?.getAttribute("c-option") || "1";
     const target = switcher.querySelector(`.language-button[value="${selected}"]`);
-    if (target && !target.checked) switcher.setAttribute("c-previous", previous);
     if (target) {
       target.checked = true;
-      switcher.dataset.currentOption = target.getAttribute("c-option") || "1";
-      switcher.dataset.activeOption = switcher.dataset.currentOption;
     }
   });
   saveSetting("language", selected);
@@ -195,23 +194,10 @@ const savedLanguage = readSetting("language", "");
 const initialLanguage = Object.hasOwn(translations, urlLanguage) ? urlLanguage : (Object.hasOwn(translations, savedLanguage) ? savedLanguage : (navigator.language.toLowerCase().startsWith("ja") ? "ja" : "en"));
 setLanguage(initialLanguage);
 document.querySelectorAll(".language-switch").forEach((switcher) => {
-  switcher.dataset.currentOption = switcher.querySelector(".language-button:checked")?.getAttribute("c-option") || "1";
-});
-requestAnimationFrame(() => {
-  requestAnimationFrame(() => document.querySelectorAll(".language-switch").forEach((switcher) => switcher.classList.add("is-ready")));
+  switcher.querySelector(".language-button:checked")?.setAttribute("aria-current", "true");
 });
 languageButtons.forEach((button) => button.addEventListener("change", () => {
   if (!button.checked) return;
-  const switcher = button.closest(".language-switch");
-  if (switcher) {
-    switcher.setAttribute("c-previous", switcher.dataset.currentOption || "1");
-    switcher.dataset.currentOption = button.getAttribute("c-option") || "1";
-    switcher.dataset.activeOption = switcher.dataset.currentOption;
-    switcher.classList.remove("is-switching");
-    void switcher.offsetWidth;
-    switcher.classList.add("is-switching");
-    window.setTimeout(() => switcher.classList.remove("is-switching"), 460);
-  }
   setLanguage(button.value);
 }));
 
@@ -225,8 +211,10 @@ const updateClocks = () => {
   const dateOptions = { month: "short", day: "numeric", weekday: "short" };
   localClock.textContent = new Intl.DateTimeFormat(locale, timeOptions).format(now);
   utcClock.textContent = new Intl.DateTimeFormat(locale, { ...timeOptions, timeZone: "UTC" }).format(now);
-  document.querySelector("#local-date").textContent = new Intl.DateTimeFormat(locale, dateOptions).format(now);
-  document.querySelector("#utc-date").textContent = new Intl.DateTimeFormat(locale, { ...dateOptions, timeZone: "UTC" }).format(now);
+  const localDate = document.querySelector("#local-date");
+  const utcDate = document.querySelector("#utc-date");
+   if (localDate) localDate.textContent = new Intl.DateTimeFormat(locale, dateOptions).format(now);
+   if (utcDate) utcDate.textContent = new Intl.DateTimeFormat(locale, { ...dateOptions, timeZone: "UTC" }).format(now);
   const era = document.querySelector("#local-era");
   if (era) {
     era.hidden = currentLanguage !== "ja";
@@ -276,13 +264,13 @@ const musicDots = document.querySelectorAll(".music-dot");
 const musicPrevious = document.querySelector(".music-prev");
 const musicNext = document.querySelector(".music-next");
 let activeMusicSlide = 0;
+let musicScrollTimer;
 
-const setMusicSlide = (index) => {
+const setMusicSlide = (index, shouldScroll = true) => {
   if (!musicTrack || !musicSlides.length) return;
   activeMusicSlide = (index + musicSlides.length) % musicSlides.length;
   const controls = document.querySelector(".music-controls");
-  if (controls) controls.setAttribute("c-previous", String(Number(controls.dataset.activeSlide || 0) + 1));
-  musicTrack.style.transform = `translate3d(-${activeMusicSlide * 100}%, 0, 0)`;
+  if (shouldScroll) musicSlides[activeMusicSlide]?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
   musicSlides.forEach((slide, slideIndex) => {
     slide.classList.toggle("is-active", slideIndex === activeMusicSlide);
     slide.classList.toggle("is-before", slideIndex < activeMusicSlide);
@@ -294,27 +282,39 @@ const setMusicSlide = (index) => {
     dot.setAttribute("aria-selected", active);
     dot.tabIndex = active ? 0 : -1;
   });
-  if (controls) {
-    const activeDot = musicDots[activeMusicSlide];
-    const dotsBounds = document.querySelector(".music-dots")?.getBoundingClientRect();
-    const dotBounds = activeDot?.getBoundingClientRect();
-    if (dotsBounds && dotBounds) {
-      controls.style.setProperty("--indicator-x", `${dotBounds.left - dotsBounds.left}px`);
-      controls.style.setProperty("--indicator-width", `${dotBounds.width}px`);
-      const previous = Number(controls.dataset.activeSlide || 0);
-      controls.style.setProperty("--indicator-origin", previous < activeMusicSlide ? "left" : "right");
-      controls.style.setProperty("--indicator-animation", activeMusicSlide === 1 ? "liquid-middle-pulse 440ms ease" : "liquid-edge-pulse 440ms ease");
-    }
-    controls.dataset.activeSlide = String(activeMusicSlide);
-  }
+  if (controls) controls.dataset.activeSlide = String(activeMusicSlide);
 };
 
-setMusicSlide(0);
+setMusicSlide(0, false);
 
 musicDots.forEach((dot) => dot.addEventListener("click", () => setMusicSlide(Number(dot.dataset.slideTo))));
 musicPrevious?.addEventListener("click", () => setMusicSlide(activeMusicSlide - 1));
 musicNext?.addEventListener("click", () => setMusicSlide(activeMusicSlide + 1));
-window.addEventListener("resize", () => setMusicSlide(activeMusicSlide));
+window.addEventListener("resize", () => setMusicSlide(activeMusicSlide, false));
+
+if (musicTrack && "IntersectionObserver" in window) {
+  const syncMusicDot = () => {
+    const trackRect = musicTrack.getBoundingClientRect();
+    const trackCenter = trackRect.left + trackRect.width / 2;
+    const nearestIndex = Array.from(musicSlides).reduce((nearest, slide, index) => {
+      const rect = slide.getBoundingClientRect();
+      const distance = Math.abs(rect.left + rect.width / 2 - trackCenter);
+      return distance < nearest.distance ? { index, distance } : nearest;
+    }, { index: activeMusicSlide, distance: Number.POSITIVE_INFINITY }).index;
+    if (nearestIndex === activeMusicSlide) return;
+    activeMusicSlide = nearestIndex;
+    musicDots.forEach((dot, dotIndex) => {
+      const active = dotIndex === activeMusicSlide;
+      dot.classList.toggle("is-active", active);
+      dot.setAttribute("aria-selected", String(active));
+      dot.tabIndex = active ? 0 : -1;
+    });
+  };
+  musicTrack.addEventListener("scroll", () => {
+    window.clearTimeout(musicScrollTimer);
+    musicScrollTimer = window.setTimeout(syncMusicDot, 80);
+  }, { passive: true });
+}
 
 let musicTouchStart = 0;
 musicTrack?.addEventListener("touchstart", (event) => { musicTouchStart = event.touches[0].clientX; }, { passive: true });
@@ -393,6 +393,7 @@ const closeMenu = () => {
   document.body.classList.remove("menu-open");
   menuButton?.setAttribute("aria-expanded", "false");
   mobileMenu?.setAttribute("aria-hidden", "true");
+  mobileMenu?.setAttribute("inert", "");
   if (menuScrim) menuScrim.hidden = true;
 };
 const openMenu = () => {
@@ -400,6 +401,7 @@ const openMenu = () => {
   requestAnimationFrame(() => document.body.classList.add("menu-open"));
   menuButton?.setAttribute("aria-expanded", "true");
   mobileMenu?.setAttribute("aria-hidden", "false");
+  mobileMenu?.removeAttribute("inert");
 };
 menuButton?.addEventListener("click", openMenu);
 document.querySelector(".menu-close")?.addEventListener("click", closeMenu);
