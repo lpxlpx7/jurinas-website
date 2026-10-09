@@ -1,0 +1,93 @@
+/* One transform per object; hover never modifies position. */
+.portrait-stage {
+  position: relative;
+  width: min(100%, 520px);
+  margin-inline: auto;
+  transform: translate(var(--stage-x, 0px), var(--stage-y, 0px));
+  isolation: isolate;
+}
+.portrait-stage .portrait-card,
+.portrait-stage .portrait-card:hover {
+  width: 100%;
+  margin: 0;
+  padding: 14px 14px 58px;
+  background: #f5f1e7;
+  border: 1px solid #d8d2c5;
+  transform-origin: 50% 0;
+  transform: rotate(var(--card-angle, -1.2deg));
+  transition: none;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  box-shadow: 0 3px 5px #0002, 0 18px 32px #0002;
+}
+.portrait-stage .portrait-card.is-dragging { cursor: grabbing; }
+.portrait-stage .portrait-card img,
+.portrait-stage .portrait-card:hover img { transform: none; transition: none; -webkit-user-drag: none; }
+.portrait-stage .polaroid-tape {
+  position: absolute;
+  z-index: 30;
+  top: -12px;
+  left: 50%;
+  width: 84px;
+  height: 26px;
+  background: #d1bd87cc;
+  transform: translateX(-50%) rotate(2deg);
+  transform-origin: 50% 50%;
+  cursor: grab;
+  pointer-events: auto;
+  touch-action: none;
+  transition: none;
+  box-shadow: inset 0 0 4px #fff3, 0 1px 2px #0002;
+}
+.portrait-stage .polaroid-tape.is-dragging { cursor: grabbing; }
+.portrait-stage.is-entering { animation: photo-arrival 850ms ease-out both; }
+@keyframes photo-arrival {
+  from { opacity: 0; translate: 0 -80px; }
+  to { opacity: 1; translate: 0 0; }
+}
+[data-theme="dark"] .portrait-stage .portrait-card { background: #34312c; border-color: #454138; box-shadow: 0 18px 35px #0008; }
+[data-theme="dark"] .portrait-stage .portrait-card img { filter: brightness(.8); }
+[data-theme="dark"] .portrait-stage .portrait-reference { color: #ccc4b4; }
+
+.retro-section { width: min(1280px, calc(100% - 48px)); }
+.retro-gallery {
+  position: relative;
+  min-height: 0;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-auto-rows: 140px;
+  gap: 26px;
+  padding: 65px 45px 180px;
+  overflow: hidden;
+  align-items: stretch;
+}
+.retro-gallery img,
+.retro-gallery img:hover,
+[data-theme="dark"] .retro-gallery img:hover,
+.retro-gallery img.is-dragging:hover {
+  transform: translate3d(var(--drag-x, 0px), var(--drag-y, 0px), 0) !important;
+  transition: none !important;
+  padding: 0;
+  border: 0;
+  border-radius: 5px;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  filter: saturate(.85) brightness(.94);
+  background: #faf8f1;
+  border: 1px solid rgba(0,0,0,.1);
+  padding: 8px 8px 28px;
+  box-shadow: 0 4px 10px #0002;
+}
+.retro-gallery img { height: auto; aspect-ratio: auto; align-self: start; object-fit: contain; }
+.retro-gallery img:nth-child(n) { grid-column: span 2; grid-row: span 1; }
+.retro-gallery img.is-dragging { cursor: grabbing; }
+[data-theme="dark"] .retro-gallery img,
+[data-theme="dark"] .retro-gallery img:hover { background: #292725; filter: saturate(.75) brightness(.75); }
+@media (max-width: 640px) {
+  .retro-section { width: calc(100% - 24px); padding-inline: 18px; }
+  .retro-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 130px; padding: 35px 12px 100px; gap: 18px; }
+  .retro-gallery img:nth-child(n) { grid-column: span 1; grid-row: span 1; }
+}
+@media (prefers-reduced-motion: reduce) { .portrait-stage.is-entering { animation: none; } }

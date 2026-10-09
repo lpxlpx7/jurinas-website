@@ -8,7 +8,11 @@
   <title>Jurina's Homepage</title>
   <script src="js/theme-init.js?v=20261010-1"></script>
   <link rel="stylesheet" href="css/style.css?v=20261010-1">
+  <link rel="stylesheet" href="css/interactive-photos.css?v=20261010-2">
+  <link rel="stylesheet" href="css/interactive-photos.css?v=20261010-2">
   <script src="js/main.js?v=20261010-1" defer></script>
+  <script src="js/interactive-photos.js?v=20261010-2" defer></script>
+  <script src="js/interactive-photos.js?v=20261010-2" defer></script>
 </head>
 <body>
   <header class="site-header">
@@ -58,19 +62,21 @@
         </div>
       </div>
 
-      <aside class="portrait-card reveal" aria-label="Avatar information">
+      <div class="portrait-stage">
+        <aside class="portrait-card" aria-label="Avatar information">
+        <div class="polaroid-tape" aria-hidden="true"></div>
         <div class="portrait-frame">
-          <img src="img/avatar.png" alt="Jurina's avatar">
+          <img src="img/avatar.png" alt="Jurina's avatar" draggable="false">
         </div>
         <div class="portrait-caption">
           <div>
-            <p class="caption-label" data-i18n="avatarLabel">My avatar</p>
           </div>
         </div>
         <a class="portrait-reference" href="https://x.com/cyh74022818" target="_blank" rel="noopener noreferrer">
           <span>Artwork by cy h</span><span aria-hidden="true">↗</span>
         </a>
-      </aside>
+        </aside>
+      </div>
     </section>
 
     <section class="interests shell" id="interests" aria-labelledby="interests-title">
@@ -123,7 +129,7 @@
                 <div class="vinyl" aria-label="紺色に憧れて album artwork" data-i18n-aria-label="playlistAlt"><img src="img/紺色に憧れて.png" alt=""><span aria-hidden="true"></span></div>
               </a>
               <div class="playlist-copy">
-                <p class="eyebrow" data-i18n="yuikaEyebrow">My favorite artist</p>
+                <p class="eyebrow" data-i18n="yuikaEyebrow">My favorite</p>
                 <h2 data-i18n="yuikaTitle">『ユイカ』</h2>
                 <p data-i18n="yuikaBody"><strong>紺色に憧れて</strong> is my favorite album, and one I always come back to.</p>
                 <div class="music-actions">
@@ -180,15 +186,15 @@
     <section class="retro-section shell reveal" id="retro">
       <div class="retro-era" aria-hidden="true"><span>平成</span><strong>25 — 27</strong></div>
       <div class="retro-gallery" aria-label="Heisei photo gallery">
-        <img src="img/Retro/1.png" alt="" loading="lazy">
-        <img src="img/Retro/2.png" alt="" loading="lazy">
-        <img src="img/Retro/3.png" alt="" loading="lazy">
-        <img src="img/Retro/4.png" alt="" loading="lazy">
-        <img src="img/Retro/5.png" alt="" loading="lazy">
-        <img src="img/Retro/6.png" alt="" loading="lazy">
-        <img src="img/Retro/7.png" alt="" loading="lazy">
-        <img src="img/Retro/8.png" alt="" loading="lazy">
-        <img src="img/Retro/9.png" alt="" loading="lazy">
+        <img src="img/Retro/1.png" alt="" loading="lazy" draggable="false">
+        <img src="img/Retro/2.png" alt="" loading="lazy" draggable="false">
+        <img src="img/Retro/3.png" alt="" loading="lazy" draggable="false">
+        <img src="img/Retro/4.png" alt="" loading="lazy" draggable="false">
+        <img src="img/Retro/5.png" alt="" loading="lazy" draggable="false">
+        <img src="img/Retro/6.png" alt="" loading="lazy" draggable="false">
+        <img src="img/Retro/7.png" alt="" loading="lazy" draggable="false">
+        <img src="img/Retro/8.png" alt="" loading="lazy" draggable="false">
+        <img src="img/Retro/9.png" alt="" loading="lazy" draggable="false">
       </div>
     </section>
 
