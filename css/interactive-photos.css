@@ -93,6 +93,15 @@
 }
 .retro-gallery img { height: auto; aspect-ratio: auto; align-self: start; object-fit: contain; }
 .retro-gallery img:nth-child(n) { grid-column: span 2; grid-row: span 1; }
+.retro-gallery img:nth-child(1) { grid-column: span 3; grid-row: span 2; transform: translate3d(var(--drag-x, 0px), var(--drag-y, 0px), 0) rotate(-4deg); }
+.retro-gallery img:nth-child(2) { grid-column: span 2; transform: translate3d(var(--drag-x, 0px), var(--drag-y, 0px), 0) rotate(3deg); }
+.retro-gallery img:nth-child(3) { grid-column: span 3; grid-row: span 2; transform: translate3d(var(--drag-x, 0px), var(--drag-y, 0px), 0) rotate(-2deg); }
+.retro-gallery img:nth-child(4) { grid-column: span 2; grid-row: span 2; transform: translate3d(var(--drag-x, 0px), var(--drag-y, 0px), 0) rotate(5deg); }
+.retro-gallery img:nth-child(5) { grid-column: span 3; transform: translate3d(var(--drag-x, 0px), var(--drag-y, 0px), 0) rotate(-3deg); }
+.retro-gallery img:nth-child(6) { grid-column: span 2; grid-row: span 2; transform: translate3d(var(--drag-x, 0px), var(--drag-y, 0px), 0) rotate(2deg); }
+.retro-gallery img:nth-child(7) { grid-column: span 2; transform: translate3d(var(--drag-x, 0px), var(--drag-y, 0px), 0) rotate(-5deg); }
+.retro-gallery img:nth-child(8) { grid-column: span 3; grid-row: span 2; transform: translate3d(var(--drag-x, 0px), var(--drag-y, 0px), 0) rotate(3deg); }
+.retro-gallery img:nth-child(9) { grid-column: span 3; transform: translate3d(var(--drag-x, 0px), var(--drag-y, 0px), 0) rotate(-2deg); }
 .retro-gallery img.is-dragging { cursor: grabbing; }
 [data-theme="dark"] .retro-gallery img,
 [data-theme="dark"] .retro-gallery img:hover { background: #292725; filter: saturate(.75) brightness(.75); }
@@ -100,5 +109,8 @@
   .retro-section { width: calc(100% - 24px); padding-inline: 18px; }
   .retro-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 130px; padding: 35px 12px 100px; gap: 18px; }
   .retro-gallery img:nth-child(n) { grid-column: span 1; grid-row: span 1; }
+  .retro-gallery img:nth-child(n) { transform: translate3d(var(--drag-x, 0px), var(--drag-y, 0px), 0) rotate(var(--photo-rotation, 0deg)); }
+  .retro-gallery img:nth-child(1) { grid-column: span 2; grid-row: span 2; --photo-rotation: -3deg; }
+  .retro-gallery img:nth-child(2) { --photo-rotation: 3deg; }.retro-gallery img:nth-child(3) { --photo-rotation: -2deg; }.retro-gallery img:nth-child(4) { --photo-rotation: 4deg; }.retro-gallery img:nth-child(5) { --photo-rotation: -4deg; }.retro-gallery img:nth-child(6) { --photo-rotation: 2deg; }.retro-gallery img:nth-child(7) { --photo-rotation: -3deg; }.retro-gallery img:nth-child(8) { --photo-rotation: 4deg; }.retro-gallery img:nth-child(9) { --photo-rotation: -2deg; }
 }
 @media (prefers-reduced-motion: reduce) { .portrait-stage.is-entering { animation: none; } }
