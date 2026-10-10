@@ -60,6 +60,10 @@
 .portrait-stage .portrait-reference,
 .portrait-stage .portrait-reference span:first-child { font-family: "Caramel Local", "Segoe Print", "Bradley Hand", cursive !important; font-size: 24px; font-weight: 400; letter-spacing: .02em; }
 .portrait-stage .portrait-reference span:last-child { font-family: var(--font); font-size: 18px; }
+.support-email small { text-decoration: none !important; }
+.support-email:hover { text-decoration: none !important; }
+.support-email a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.footer-clocks small { color: var(--muted); font-size: 11px; }
 
 .retro-section { width: min(1280px, calc(100% - 48px)); }
 .retro-gallery {

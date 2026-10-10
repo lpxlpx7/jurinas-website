@@ -208,7 +208,7 @@ const updateClocks = () => {
   const now = new Date();
   const locale = currentLanguage === "ja" ? "ja-JP" : "en-US";
   const timeOptions = { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false };
-  const dateOptions = { month: "short", day: "numeric", weekday: "short" };
+  const dateOptions = { year: "numeric", month: "short", day: "numeric", weekday: "short", ...(currentLanguage === "ja" ? { calendar: "japanese", era: "long" } : {}) };
   localClock.textContent = new Intl.DateTimeFormat(locale, timeOptions).format(now);
   utcClock.textContent = new Intl.DateTimeFormat(locale, { ...timeOptions, timeZone: "UTC" }).format(now);
   const localDate = document.querySelector("#local-date");
@@ -217,7 +217,7 @@ const updateClocks = () => {
    if (utcDate) utcDate.textContent = new Intl.DateTimeFormat(locale, { ...dateOptions, timeZone: "UTC" }).format(now);
   const era = document.querySelector("#local-era");
   if (era) {
-    era.hidden = currentLanguage !== "ja";
+    era.hidden = true;
     era.textContent = new Intl.DateTimeFormat("ja-JP-u-ca-japanese", { era: "long", year: "numeric", month: "long", day: "numeric" }).format(now);
   }
 };

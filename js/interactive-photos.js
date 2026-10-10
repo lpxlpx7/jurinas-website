@@ -123,4 +123,5 @@
     ["dragstart", "contextmenu", "copy"].forEach((name) => area.addEventListener(name, (event) => event.preventDefault()));
     area.querySelectorAll("img").forEach((image) => { image.draggable = false; });
   });
+
 })();
