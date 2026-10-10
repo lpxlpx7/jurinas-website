@@ -60,8 +60,10 @@
 .portrait-stage .portrait-reference,
 .portrait-stage .portrait-reference span:first-child { font-family: "Caramel Local", "Segoe Print", "Bradley Hand", cursive !important; font-size: 24px; font-weight: 400; letter-spacing: .02em; }
 .portrait-stage .portrait-reference span:last-child { font-family: var(--font); font-size: 18px; }
-.support-email small { text-decoration: none !important; }
-.support-email:hover { text-decoration: none !important; }
+.support-email,
+.support-email:hover,
+.support-email small,
+.support-email small:hover { text-decoration: none !important; }
 .support-email a:hover { text-decoration: underline; text-underline-offset: 4px; }
 .footer-clocks small { color: var(--muted); font-size: 11px; }
 
@@ -118,3 +120,13 @@
   .retro-gallery img:nth-child(2) { --photo-rotation: 3deg; }.retro-gallery img:nth-child(3) { --photo-rotation: -2deg; }.retro-gallery img:nth-child(4) { --photo-rotation: 4deg; }.retro-gallery img:nth-child(5) { --photo-rotation: -4deg; }.retro-gallery img:nth-child(6) { --photo-rotation: 2deg; }.retro-gallery img:nth-child(7) { --photo-rotation: -3deg; }.retro-gallery img:nth-child(8) { --photo-rotation: 4deg; }.retro-gallery img:nth-child(9) { --photo-rotation: -2deg; }
 }
 @media (prefers-reduced-motion: reduce) { .portrait-stage.is-entering { animation: none; } }
+
+@media (max-width: 640px) {
+  .portrait-stage { width: calc(100% - 8px); }
+  .portrait-stage .portrait-card { padding: 10px 10px 52px; }
+  .portrait-stage .portrait-reference { left: 14px; bottom: 12px; font-size: 20px; }
+  .retro-section { min-height: 0; margin-block: 56px; padding: 30px 16px; }
+  .retro-gallery { min-height: 520px; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 132px; gap: 18px 10px; padding: 28px 8px 90px; }
+  .retro-gallery img:nth-child(n) { grid-column: span 1; grid-row: span 1; }
+  .retro-gallery img:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+}

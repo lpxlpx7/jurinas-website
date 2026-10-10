@@ -391,4 +391,26 @@ img { display: block; max-width: 100%; }
   .support-emails { flex-direction: column; align-items: center; gap: 8px; }
   .support-email { width: min(100%, 310px); margin-top: 20px; }
   .retro-era { gap: 14px; margin-bottom: 28px; }.retro-era span { font-size: 31px; }.retro-era strong { font-size: 70px; }
+  .hero { padding-top: 42px; }
+  .portrait-stage { margin-top: 4px; }
+  .music-track { padding-inline: 12px; gap: 10px; }
+  .music-slide { flex-basis: calc(100vw - 24px); min-height: 680px; }
+  .music-slide-inner { min-height: 680px; padding: 44px 22px 120px; gap: 28px; }
+  .music-showcase .playlist-copy h2 { font-size: clamp(44px, 14vw, 64px); }
+  .music-showcase .playlist-copy > p:not(.eyebrow) { font-size: 17px; }
+  .product-main { padding-bottom: 0; }
+  .product-intro { padding-inline: 16px; }
+  .product-feature { margin-bottom: 8px; padding-top: 36px; }
+  .product-copy { padding-inline: 20px; }
+  .product-copy h2 { font-size: clamp(32px, 10vw, 44px); }
+  .product-tagline { font-size: 18px; }
+  .product-art { width: calc(100% - 28px); height: 190px; }
+  .product-pair { margin-inline: 8px; gap: 8px; }
+  .support-hero { padding-inline: 16px; }
+  .support-emails { width: 100%; }
+  .support-email { width: 100%; max-width: 330px; }
+  .footer-directory { grid-template-columns: 1fr; gap: 30px; padding-block: 34px; }
+  .footer-column a { font-size: 14px; }
+  .footer-top { padding-block: 18px; }
+  .time-inline .footer-clocks { grid-template-columns: 1fr 1fr; gap: 18px; width: 100%; }
 }
