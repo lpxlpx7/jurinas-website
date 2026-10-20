@@ -166,11 +166,16 @@ const setLanguage = (language) => {
   updatePageLinks();
 };
 
+const themeIcons = {
+  dark: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2" fill="currentColor"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
+  light: '<svg viewBox="0 0 24 24"><path d="M20.2 14.6A8.4 8.4 0 0 1 9.4 3.8a8.4 8.4 0 1 0 10.8 10.8z" fill="currentColor"/></svg>',
+};
+
 const applyTheme = (theme) => {
   const resolved = theme === "system" ? (systemTheme.matches ? "dark" : "light") : theme;
   document.documentElement.dataset.theme = resolved;
   document.documentElement.dataset.themePreference = theme;
-  if (themeButton) themeButton.querySelector(".theme-icon").textContent = resolved === "dark" ? "☀" : "☾";
+  if (themeButton) themeButton.querySelector(".theme-icon").innerHTML = themeIcons[resolved];
   if (themeColor) themeColor.content = resolved === "dark" ? "#09090b" : "#f5f5f7";
   updatePageLinks();
 };

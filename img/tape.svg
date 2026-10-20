@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 48" width="160" height="48">
+  <defs>
+    <!-- Torn ends: irregular zigzags so the tape looks hand-ripped. -->
+    <path id="tape-shape" d="M5 0H154.5L157.6 3.4 154.2 7.1 158.8 10.6 155.3 14.2 157.9 17.5 153.6 21.3 158.4 24.6 154.8 28.4 158.9 31.8 155.1 35.6 157.5 39.2 154 43 157.2 46.2 155.6 48H6.2L2.4 44.7 6.6 41.1 1.7 37.4 5.4 33.9 2.6 30.4 6.9 26.8 1.4 23.1 5.8 19.7 2.1 16.2 6.4 12.6 1.6 9.1 5.2 5.5 2 2.2Z"/>
+    <clipPath id="tape-clip"><use href="#tape-shape"/></clipPath>
+    <linearGradient id="tape-depth" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity=".62"/>
+      <stop offset=".16" stop-color="#fff" stop-opacity=".16"/>
+      <stop offset=".58" stop-color="#fff" stop-opacity="0"/>
+      <stop offset="1" stop-color="#6b5428" stop-opacity=".16"/>
+    </linearGradient>
+    <linearGradient id="tape-glare" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+      <stop offset=".46" stop-color="#fff" stop-opacity="0"/>
+      <stop offset=".5" stop-color="#fff" stop-opacity=".42"/>
+      <stop offset=".6" stop-color="#fff" stop-opacity="0"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <!-- Long horizontal noise reads as paper fibres in washi tape. -->
+    <filter id="tape-fiber" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency=".035 .75" numOctaves="3" seed="11"/>
+      <feColorMatrix values="0 0 0 0 .42  0 0 0 0 .33  0 0 0 0 .17  1.35 0 0 0 -.56"/>
+    </filter>
+    <filter id="tape-speckle" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="1.6" numOctaves="1" seed="3"/>
+      <feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 2.2 -1.45"/>
+    </filter>
+  </defs>
+  <g clip-path="url(#tape-clip)">
+    <rect width="160" height="48" fill="#efe1b9" fill-opacity=".74"/>
+    <rect width="160" height="48" filter="url(#tape-fiber)" opacity=".42"/>
+    <rect width="160" height="48" filter="url(#tape-speckle)" opacity=".5"/>
+    <rect width="160" height="48" fill="url(#tape-depth)"/>
+    <rect width="160" height="48" fill="url(#tape-glare)"/>
+    <path d="M0 3.2H160M0 44.8H160" stroke="#8a7140" stroke-opacity=".1" stroke-width="1.2"/>
+  </g>
+  <use href="#tape-shape" fill="none" stroke="#fff" stroke-opacity=".38" stroke-width=".7"/>
+</svg>
