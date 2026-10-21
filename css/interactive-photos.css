@@ -1,4 +1,4 @@
-/* One transform per object; hover never modifies position. */
+/* Hanging polaroid + Heisei photo wall. JS only writes custom properties; CSS owns every transform. */
 @font-face {
   font-family: "Caramel Local";
   src: url("../fort/Caramel-Regular.ttf") format("truetype");
@@ -7,43 +7,44 @@
   font-display: swap;
 }
 
+/* ---------- Hanging polaroid ---------- */
 .portrait-stage {
   --card-angle: -1.2deg;
   --card-twist: 0deg;
-  --card-drop: 0px;
   --card-lift: 1;
   --shadow-x: 0px;
   --shadow-y: 14px;
   --shadow-blur: 26px;
   --shadow-alpha: .16;
-  --tape-bend: 0deg;
-  --tape-stretch: 1;
-  --sheen: 50%;
+  --pin-y: 8px;          /* how far below the card's top edge the pin goes through */
+  --pin-size: 24px;
+  --pin-shadow: 3px;
+  --sheen-x: 50%;
+  --sheen-strength: 0;
   position: relative;
-  width: min(100%, 480px);
+  width: min(100%, 460px);
   margin-inline: auto;
-  padding-top: 18px;
+  padding-top: 12px;
   perspective: 1600px;
   isolation: isolate;
 }
-.portrait-stage .portrait-card,
-.portrait-stage .portrait-card:hover {
+.portrait-card {
   position: relative;
   width: 100%;
-  margin: 0;
   padding: 14px 14px 64px;
-  border: 0;
   border-radius: 2px;
   background:
     linear-gradient(176deg, rgba(255,255,255,.7), rgba(255,255,255,0) 24%, rgba(120,100,70,0) 70%, rgba(120,100,70,.05)),
     url("../img/paper-grain.svg"),
     #fbf8f1;
-  transform-origin: 50% 0;
-  transform: translateY(var(--card-drop)) rotate(var(--card-angle)) rotateY(var(--card-twist)) scale(var(--card-lift));
-  transition: none;
+  /* The card turns around the pin. */
+  transform-origin: 50% var(--pin-y);
+  transform: rotate(var(--card-angle)) rotateY(var(--card-twist)) scale(var(--card-lift));
   cursor: grab;
-  touch-action: none;
+  /* Vertical swipes still scroll the page on touch screens; sideways drags swing the photo. */
+  touch-action: pan-y;
   user-select: none;
+  -webkit-user-select: none;
   will-change: transform;
   box-shadow:
     0 0 0 .5px rgba(60,45,25,.12),
@@ -51,137 +52,261 @@
     calc(var(--shadow-x) * .3) calc(var(--shadow-y) * .3) calc(var(--shadow-blur) * .35) rgba(50,38,22,calc(var(--shadow-alpha) * .9)),
     var(--shadow-x) var(--shadow-y) var(--shadow-blur) rgba(50,38,22,var(--shadow-alpha));
 }
-.portrait-stage .portrait-card.is-dragging { cursor: grabbing; }
-.portrait-stage .portrait-frame { position: relative; aspect-ratio: 1; overflow: hidden; background: #e7e2d8; }
-.portrait-stage .portrait-frame::after {
+.portrait-card.is-dragging { cursor: grabbing; }
+/* A faint dimple where the pin presses into the paper; it sits at the pivot, so it never drifts. */
+.portrait-card::before {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  top: calc(var(--pin-y) - var(--pin-size) * .75);
+  left: calc(50% - var(--pin-size) * .75);
+  width: calc(var(--pin-size) * 1.5);
+  height: calc(var(--pin-size) * 1.5);
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(60,40,20,.14), rgba(60,40,20,.05) 60%, transparent);
+  pointer-events: none;
+}
+.portrait-frame { position: relative; aspect-ratio: 1; overflow: hidden; background: #e7e2d8; }
+.portrait-frame img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+.portrait-frame::after {
   content: "";
   position: absolute;
   inset: 0;
   z-index: 2;
   pointer-events: none;
-  box-shadow: inset 0 0 0 1px rgba(40,30,20,.1), inset 0 1px 5px rgba(40,30,20,.16);
+  box-shadow: inset 0 0 0 1px rgba(40,30,20,.1), inset 0 1px 4px rgba(40,30,20,.14);
 }
-.portrait-stage .portrait-card img,
-.portrait-stage .portrait-card:hover img { transform: none; transition: none; -webkit-user-drag: none; }
-/* Glossy print: a soft highlight slides across as the photo swings through the light. */
+/* Glossy print. At rest only a faint satin gloss shows; a soft specular glint
+   travels across the surface while the photo moves through the light. */
 .portrait-sheen {
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  background: linear-gradient(112deg, transparent 34%, rgba(255,255,255,.34) 47%, rgba(255,255,255,.08) 53%, transparent 62%) var(--sheen) 0 / 280% 100% no-repeat;
-  mix-blend-mode: screen;
-  opacity: .7;
+  background:
+    linear-gradient(158deg, rgba(255,255,255,.16) 0%, rgba(255,255,255,.04) 28%, rgba(255,255,255,0) 46%),
+    linear-gradient(0deg, rgba(0,0,0,.05), rgba(0,0,0,0) 30%);
 }
-.portrait-stage .polaroid-tape {
+.portrait-sheen::after {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background: radial-gradient(ellipse 34% 52% at var(--sheen-x) 30%, rgba(255,255,255,.42), rgba(255,255,255,.12) 45%, rgba(255,255,255,0) 72%);
+  mix-blend-mode: soft-light;
+  opacity: var(--sheen-strength);
+}
+.portrait-caption { display: none; }
+.portrait-reference {
+  position: absolute;
+  left: 18px;
+  bottom: 14px;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  color: #4a443d;
+  font-family: "Caramel Local", "Segoe Print", "Bradley Hand", cursive;
+  font-size: 24px;
+  letter-spacing: .02em;
+  transform: rotate(-3deg);
+}
+.portrait-reference span:last-child { font-family: var(--font); font-size: 16px; }
+.portrait-reference:hover { color: #2f2a25; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+
+/* Push pin: fixed to the wall, the one thing that never moves. */
+.pushpin {
   position: absolute;
   z-index: 30;
-  top: -17px;
+  top: calc(12px + var(--pin-y));
   left: 50%;
-  width: 136px;
-  height: 40px;
-  background: url("../img/tape.svg") center / 100% 100% no-repeat;
-  transform-origin: 50% 35%;
-  transform: translateX(-50%) rotate(calc(-2.5deg + var(--tape-bend))) skewX(calc(var(--tape-bend) * -.5)) scaleY(var(--tape-stretch));
-  filter: drop-shadow(0 .5px .5px rgba(70,52,20,.22)) drop-shadow(0 2px 3px rgba(70,52,20,.1));
-  cursor: grab;
-  pointer-events: auto;
-  touch-action: none;
-  transition: none;
+  width: var(--pin-size);
+  height: var(--pin-size);
+  margin: calc(var(--pin-size) / -2) 0 0 calc(var(--pin-size) / -2);
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 30%, #fff 0 5%, #e4d8ff 12%, #a77ff5 38%, #7445dd 68%, #4c2399 100%);
+  box-shadow:
+    inset -2px -3px 4px rgba(35,10,80,.35),
+    inset 1px 1px 2px rgba(255,255,255,.45),
+    0 1px 1px rgba(30,15,5,.3),
+    var(--pin-shadow) calc(var(--pin-shadow) * 1.5) calc(2px + var(--pin-shadow)) rgba(40,25,10,.3);
+  pointer-events: none;
 }
-.portrait-stage .portrait-card.is-dragging .polaroid-tape { cursor: grabbing; }
+/* The raised cap in the middle of the head. */
+.pushpin::before {
+  content: "";
+  position: absolute;
+  inset: 24%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 32%, rgba(255,255,255,.95) 0 10%, #cdb6ff 34%, #8a5ce8 80%);
+  box-shadow: 0 1px 2px rgba(35,10,80,.35);
+}
+[data-theme="dark"] .pushpin { box-shadow: inset -2px -3px 4px rgba(20,5,50,.45), inset 1px 1px 2px rgba(255,255,255,.35), 0 1px 1px rgba(0,0,0,.5), var(--pin-shadow) calc(var(--pin-shadow) * 1.5) calc(2px + var(--pin-shadow)) rgba(0,0,0,.5); }
+[data-theme="dark"] .portrait-card::before { background: radial-gradient(closest-side, rgba(0,0,0,.35), rgba(0,0,0,.1) 60%, transparent); }
 .portrait-stage.is-entering { animation: photo-arrival 900ms cubic-bezier(.2,.9,.25,1) both; }
-@keyframes photo-arrival {
-  from { opacity: 0; translate: 0 -60px; }
-  to { opacity: 1; translate: 0 0; }
-}
-[data-theme="dark"] .portrait-stage .portrait-card {
-  background:
-    linear-gradient(176deg, rgba(255,255,255,.06), rgba(255,255,255,0) 24%),
-    url("../img/paper-grain.svg"),
-    #2e2b27;
+@keyframes photo-arrival { from { opacity: 0; translate: 0 -48px; } to { opacity: 1; translate: 0 0; } }
+
+[data-theme="dark"] .portrait-card {
+  background: linear-gradient(176deg, rgba(255,255,255,.06), rgba(255,255,255,0) 24%), url("../img/paper-grain.svg"), #2e2b27;
   box-shadow:
     0 0 0 .5px rgba(255,255,255,.08),
     0 1px 1.5px rgba(0,0,0,.4),
     calc(var(--shadow-x) * .3) calc(var(--shadow-y) * .3) calc(var(--shadow-blur) * .35) rgba(0,0,0,.45),
     var(--shadow-x) var(--shadow-y) var(--shadow-blur) rgba(0,0,0,.55);
 }
-[data-theme="dark"] .portrait-stage .portrait-card img { filter: brightness(.86); }
-[data-theme="dark"] .portrait-sheen { opacity: .35; }
-[data-theme="dark"] .portrait-stage .polaroid-tape { filter: brightness(.82) saturate(.85) drop-shadow(0 1px 2px rgba(0,0,0,.5)); }
-[data-theme="dark"] .portrait-stage .portrait-reference { color: #ccc4b4; }
-.portrait-stage .portrait-reference,
-.portrait-stage .portrait-reference span:first-child { font-family: "Caramel Local", "Segoe Print", "Bradley Hand", cursive !important; font-size: 24px; font-weight: 400; letter-spacing: .02em; }
-.portrait-stage .portrait-reference span:last-child { font-family: var(--font); font-size: 18px; }
-.support-email,
-.support-email:hover,
-.support-email small,
-.support-email small:hover { text-decoration: none !important; }
-.support-email a:hover { text-decoration: underline; text-underline-offset: 4px; }
-.footer-clocks small { color: var(--muted); font-size: 11px; }
+[data-theme="dark"] .portrait-frame img { filter: brightness(.88); }
+[data-theme="dark"] .portrait-sheen { opacity: .6; }
+[data-theme="dark"] .portrait-reference { color: #ccc4b4; }
 
-.retro-section { width: min(1280px, calc(100% - 48px)); }
+/* ---------- Heisei photo wall ---------- */
+.retro-section {
+  position: relative;
+  width: min(1240px, calc(100% - var(--gutter) * 2));
+  margin: 24px auto 96px;
+  padding: clamp(36px, 5vw, 64px) clamp(24px, 4vw, 56px) clamp(28px, 4vw, 48px);
+  overflow: hidden;
+  border-radius: var(--radius-tile);
+  background: url("../img/paper-grain.svg"), #ebe5da;
+  color: #2a2724;
+}
+.retro-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,.5), transparent 60%), repeating-linear-gradient(0deg, rgba(36,34,32,.03) 0 1px, transparent 1px 5px);
+  pointer-events: none;
+}
+.retro-head { position: relative; z-index: 1; display: flex; align-items: flex-end; justify-content: space-between; gap: 12px 32px; flex-wrap: wrap; }
+.retro-era { display: flex; align-items: baseline; gap: 20px; }
+.retro-era span { font: 700 clamp(32px, 4.4vw, 56px)/1 Georgia, "Times New Roman", serif; letter-spacing: .08em; }
+.retro-era strong { font: 400 clamp(56px, 9vw, 120px)/.8 Georgia, "Times New Roman", serif; letter-spacing: -.06em; opacity: .72; }
+.retro-hint { margin: 0 0 6px; color: #6f675d; font-size: 14px; }
+.retro-hint .hint-pointer { display: none; }
+@media (hover: hover) and (pointer: fine) and (min-width: 735px) {
+  .retro-hint .hint-pointer { display: inline; }
+  .retro-hint .hint-touch { display: none; }
+}
+
 .retro-gallery {
   position: relative;
-  min-height: 0;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  grid-auto-rows: 140px;
-  gap: 26px;
-  padding: 65px 45px 180px;
-  overflow: hidden;
-  align-items: stretch;
+  z-index: 1;
+  margin-top: clamp(20px, 3vw, 36px);
+  aspect-ratio: 100 / 72;
 }
-.retro-gallery img,
-.retro-gallery img:hover,
-[data-theme="dark"] .retro-gallery img:hover,
-.retro-gallery img.is-dragging:hover {
-  transform: translate3d(var(--drag-x, 0px), var(--drag-y, 0px), 0) !important;
-  transition: none !important;
-  padding: 0;
-  border: 0;
-  border-radius: 5px;
-  cursor: grab;
-  touch-action: none;
+.snap {
+  --dx: 0px;
+  --dy: 0px;
+  --tilt: 0deg;
+  --lift: 1;
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--w);
+  margin: 0;
+  padding: calc(var(--w) * .045) calc(var(--w) * .045) calc(var(--w) * .15);
+  border-radius: 2px;
+  background: url("../img/paper-grain.svg"), #fbf8f1;
+  box-shadow: 0 0 0 .5px rgba(60,45,25,.14), 0 1px 2px rgba(50,38,22,.12), 0 10px 22px rgba(50,38,22,.16);
+  transform: translate3d(var(--dx), var(--dy), 0) rotate(calc(var(--r) + var(--tilt))) scale(var(--lift));
+  transition: transform .7s var(--ease-out), box-shadow .5s var(--ease-out);
+  cursor: zoom-in;
   user-select: none;
-  -webkit-user-drag: none;
-  filter: saturate(.85) brightness(.94);
-  background: #faf8f1;
-  border: 1px solid rgba(0,0,0,.1);
-  padding: 8px 8px 28px;
-  box-shadow: 0 4px 10px #0002;
+  -webkit-user-select: none;
 }
-.retro-gallery img { height: auto; aspect-ratio: auto; align-self: start; object-fit: contain; }
-.retro-gallery img:nth-child(n) { grid-column: span 2; grid-row: span 1; }
-.retro-gallery img:nth-child(1) { grid-column: span 3; grid-row: span 2; transform: translate3d(var(--drag-x, 0px), var(--drag-y, 0px), 0) rotate(-4deg); }
-.retro-gallery img:nth-child(2) { grid-column: span 2; transform: translate3d(var(--drag-x, 0px), var(--drag-y, 0px), 0) rotate(3deg); }
-.retro-gallery img:nth-child(3) { grid-column: span 3; grid-row: span 2; transform: translate3d(var(--drag-x, 0px), var(--drag-y, 0px), 0) rotate(-2deg); }
-.retro-gallery img:nth-child(4) { grid-column: span 2; grid-row: span 2; transform: translate3d(var(--drag-x, 0px), var(--drag-y, 0px), 0) rotate(5deg); }
-.retro-gallery img:nth-child(5) { grid-column: span 3; transform: translate3d(var(--drag-x, 0px), var(--drag-y, 0px), 0) rotate(-3deg); }
-.retro-gallery img:nth-child(6) { grid-column: span 2; grid-row: span 2; transform: translate3d(var(--drag-x, 0px), var(--drag-y, 0px), 0) rotate(2deg); }
-.retro-gallery img:nth-child(7) { grid-column: span 2; transform: translate3d(var(--drag-x, 0px), var(--drag-y, 0px), 0) rotate(-5deg); }
-.retro-gallery img:nth-child(8) { grid-column: span 3; grid-row: span 2; transform: translate3d(var(--drag-x, 0px), var(--drag-y, 0px), 0) rotate(3deg); }
-.retro-gallery img:nth-child(9) { grid-column: span 3; transform: translate3d(var(--drag-x, 0px), var(--drag-y, 0px), 0) rotate(-2deg); }
-.retro-gallery img.is-dragging { cursor: grabbing; }
-[data-theme="dark"] .retro-gallery img,
-[data-theme="dark"] .retro-gallery img:hover { background: #292725; filter: saturate(.75) brightness(.75); }
-@media (max-width: 640px) {
-  .retro-section { width: calc(100% - 24px); padding-inline: 18px; }
-  .retro-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 130px; padding: 35px 12px 100px; gap: 18px; }
-  .retro-gallery img:nth-child(n) { grid-column: span 1; grid-row: span 1; }
-  .retro-gallery img:nth-child(n) { transform: translate3d(var(--drag-x, 0px), var(--drag-y, 0px), 0) rotate(var(--photo-rotation, 0deg)); }
-  .retro-gallery img:nth-child(1) { grid-column: span 2; grid-row: span 2; --photo-rotation: -3deg; }
-  .retro-gallery img:nth-child(2) { --photo-rotation: 3deg; }.retro-gallery img:nth-child(3) { --photo-rotation: -2deg; }.retro-gallery img:nth-child(4) { --photo-rotation: 4deg; }.retro-gallery img:nth-child(5) { --photo-rotation: -4deg; }.retro-gallery img:nth-child(6) { --photo-rotation: 2deg; }.retro-gallery img:nth-child(7) { --photo-rotation: -3deg; }.retro-gallery img:nth-child(8) { --photo-rotation: 4deg; }.retro-gallery img:nth-child(9) { --photo-rotation: -2deg; }
+.snap img { width: 100%; height: auto; background: #d9d2c4; filter: saturate(.86) contrast(.97) sepia(.06); pointer-events: none; }
+.snap:focus-visible { outline-offset: 6px; }
+@media (hover: hover) and (pointer: fine) {
+  .snap { cursor: grab; touch-action: none; }
+  .snap:hover { --lift: 1.025; box-shadow: 0 0 0 .5px rgba(60,45,25,.14), 0 2px 4px rgba(50,38,22,.12), 0 18px 34px rgba(50,38,22,.2); }
 }
-@media (prefers-reduced-motion: reduce) { .portrait-stage.is-entering { animation: none; } .portrait-sheen { display: none; } }
+.snap.is-dragging {
+  --lift: 1.06;
+  cursor: grabbing;
+  transition: box-shadow .3s ease, transform .18s linear;
+  box-shadow: 0 0 0 .5px rgba(60,45,25,.14), 0 4px 8px rgba(50,38,22,.12), 0 30px 50px rgba(50,38,22,.26);
+}
+.snap.is-moving { transition: box-shadow .3s ease; }
+.snap:nth-child(1) { --x: 3%;  --y: 4%;  --w: 33%; --r: -3.5deg; }
+.snap:nth-child(2) { --x: 38%; --y: 2%;  --w: 26%; --r: 2.5deg; }
+.snap:nth-child(3) { --x: 67%; --y: 6%;  --w: 30%; --r: -2deg; }
+.snap:nth-child(4) { --x: 4%;  --y: 41%; --w: 21%; --r: 4deg; }
+.snap:nth-child(5) { --x: 29%; --y: 36%; --w: 28%; --r: -2.5deg; }
+.snap:nth-child(6) { --x: 66%; --y: 39%; --w: 23%; --r: 3deg; }
+.snap:nth-child(7) { --x: 10%; --y: 68%; --w: 26%; --r: -4deg; }
+.snap:nth-child(8) { --x: 41%; --y: 66%; --w: 21%; --r: 2deg; }
+.snap:nth-child(9) { --x: 71%; --y: 68%; --w: 18%; --r: -3deg; }
 
-@media (max-width: 640px) {
-  .portrait-stage { width: calc(100% - 8px); }
-  .portrait-stage .portrait-card,
-  .portrait-stage .portrait-card:hover { padding: 10px 10px 54px; }
-  .portrait-stage .polaroid-tape { width: 112px; height: 33px; top: -14px; }
-  .portrait-stage .portrait-reference { left: 14px; bottom: 12px; font-size: 20px; }
-  .retro-section { min-height: 0; margin-block: 56px; padding: 30px 16px; }
-  .retro-gallery { min-height: 520px; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 132px; gap: 18px 10px; padding: 28px 8px 90px; }
-  .retro-gallery img:nth-child(n) { grid-column: span 1; grid-row: span 1; }
-  .retro-gallery img:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+.retro-tidy {
+  position: absolute;
+  z-index: 2;
+  right: clamp(20px, 3vw, 36px);
+  bottom: clamp(18px, 2.4vw, 28px);
+  min-height: 34px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(42,39,36,.08);
+  color: #2a2724;
+  font: 400 14px var(--font);
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s ease, background-color .2s ease;
+}
+.retro-tidy:hover { background: rgba(42,39,36,.14); }
+.retro-section.is-messy .retro-tidy { opacity: 1; pointer-events: auto; }
+
+[data-theme="dark"] .retro-section { background: url("../img/paper-grain.svg"), #1c1a17; color: #ebe5da; }
+[data-theme="dark"] .retro-section::before { background: radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,.05), transparent 60%); }
+[data-theme="dark"] .retro-hint { color: #a39b8f; }
+[data-theme="dark"] .snap { background: url("../img/paper-grain.svg"), #2e2b27; box-shadow: 0 0 0 .5px rgba(255,255,255,.08), 0 10px 24px rgba(0,0,0,.5); }
+[data-theme="dark"] .snap img { filter: saturate(.78) brightness(.82) sepia(.06); }
+[data-theme="dark"] .retro-tidy { background: rgba(255,255,255,.1); color: #ebe5da; }
+
+/* Phones: every print is visible at once, laid out as a loose two-column collage. Tap to enlarge. */
+@media (max-width: 734px) {
+  .portrait-stage { --pin-y: 6px; --pin-size: 19px; width: min(78%, 340px); }
+  .portrait-card { padding: 10px 10px 50px; }
+  .portrait-reference { left: 12px; bottom: 11px; font-size: 19px; }
+  .portrait-reference span:last-child { font-size: 14px; }
+
+  .retro-section { margin: 8px auto 72px; padding: 32px 18px 34px; }
+  .retro-head { padding-inline: 6px; align-items: flex-start; flex-direction: column; gap: 10px; }
+  .retro-era { gap: 14px; }
+  .retro-era span { font-size: 30px; }
+  .retro-era strong { font-size: 64px; }
+  .retro-gallery {
+    aspect-ratio: auto;
+    margin-top: 22px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: 16px 14px;
+    padding: 4px 2px 14px;
+  }
+  .snap {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: auto;
+    padding: 7px 7px 24px;
+    transform: translateY(var(--oy, 0px)) rotate(var(--r));
+    transition: transform .4s var(--ease-out), box-shadow .3s ease;
+  }
+  .snap img { aspect-ratio: 1; object-fit: cover; }
+  .snap:nth-child(1) { grid-column: 1 / -1; padding: 9px 9px 32px; --r: -1.2deg; }
+  .snap:nth-child(1) img { aspect-ratio: 16 / 10; }
+  .snap:nth-child(2) { --r: 2.2deg; }
+  .snap:nth-child(3) { --r: -2deg; --oy: 12px; }
+  .snap:nth-child(4) { --r: -1.4deg; }
+  .snap:nth-child(5) { --r: 2.6deg; --oy: 12px; }
+  .snap:nth-child(6) { --r: 1.8deg; }
+  .snap:nth-child(7) { --r: -2.4deg; --oy: 12px; }
+  .snap:nth-child(8) { --r: -1.6deg; }
+  .snap:nth-child(9) { --r: 2deg; --oy: 12px; }
+  .snap:active { transform: translateY(var(--oy, 0px)) rotate(0deg) scale(.97); }
+  .retro-tidy { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portrait-stage.is-entering { animation: none; }
+  .portrait-sheen::after { display: none; }
 }

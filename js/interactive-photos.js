@@ -1,160 +1,188 @@
-/* Independent pointer interactions. CSS variables are the only transform owner. */
+/* Pointer and motion interactions. CSS custom properties are the only transform owner. */
 (() => {
-  const clamp = (value, min, max) => Math.max(min, Math.min(Math.max(min, max), value));
+  const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
   const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
+  const phone = matchMedia("(max-width: 734px)");
+  const coarse = matchMedia("(pointer: coarse)");
+  const DEG = Math.PI / 180;
 
-  function bindDrag(element, start, move, finish) {
+  // Drag only starts from a pressed button; plain hovering never moves anything.
+  function bindDrag(element, { start, move, finish, accept = () => true }) {
     let pointer = null;
     let origin;
     let moved = false;
     element.addEventListener("pointerdown", (event) => {
       if (!event.isPrimary || event.button !== 0 || pointer !== null) return;
-      if (event.target.closest("a")) return;
-      event.preventDefault();
+      if (event.target.closest("a") || !accept(event)) return;
+      if (event.pointerType === "mouse") event.preventDefault();
       pointer = event.pointerId;
       moved = false;
       origin = { x: event.clientX, y: event.clientY };
       start(event);
-      element.setPointerCapture(pointer);
+      element.setPointerCapture?.(pointer);
       element.classList.add("is-dragging");
     });
     element.addEventListener("pointermove", (event) => {
       if (event.pointerId !== pointer) return;
       const dx = event.clientX - origin.x;
       const dy = event.clientY - origin.y;
-      moved ||= Math.hypot(dx, dy) > 5;
-      move(event, dx, dy);
+      moved ||= Math.hypot(dx, dy) > 4;
+      move(event, dx, dy, moved);
     });
     const stop = (event) => {
       if (event.pointerId !== pointer) return;
       pointer = null;
       element.classList.remove("is-dragging");
-      finish?.(event, moved);
-      if (element.hasPointerCapture(event.pointerId)) element.releasePointerCapture(event.pointerId);
+      finish?.(event, moved, event.type === "pointercancel");
+      if (element.hasPointerCapture?.(event.pointerId)) element.releasePointerCapture(event.pointerId);
     };
     ["pointerup", "pointercancel", "lostpointercapture"].forEach((name) => element.addEventListener(name, stop));
     element.addEventListener("click", (event) => {
-      if (moved) { event.preventDefault(); event.stopPropagation(); moved = false; }
+      if (moved) { event.preventDefault(); event.stopImmediatePropagation(); moved = false; }
     }, true);
   }
 
+  /* ---------- Hanging polaroid: a damped pendulum on a push pin ---------- */
   const stage = document.querySelector(".portrait-stage");
   if (stage) {
-    // The polaroid is a damped pendulum hanging from the tape. Angles are radians.
     const card = stage.querySelector(".portrait-card");
-    const REST = -1.2 * Math.PI / 180;
-    const LIMIT = 26 * Math.PI / 180;
-    const GRAVITY = 30;          // g / L: sets the swing period (~1.15s)
-    const AIR = 1.35;            // light damping so a fling swings a few times
+    const pin = stage.querySelector(".pushpin");
+    const REST = -1.2 * DEG;
+    const GRAVITY = 30;          // g / L: swing period around 1.15s
+    const AIR = 1.6;
     const HAND = 520;            // how firmly the card follows the pointer
     const HAND_DAMPING = 34;
-    const state = { angle: REST, velocity: 0, drop: 0, dropVelocity: 0, lift: 0, liftVelocity: 0 };
+    const GYRO_RANGE = 3.5 * DEG; // phones only lean the photo a little
+    const limit = () => (phone.matches ? 10 : 18) * DEG;
+
+    const state = { angle: REST, velocity: 0, lift: 0, liftVelocity: 0, lean: 0, glint: 0 };
     let dragging = false;
     let target = REST;
-    let stretch = 0;
-    let pivot, grabAngle, grabDistance, startAngle;
+    let leanTarget = 0;
+    let glintTarget = 0;
+    let pivot, grabAngle, startAngle;
     let frameId = 0;
     let lastTime = 0;
     let visible = true;
 
     const wrap = (value) => Math.atan2(Math.sin(value), Math.cos(value));
+    // The pin never moves, so its centre is the pivot.
     const pivotPoint = () => {
-      const rect = stage.getBoundingClientRect();
-      return { x: rect.left + card.offsetLeft + card.offsetWidth / 2, y: rect.top + card.offsetTop };
+      const rect = pin.getBoundingClientRect();
+      return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
     };
-    const breeze = (t) => reduceMotion.matches ? 0 : .2 * Math.sin(t * .83) + .12 * Math.sin(t * 1.71 + 1.3);
 
     const render = () => {
       const swing = state.angle - REST;
-      const depth = 14 + state.lift * 30;
+      const swingDeg = swing / DEG;
+      const depth = 14 + state.lift * 26;
       const set = (name, value) => stage.style.setProperty(name, value);
-      set("--card-angle", `${(state.angle * 180 / Math.PI).toFixed(3)}deg`);
-      set("--card-twist", `${clamp(state.velocity * 3.4, -10, 10).toFixed(3)}deg`);
-      set("--card-drop", `${state.drop.toFixed(2)}px`);
-      set("--card-lift", (1 + state.lift * .022).toFixed(4));
+      set("--card-angle", `${(state.angle / DEG).toFixed(3)}deg`);
+      set("--card-twist", `${clamp(state.velocity * 3, -8, 8).toFixed(3)}deg`);
+      set("--card-lift", (1 + state.lift * .018).toFixed(4));
       // Light comes from above, so the cast shadow stays below the card while it rotates.
       set("--shadow-x", `${(depth * Math.sin(state.angle)).toFixed(2)}px`);
       set("--shadow-y", `${(depth * Math.cos(state.angle)).toFixed(2)}px`);
-      set("--shadow-blur", `${(26 + state.lift * 34).toFixed(1)}px`);
+      set("--shadow-blur", `${(26 + state.lift * 30).toFixed(1)}px`);
       set("--shadow-alpha", (.16 - state.lift * .04).toFixed(3));
-      set("--tape-bend", `${(-swing * 180 / Math.PI * .42).toFixed(3)}deg`);
-      set("--tape-stretch", (1 + Math.max(state.drop, 0) / 40).toFixed(4));
-      set("--sheen", `${(50 + swing * 180 / Math.PI * 3.6).toFixed(2)}%`);
+      // Lifting the photo off the wall lengthens the pin's shadow on it.
+      set("--pin-shadow", `${(3 + state.lift * 3).toFixed(2)}px`);
+      // The glint follows the light: it slides with the swing and the phone's tilt.
+      const strength = clamp(Math.abs(swing) * 4 + Math.abs(state.velocity) * .35 + state.lift * .5 + state.glint, 0, 1);
+      set("--sheen-x", `${(50 - swingDeg * 4.5 - state.lean / DEG * 9).toFixed(2)}%`);
+      set("--sheen-strength", strength.toFixed(3));
     };
 
-    const step = (dt, t) => {
-      let torque = -GRAVITY * Math.sin(state.angle - REST) - AIR * state.velocity;
+    const step = (dt) => {
+      const rest = REST + state.lean;
+      let torque = -GRAVITY * Math.sin(state.angle - rest) - AIR * state.velocity;
       if (dragging) torque += HAND * (target - state.angle) - HAND_DAMPING * state.velocity;
-      else torque += breeze(t);
       state.velocity += torque * dt;
       state.angle += state.velocity * dt;
-      if (Math.abs(state.angle - REST) > LIMIT) {
-        state.angle = REST + Math.sign(state.angle - REST) * LIMIT;
+      const max = limit();
+      if (Math.abs(state.angle - REST) > max) {
+        state.angle = REST + Math.sign(state.angle - REST) * max;
         state.velocity *= -.25;
       }
-      // The tape behaves like a stiff rubber band: it stretches while pulled and rebounds on release.
-      state.dropVelocity += (340 * ((dragging ? stretch : 0) - state.drop) - 15 * state.dropVelocity) * dt;
-      state.drop += state.dropVelocity * dt;
       state.liftVelocity += (200 * ((dragging ? 1 : 0) - state.lift) - 24 * state.liftVelocity) * dt;
       state.lift += state.liftVelocity * dt;
+      // Gyroscope input is smoothed so the photo leans, never jitters.
+      state.lean += (leanTarget - state.lean) * Math.min(1, dt * 4);
+      state.glint += (glintTarget - state.glint) * Math.min(1, dt * 3);
     };
 
-    const settled = () => !dragging && Math.abs(state.angle - REST) < 1e-4 && Math.abs(state.velocity) < 1e-3
-      && Math.abs(state.drop) < .05 && Math.abs(state.dropVelocity) < .05 && state.lift < .002;
+    const settled = () => !dragging
+      && Math.abs(state.angle - REST - state.lean) < 1e-4 && Math.abs(state.velocity) < 1e-3
+      && Math.abs(state.lift) < .002 && Math.abs(state.liftVelocity) < .002
+      && Math.abs(leanTarget - state.lean) < 1e-4 && Math.abs(glintTarget - state.glint) < 1e-3;
     const frame = (time) => {
       const elapsed = Math.min((time - (lastTime || time)) / 1000, .05);
       lastTime = time;
       const steps = Math.max(1, Math.ceil(elapsed * 240));
-      for (let i = 0; i < steps; i += 1) step(elapsed / steps, time / 1000);
+      for (let i = 0; i < steps; i += 1) step(elapsed / steps);
       render();
-      const keepGoing = visible && (dragging || !reduceMotion.matches || !settled());
-      frameId = keepGoing ? requestAnimationFrame(frame) : 0;
+      frameId = visible && !settled() ? requestAnimationFrame(frame) : 0;
       if (!frameId) lastTime = 0;
     };
-    const wake = () => { if (!frameId) frameId = requestAnimationFrame(frame); };
+    const wake = () => { if (!frameId && visible) frameId = requestAnimationFrame(frame); };
 
-    bindDrag(card, (event) => {
-      stage.classList.remove("is-entering");
-      pivot = pivotPoint();
-      const dx = event.clientX - pivot.x;
-      const dy = event.clientY - pivot.y;
-      grabAngle = Math.atan2(dx, dy);
-      grabDistance = Math.hypot(dx, dy);
-      startAngle = target = state.angle;
-      stretch = 0;
-      dragging = true;
-      wake();
-    }, (event) => {
-      const dx = event.clientX - pivot.x;
-      const dy = event.clientY - pivot.y;
-      target = clamp(startAngle - wrap(Math.atan2(dx, dy) - grabAngle), REST - LIMIT, REST + LIMIT);
-      stretch = clamp(16 * Math.tanh((Math.hypot(dx, dy) - grabDistance) / 150), -3, 16);
-    }, (event, moved) => {
-      dragging = false;
-      // A tap without dragging gives the card a gentle push away from the finger.
-      if (!moved && event && !reduceMotion.matches) {
-        state.velocity += Math.sign(event.clientX - pivot.x || 1) * 1.6;
-      }
-      wake();
+    bindDrag(card, {
+      start: (event) => {
+        stage.classList.remove("is-entering");
+        pivot = pivotPoint();
+        grabAngle = Math.atan2(event.clientX - pivot.x, event.clientY - pivot.y);
+        startAngle = target = state.angle;
+        dragging = true;
+        wake();
+      },
+      move: (event) => {
+        const max = limit();
+        const angle = Math.atan2(event.clientX - pivot.x, event.clientY - pivot.y);
+        target = clamp(startAngle - wrap(angle - grabAngle), REST - max, REST + max);
+      },
+      finish: (event, moved, cancelled) => {
+        dragging = false;
+        // A tap without dragging gives the card a gentle push away from the finger.
+        if (!moved && !cancelled && !reduceMotion.matches) {
+          state.velocity += Math.sign(event.clientX - pivot.x || 1) * (phone.matches ? .9 : 1.4);
+        }
+        wake();
+      },
     });
 
-    // Fast mouse movements near the photo act like a small gust of air.
-    let lastPointer = null;
-    window.addEventListener("pointermove", (event) => {
-      if (event.pointerType !== "mouse" || dragging || reduceMotion.matches || !visible) { lastPointer = null; return; }
-      if (lastPointer && event.timeStamp > lastPointer.t) {
-        const rect = card.getBoundingClientRect();
-        const gapX = Math.max(rect.left - event.clientX, 0, event.clientX - rect.right);
-        const gapY = Math.max(rect.top - event.clientY, 0, event.clientY - rect.bottom);
-        const reach = Math.max(0, 1 - Math.hypot(gapX, gapY) / 150);
-        if (reach > 0) {
-          const speed = clamp((event.clientX - lastPointer.x) / (event.timeStamp - lastPointer.t), -4, 4);
-          state.velocity -= speed * reach * .028;
-          wake();
-        }
-      }
-      lastPointer = { x: event.clientX, t: event.timeStamp };
-    }, { passive: true });
+    /* Gyroscope: on phones the photo leans slightly as the device tilts. */
+    let neutral = null;
+    const onOrientation = (event) => {
+      if (event.gamma == null || reduceMotion.matches) return;
+      const gamma = clamp(event.gamma, -45, 45);
+      const beta = clamp(event.beta ?? 45, -90, 180);
+      // A slow-moving neutral pose means the photo drifts back to hanging straight
+      // while the phone is simply held at an angle.
+      neutral ??= { gamma, beta };
+      neutral.gamma += (gamma - neutral.gamma) * .02;
+      neutral.beta += (beta - neutral.beta) * .02;
+      const roll = gamma - neutral.gamma;
+      const pitch = beta - neutral.beta;
+      // Hanging photos stay level with the world, so they counter-rotate against the roll.
+      leanTarget = clamp(-roll * .16 * DEG, -GYRO_RANGE, GYRO_RANGE);
+      glintTarget = clamp((Math.abs(roll) + Math.abs(pitch) * .6) / 30, 0, .55);
+      wake();
+    };
+    let motionStarted = false;
+    const startMotion = () => {
+      if (motionStarted || !coarse.matches || !("DeviceOrientationEvent" in window)) return;
+      motionStarted = true;
+      window.addEventListener("deviceorientation", onOrientation, { passive: true });
+    };
+    if (typeof DeviceOrientationEvent !== "undefined" && typeof DeviceOrientationEvent.requestPermission === "function") {
+      // iOS asks for motion access, and only from a tap: the first tap on the photo turns it on.
+      card.addEventListener("click", () => {
+        if (motionStarted) return;
+        DeviceOrientationEvent.requestPermission().then((result) => { if (result === "granted") startMotion(); }).catch(() => {});
+      });
+    } else {
+      startMotion();
+    }
 
     if ("IntersectionObserver" in window) {
       new IntersectionObserver(([entry]) => {
@@ -165,7 +193,7 @@
 
     if (!reduceMotion.matches) {
       // Arrive with a little swing, as if the photo was just pinned up.
-      state.angle = REST + .16;
+      state.angle = REST + (phone.matches ? .08 : .12);
       stage.classList.add("is-entering");
       stage.addEventListener("animationend", () => stage.classList.remove("is-entering"), { once: true });
     }
@@ -173,40 +201,86 @@
     wake();
   }
 
-  document.querySelectorAll(".retro-gallery").forEach((wall) => {
-    let layer = 1;
-    wall.querySelectorAll("img").forEach((photo) => {
-      let x = 0, y = 0, baseX = 0, baseY = 0, bounds;
-      const measure = () => {
-        // offset coordinates are unaffected by transforms, hover or pointer movement.
-        const inset = 8;
-        bounds = {
-          minX: inset - photo.offsetLeft,
-          maxX: wall.clientWidth - inset - photo.offsetLeft - photo.offsetWidth,
-          minY: inset - photo.offsetTop,
-          maxY: wall.clientHeight - inset - photo.offsetTop - photo.offsetHeight,
-        };
-      };
-      const render = () => {
-        x = clamp(x, bounds.minX, bounds.maxX);
-        y = clamp(y, bounds.minY, bounds.maxY);
-        photo.style.setProperty("--drag-x", `${x}px`);
-        photo.style.setProperty("--drag-y", `${y}px`);
-      };
-      bindDrag(photo, () => {
-        measure(); baseX = x; baseY = y;
-        photo.style.zIndex = String(++layer);
-      }, (event, dx, dy) => {
-        x = baseX + dx; y = baseY + dy;
-        render();
+  /* ---------- Heisei wall: prints you can pick up and move around ---------- */
+  document.querySelectorAll(".retro-section").forEach((section) => {
+    const wall = section.querySelector(".retro-gallery");
+    const prints = Array.from(wall.querySelectorAll(".snap"));
+    const tidy = section.querySelector(".retro-tidy");
+    const offsets = new Map(prints.map((print) => [print, { x: 0, y: 0 }]));
+    let layer = prints.length;
+
+    const place = (print) => {
+      const offset = offsets.get(print);
+      print.style.setProperty("--dx", `${(offset.x * wall.clientWidth).toFixed(1)}px`);
+      print.style.setProperty("--dy", `${(offset.y * wall.clientHeight).toFixed(1)}px`);
+    };
+    const updateMessy = () => {
+      section.classList.toggle("is-messy", prints.some((print) => {
+        const offset = offsets.get(print);
+        return Math.abs(offset.x) > .002 || Math.abs(offset.y) > .002;
+      }));
+    };
+
+    prints.forEach((print, index) => {
+      print.style.zIndex = String(index + 1);
+      let base, bounds, last, tilt = 0;
+      bindDrag(print, {
+        // Touch keeps scrolling and tapping; picking up prints is for mouse and pen.
+        accept: (event) => event.pointerType !== "touch" && !phone.matches,
+        start: (event) => {
+          base = { ...offsets.get(print) };
+          const width = wall.clientWidth;
+          const height = wall.clientHeight;
+          const inset = 6;
+          bounds = {
+            minX: (inset - print.offsetLeft) / width,
+            maxX: (width - inset - print.offsetLeft - print.offsetWidth) / width,
+            minY: (inset - print.offsetTop) / height,
+            maxY: (height - inset - print.offsetTop - print.offsetHeight) / height,
+          };
+          last = { x: event.clientX, t: event.timeStamp };
+          tilt = 0;
+          print.style.zIndex = String(++layer);
+        },
+        move: (event, dx, dy, moved) => {
+          if (!moved) return;
+          print.classList.add("is-moving");
+          offsets.set(print, {
+            x: clamp(base.x + dx / wall.clientWidth, bounds.minX, bounds.maxX),
+            y: clamp(base.y + dy / wall.clientHeight, bounds.minY, bounds.maxY),
+          });
+          // A print swings slightly in the direction it is carried.
+          const elapsed = Math.max(event.timeStamp - last.t, 1);
+          const speed = (event.clientX - last.x) / elapsed;
+          tilt += (clamp(speed * 4, -7, 7) - tilt) * .25;
+          last = { x: event.clientX, t: event.timeStamp };
+          print.style.setProperty("--tilt", `${tilt.toFixed(2)}deg`);
+          place(print);
+        },
+        finish: () => {
+          print.classList.remove("is-moving");
+          print.style.setProperty("--tilt", "0deg");
+          updateMessy();
+        },
       });
-      new ResizeObserver(() => { measure(); render(); }).observe(wall);
     });
+
+    tidy?.addEventListener("click", () => {
+      prints.forEach((print, index) => {
+        offsets.set(print, { x: 0, y: 0 });
+        print.style.zIndex = String(index + 1);
+        place(print);
+      });
+      layer = prints.length;
+      updateMessy();
+    });
+
+    new ResizeObserver(() => prints.forEach(place)).observe(wall);
   });
 
-  document.querySelectorAll(".portrait-stage, .retro-gallery").forEach((area) => {
-    ["dragstart", "contextmenu", "copy"].forEach((name) => area.addEventListener(name, (event) => event.preventDefault()));
-    area.querySelectorAll("img").forEach((image) => { image.draggable = false; });
-  });
-
+  /* Photos can be viewed, not saved: no context menu, drag-out or long-press menu. */
+  const isPhoto = (target) => target instanceof Element && target.closest("img, .snap, .portrait-frame, .vinyl, .album-cover, .music-backdrop");
+  document.addEventListener("contextmenu", (event) => { if (isPhoto(event.target)) event.preventDefault(); });
+  document.addEventListener("dragstart", (event) => { if (isPhoto(event.target)) event.preventDefault(); });
+  document.querySelectorAll("img").forEach((image) => { image.draggable = false; });
 })();

@@ -48,6 +48,8 @@ const translations = {
      contactNote: "Please don't send spam or unsolicited advertising. Thanks!",
      contactProjectsLink: "See what I make ›", contactGithubLink: "Open my work ›", contactProjectsEyebrow: "Before you write", contactProjectsTitle: "A little context helps.", contactProjectsBody: "If your message is about a project, including a link or a few details makes it easier for me to understand.", contactNoteEyebrow: "A small note", contactNoteTitle: "Say what you need.", contactNoteBody: "Short messages are welcome. I read everything and get back to messages when I have something useful to say.",
       linksEyebrow: "Links", linksTitle: "Around the<br><span>internet.</span>", linksIntro: "A small collection of websites worth visiting.", homeLinksTitle: "Good company.<br>Worth a visit.", footerShop: "Explore", footerTools: "Tools", footerConnect: "Connect", footerLinks: "Links", footerOther: "Other", footerContact: "Contact",
+    vqaaKicker: "Have you met your controller time?", vqaaBody: "Check your quarterly ATC hours on VATSIM, broken down by division and ARTCC.",
+    wallLabel: "Heisei photo wall", wallHintPointer: "Drag the prints around. Click one to look closer.", wallHintTouch: "Tap a print to look closer.", wallTidy: "Tidy up",
   },
   ja: {
     brand: "Jurinaのホームページ", navHome: "ホーム", navProjects: "プロジェクト", navContact: "連絡先", navLinks: "リンク集",
@@ -99,6 +101,8 @@ const translations = {
      contactNote: "迷惑メールや一方的な広告はご遠慮ください。よろしくお願いします。",
      contactProjectsLink: "作ったものを見る ›", contactGithubLink: "制作物を見る ›", contactProjectsEyebrow: "送る前に", contactProjectsTitle: "少しだけ詳しく。", contactProjectsBody: "プロジェクトについての場合は、リンクや状況を少し書いてもらえると助かります。", contactNoteEyebrow: "ひとこと", contactNoteTitle: "用件を教えてください。", contactNoteBody: "短いメッセージでも大丈夫です。内容を読んで、必要なときに返信します。",
       linksEyebrow: "リンク", linksTitle: "インターネットの<br><span>いろいろ。</span>", linksIntro: "おすすめのWebサイトを、ここで少しずつ紹介します。", homeLinksTitle: "大切な人。<br>訪れてみてください。", footerShop: "Explore", footerTools: "Tools", footerConnect: "Connect", footerLinks: "リンク", footerOther: "その他", footerContact: "連絡先",
+    vqaaKicker: "管制時間、足りていますか？", vqaaBody: "VATSIMでの四半期ごとの管制時間を、DivisionやARTCC別に確認できます。",
+    wallLabel: "平成の写真", wallHintPointer: "写真はドラッグで動かせます。クリックで拡大。", wallHintTouch: "写真をタップで拡大。", wallTidy: "片付ける",
   },
 };
 
@@ -275,7 +279,11 @@ const setMusicSlide = (index, shouldScroll = true) => {
   if (!musicTrack || !musicSlides.length) return;
   activeMusicSlide = (index + musicSlides.length) % musicSlides.length;
   const controls = document.querySelector(".music-controls");
-  if (shouldScroll) musicSlides[activeMusicSlide]?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+  const slide = musicSlides[activeMusicSlide];
+  if (shouldScroll && slide) {
+    const left = slide.offsetLeft - (musicTrack.clientWidth - slide.offsetWidth) / 2;
+    musicTrack.scrollTo({ left, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+  }
   musicSlides.forEach((slide, slideIndex) => {
     slide.classList.toggle("is-active", slideIndex === activeMusicSlide);
     slide.classList.toggle("is-before", slideIndex < activeMusicSlide);
@@ -295,7 +303,7 @@ setMusicSlide(0, false);
 musicDots.forEach((dot) => dot.addEventListener("click", () => setMusicSlide(Number(dot.dataset.slideTo))));
 musicPrevious?.addEventListener("click", () => setMusicSlide(activeMusicSlide - 1));
 musicNext?.addEventListener("click", () => setMusicSlide(activeMusicSlide + 1));
-window.addEventListener("resize", () => setMusicSlide(activeMusicSlide, false));
+window.addEventListener("resize", () => setMusicSlide(activeMusicSlide, false), { passive: true });
 
 if (musicTrack && "IntersectionObserver" in window) {
   const syncMusicDot = () => {
@@ -321,12 +329,6 @@ if (musicTrack && "IntersectionObserver" in window) {
   }, { passive: true });
 }
 
-let musicTouchStart = 0;
-musicTrack?.addEventListener("touchstart", (event) => { musicTouchStart = event.touches[0].clientX; }, { passive: true });
-musicTrack?.addEventListener("touchend", (event) => {
-  const distance = event.changedTouches[0].clientX - musicTouchStart;
-  if (Math.abs(distance) > 50) setMusicSlide(activeMusicSlide + (distance < 0 ? 1 : -1));
-}, { passive: true });
 
 document.querySelector(".music-showcase")?.addEventListener("keydown", (event) => {
   if (event.key === "ArrowLeft") setMusicSlide(activeMusicSlide - 1);
@@ -349,35 +351,41 @@ const showGalleryImage = (index) => {
   if (lightboxCount) lightboxCount.textContent = `${activeGalleryImage + 1} / ${galleryImages.length}`;
 };
 
+let lightboxTimer;
 const openLightbox = (index) => {
-  if (!lightbox) return;
+  if (!lightbox || index < 0) return;
+  window.clearTimeout(lightboxTimer);
   showGalleryImage(index);
   lightbox.hidden = false;
   lightbox.setAttribute("aria-hidden", "false");
   document.body.classList.add("lightbox-open");
-  document.querySelector(".lightbox-close")?.focus();
+  document.querySelector(".lightbox-close")?.focus({ preventScroll: true });
 };
 
 const closeLightbox = () => {
-  if (!lightbox) return;
+  if (!lightbox || lightbox.hidden) return;
   lightbox.setAttribute("aria-hidden", "true");
   document.body.classList.remove("lightbox-open");
-  window.setTimeout(() => { lightbox.hidden = true; }, 240);
+  lightboxTimer = window.setTimeout(() => { lightbox.hidden = true; }, 240);
 };
 
+// Heisei prints are <figure class="snap"> wrappers; Reiwa photos are bare images.
+const galleryItem = (target) => (target instanceof Element ? target.closest(".snap, .reiwa-gallery img") : null);
+const galleryImage = (item) => (item.matches("img") ? item : item.querySelector("img"));
 document.querySelectorAll(".retro-gallery, .reiwa-gallery").forEach((gallery) => {
-  gallery.querySelectorAll("img").forEach((image) => {
-    image.tabIndex = 0;
-    image.setAttribute("role", "button");
+  gallery.querySelectorAll(".snap, .reiwa-gallery img").forEach((item) => {
+    item.tabIndex = 0;
+    item.setAttribute("role", "button");
   });
   gallery.addEventListener("click", (event) => {
-    if (!(event.target instanceof HTMLImageElement)) return;
-    openLightbox(getGalleryImages().indexOf(event.target));
+    const item = galleryItem(event.target);
+    if (item) openLightbox(getGalleryImages().indexOf(galleryImage(item)));
   });
   gallery.addEventListener("keydown", (event) => {
-    if (!(event.target instanceof HTMLImageElement) || (event.key !== "Enter" && event.key !== " ")) return;
+    const item = galleryItem(event.target);
+    if (!item || (event.key !== "Enter" && event.key !== " ")) return;
     event.preventDefault();
-    openLightbox(getGalleryImages().indexOf(event.target));
+    openLightbox(getGalleryImages().indexOf(galleryImage(item)));
   });
 });
 document.querySelector(".lightbox-close")?.addEventListener("click", closeLightbox);
