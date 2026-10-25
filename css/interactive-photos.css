@@ -1,11 +1,4 @@
 /* Hanging polaroid + Heisei photo wall. JS only writes custom properties; CSS owns every transform. */
-@font-face {
-  font-family: "Caramel Local";
-  src: url("../fort/Caramel-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
 
 /* ---------- Hanging polaroid ---------- */
 .portrait-stage {
@@ -96,21 +89,20 @@
   opacity: var(--sheen-strength);
 }
 .portrait-caption { display: none; }
+/* Caption: small system type, like the label under a product shot. */
 .portrait-reference {
   position: absolute;
   left: 18px;
-  bottom: 14px;
+  bottom: 23px;
   display: inline-flex;
   align-items: baseline;
   gap: 4px;
-  color: #4a443d;
-  font-family: "Caramel Local", "Segoe Print", "Bradley Hand", cursive;
-  font-size: 24px;
-  letter-spacing: .02em;
-  transform: rotate(-3deg);
+  color: #86868b;
+  font: 400 13px/1 var(--font);
+  letter-spacing: -.005em;
+  transition: color .2s ease;
 }
-.portrait-reference span:last-child { font-family: var(--font); font-size: 16px; }
-.portrait-reference:hover { color: #2f2a25; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.portrait-reference:hover { color: var(--blue); }
 
 /* Push pin: fixed to the wall, the one thing that never moves. */
 .pushpin {
@@ -122,9 +114,9 @@
   height: var(--pin-size);
   margin: calc(var(--pin-size) / -2) 0 0 calc(var(--pin-size) / -2);
   border-radius: 50%;
-  background: radial-gradient(circle at 34% 30%, #fff 0 5%, #e4d8ff 12%, #a77ff5 38%, #7445dd 68%, #4c2399 100%);
+  background: radial-gradient(circle at 34% 30%, #fff 0 5%, #c7c7cc 14%, #6e6e73 42%, #3a3a3c 70%, #1d1d1f 100%);
   box-shadow:
-    inset -2px -3px 4px rgba(35,10,80,.35),
+    inset -2px -3px 4px rgba(0,0,0,.35),
     inset 1px 1px 2px rgba(255,255,255,.45),
     0 1px 1px rgba(30,15,5,.3),
     var(--pin-shadow) calc(var(--pin-shadow) * 1.5) calc(2px + var(--pin-shadow)) rgba(40,25,10,.3);
@@ -136,10 +128,11 @@
   position: absolute;
   inset: 24%;
   border-radius: 50%;
-  background: radial-gradient(circle at 38% 32%, rgba(255,255,255,.95) 0 10%, #cdb6ff 34%, #8a5ce8 80%);
-  box-shadow: 0 1px 2px rgba(35,10,80,.35);
+  background: radial-gradient(circle at 38% 32%, rgba(255,255,255,.9) 0 10%, #aeaeb2 36%, #48484a 82%);
+  box-shadow: 0 1px 2px rgba(0,0,0,.35);
 }
-[data-theme="dark"] .pushpin { box-shadow: inset -2px -3px 4px rgba(20,5,50,.45), inset 1px 1px 2px rgba(255,255,255,.35), 0 1px 1px rgba(0,0,0,.5), var(--pin-shadow) calc(var(--pin-shadow) * 1.5) calc(2px + var(--pin-shadow)) rgba(0,0,0,.5); }
+[data-theme="dark"] .pushpin { background: radial-gradient(circle at 34% 30%, #fff 0 6%, #f2f2f7 16%, #c7c7cc 44%, #8e8e93 74%, #636366 100%); box-shadow: inset -2px -3px 4px rgba(0,0,0,.3), inset 1px 1px 2px rgba(255,255,255,.35), 0 1px 1px rgba(0,0,0,.5), var(--pin-shadow) calc(var(--pin-shadow) * 1.5) calc(2px + var(--pin-shadow)) rgba(0,0,0,.5); }
+[data-theme="dark"] .pushpin::before { background: radial-gradient(circle at 38% 32%, #fff 0 12%, #e5e5ea 40%, #aeaeb2 85%); }
 [data-theme="dark"] .portrait-card::before { background: radial-gradient(closest-side, rgba(0,0,0,.35), rgba(0,0,0,.1) 60%, transparent); }
 .portrait-stage.is-entering { animation: photo-arrival 900ms cubic-bezier(.2,.9,.25,1) both; }
 @keyframes photo-arrival { from { opacity: 0; translate: 0 -48px; } to { opacity: 1; translate: 0 0; } }
@@ -154,7 +147,8 @@
 }
 [data-theme="dark"] .portrait-frame img { filter: brightness(.88); }
 [data-theme="dark"] .portrait-sheen { opacity: .6; }
-[data-theme="dark"] .portrait-reference { color: #ccc4b4; }
+[data-theme="dark"] .portrait-reference { color: #8e8e93; }
+[data-theme="dark"] .portrait-reference:hover { color: var(--blue); }
 
 /* ---------- Heisei photo wall ---------- */
 .retro-section {
@@ -265,8 +259,7 @@
 @media (max-width: 734px) {
   .portrait-stage { --pin-y: 6px; --pin-size: 19px; width: min(78%, 340px); }
   .portrait-card { padding: 10px 10px 50px; }
-  .portrait-reference { left: 12px; bottom: 11px; font-size: 19px; }
-  .portrait-reference span:last-child { font-size: 14px; }
+  .portrait-reference { left: 12px; bottom: 18px; font-size: 12px; }
 
   .retro-section { margin: 8px auto 72px; padding: 32px 18px 34px; }
   .retro-head { padding-inline: 6px; align-items: flex-start; flex-direction: column; gap: 10px; }
