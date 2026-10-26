@@ -14,7 +14,7 @@ const translations = {
      friendName: "大切な人", friendBody: "They're a really nice person, and their liveries look great.", friendLinkLabel: "Visit their website",
     interestsEyebrow: "Interests", interestsTitle: "A few things<br>I'm into.",
     musicKicker: "Now playing", musicTitle: "MUSIC",
-    musicBody: "J-Pop, especially <a href=\"https://www.universal-music.co.jp/yuika/\" target=\"_blank\" rel=\"noopener noreferrer\">Yuika ↗</a>.",
+    musicBody: "J-Pop, especially <a href=\"https://www.universal-music.co.jp/yuika/\" target=\"_blank\" rel=\"noopener noreferrer\">Yuika <span class=\"icon icon-external\" aria-hidden=\"true\"></span></a>.",
     flightKicker: "Flight simulation", flightTitle: "FLIGHT",
     flightBody: "Flying and controlling on VATSIM and IVAO.",
     gamesKicker: "Gaming", gamesTitle: "GAME",
@@ -67,7 +67,7 @@ const translations = {
     friendName: "大切な人", friendBody: "とてもいい人で、作っている機体塗装もきれいです。", friendLinkLabel: "ウェブサイトを開く",
     interestsEyebrow: "趣味", interestsTitle: "好きなものを、<br>少しだけ。",
     musicKicker: "音楽", musicTitle: "MUSIC",
-    musicBody: "J-Pop、特に<a href=\"https://www.universal-music.co.jp/yuika/\" target=\"_blank\" rel=\"noopener noreferrer\">ユイカ ↗</a>。",
+    musicBody: "J-Pop、特に<a href=\"https://www.universal-music.co.jp/yuika/\" target=\"_blank\" rel=\"noopener noreferrer\">ユイカ <span class=\"icon icon-external\" aria-hidden=\"true\"></span></a>。",
     flightKicker: "フライトシミュレーション", flightTitle: "FLIGHT",
     flightBody: "VATSIMとIVAOで、飛んだり管制したり。",
     gamesKicker: "ゲーム", gamesTitle: "GAME",
@@ -171,8 +171,8 @@ const setLanguage = (language) => {
 };
 
 const themeIcons = {
-  dark: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2" fill="currentColor"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
-  light: '<svg viewBox="0 0 24 24"><path d="M20.2 14.6A8.4 8.4 0 0 1 9.4 3.8a8.4 8.4 0 1 0 10.8 10.8z" fill="currentColor"/></svg>',
+  dark: '<span class="icon icon-sun"></span>',
+  light: '<span class="icon icon-moon"></span>',
 };
 
 const applyTheme = (theme) => {
@@ -270,6 +270,8 @@ loadGallery(".reiwa-section", ".reiwa-gallery", "img/reiwa", "reiwa", 20);
 const musicTrack = document.querySelector(".music-track");
 const musicSlides = Array.from(document.querySelectorAll(".music-slide"));
 const musicDots = document.querySelectorAll(".music-dot");
+const musicPrevious = document.querySelector(".music-prev");
+const musicNext = document.querySelector(".music-next");
 let activeMusicSlide = -1;
 let musicTarget = null;
 let musicFrame = 0;
@@ -283,6 +285,8 @@ const markMusicSlide = (index) => {
     dot.setAttribute("aria-selected", String(active));
     dot.tabIndex = active ? 0 : -1;
   });
+  if (musicPrevious) musicPrevious.disabled = index === 0;
+  if (musicNext) musicNext.disabled = index === musicSlides.length - 1;
 };
 
 // Positions come from layout offsets, so the dots never wait for a scroll to finish.
@@ -302,7 +306,7 @@ const nearestMusicSlide = () => {
 
 const goToMusicSlide = (index) => {
   if (!musicTrack || !musicSlides.length) return;
-  const target = (index + musicSlides.length) % musicSlides.length;
+  const target = Math.max(0, Math.min(index, musicSlides.length - 1));
   // The dot moves immediately; the scroll catches up underneath it.
   markMusicSlide(target);
   musicTarget = target;
@@ -331,14 +335,50 @@ if (musicTrack && musicSlides.length) {
   // Grabbing the rail mid-animation takes over from the dot.
   ["pointerdown", "wheel", "touchstart"].forEach((name) => musicTrack.addEventListener(name, () => { musicTarget = null; }, { passive: true }));
   musicDots.forEach((dot) => dot.addEventListener("click", () => goToMusicSlide(Number(dot.dataset.slideTo))));
-  document.querySelector(".music-prev")?.addEventListener("click", () => goToMusicSlide(activeMusicSlide - 1));
-  document.querySelector(".music-next")?.addEventListener("click", () => goToMusicSlide(activeMusicSlide + 1));
+  musicPrevious?.addEventListener("click", () => goToMusicSlide(activeMusicSlide - 1));
+  musicNext?.addEventListener("click", () => goToMusicSlide(activeMusicSlide + 1));
   document.querySelector(".music-showcase")?.addEventListener("keydown", (event) => {
     if (event.key === "ArrowLeft") goToMusicSlide(activeMusicSlide - 1);
     if (event.key === "ArrowRight") goToMusicSlide(activeMusicSlide + 1);
   });
   // Album artwork stays put: no dragging images or links out of the rail.
   musicTrack.addEventListener("dragstart", (event) => event.preventDefault());
+
+  // Mouse drag: the rail follows the pointer, then settles one slide over in the drag direction.
+  // Touch screens already swipe natively, so only the mouse is handled here.
+  let musicDrag = null;
+  let musicDragEnded = 0;
+  musicTrack.addEventListener("pointerdown", (event) => {
+    if (event.pointerType !== "mouse" || event.button !== 0) return;
+    musicDrag = { id: event.pointerId, x: event.clientX, left: musicTrack.scrollLeft, from: activeMusicSlide, moved: false };
+  });
+  musicTrack.addEventListener("pointermove", (event) => {
+    if (!musicDrag || event.pointerId !== musicDrag.id) return;
+    const dx = event.clientX - musicDrag.x;
+    if (!musicDrag.moved) {
+      if (Math.abs(dx) < 6) return;
+      musicDrag.moved = true;
+      musicTrack.classList.add("is-dragging");
+      musicTrack.setPointerCapture(event.pointerId);
+    }
+    musicTrack.scrollLeft = musicDrag.left - dx;
+  });
+  const endMusicDrag = (event) => {
+    if (!musicDrag || event.pointerId !== musicDrag.id) return;
+    const { moved, x, from } = musicDrag;
+    musicDrag = null;
+    if (!moved) return;
+    musicTrack.classList.remove("is-dragging");
+    musicDragEnded = performance.now();
+    const dx = event.clientX - x;
+    goToMusicSlide(Math.abs(dx) > 60 ? from + (dx < 0 ? 1 : -1) : nearestMusicSlide());
+  };
+  musicTrack.addEventListener("pointerup", endMusicDrag);
+  musicTrack.addEventListener("pointercancel", endMusicDrag);
+  // A drag that ends over a link must not open it.
+  musicTrack.addEventListener("click", (event) => {
+    if (performance.now() - musicDragEnded < 300) { event.preventDefault(); event.stopPropagation(); }
+  }, true);
 }
 
 // The pride flags are decoration: no context menu, dragging or copying.
