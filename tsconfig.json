@@ -1,15 +1,18 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "rootDir": "src",
-    "outDir": "js",
+    "target": "ES2023",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "types": ["node"],
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "allowImportingTsExtensions": true,
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true,
+    "noEmit": true,
     "strict": true,
     "noUnusedLocals": true,
     "noFallthroughCasesInSwitch": true,
-    "skipLibCheck": true,
-    "removeComments": false,
-    "newLine": "lf"
+    "skipLibCheck": true
   },
   "include": ["src"]
 }
