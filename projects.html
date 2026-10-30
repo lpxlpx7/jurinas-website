@@ -6,9 +6,9 @@
   <meta name="description" content="Explore Jurina's VATSYS plugins, VATSIM tools, and aviation and community projects.">
   <meta name="theme-color" content="#f5f5f7">
   <title>Projects | Jurina's Homepage</title>
-  <script src="js/theme-init.js?v=20261021-3"></script>
-  <link rel="stylesheet" href="css/style.css?v=20261029-2">
-  <script src="js/main.js?v=20261029-2" defer></script>
+  <script src="js/theme-init.js?v=20261030-1"></script>
+  <link rel="stylesheet" href="css/style.css?v=20261030-4">
+  <script src="js/main.js?v=20261030-4" defer></script>
 </head>
 <body data-title-key="projectsPageTitle">
   <header class="site-header">
@@ -18,17 +18,23 @@
         <div class="nav-links"><a href="index.html" data-i18n="navHome">Home</a><a class="is-active" href="projects.html" data-i18n="navProjects" aria-current="page">Projects</a><a href="contact.html" data-i18n="navContact">Contact</a></div>
         <fieldset class="language-switch" aria-label="Language" data-i18n-aria-label="languageLabel"><legend data-i18n="languageLabel">Language</legend><label class="language-option"><input class="language-button" type="radio" name="language-desktop" value="en" checked><span>EN</span></label><label class="language-option"><input class="language-button" type="radio" name="language-desktop" value="ja"><span>日本語</span></label></fieldset>
         <button class="theme-button" type="button" aria-label="Switch color theme" data-i18n-aria-label="themeLabel"><span class="theme-icon" aria-hidden="true"><span class="icon icon-moon" aria-hidden="true"></span></span></button>
-        <button class="menu-button" type="button" aria-label="Open menu" aria-expanded="false" data-i18n-aria-label="menuOpen"><span></span><span></span></button>
+        <button class="menu-button" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu" data-i18n-aria-label="menuOpen"><svg class="menu-icon" width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><polyline class="menu-bread menu-bread-bottom" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" points="2 12, 16 12"><animate class="menu-anim-open" attributeName="points" keyTimes="0;0.5;1" dur="0.24s" begin="indefinite" fill="freeze" calcMode="spline" keySplines="0.42, 0, 1, 1;0, 0, 0.58, 1" values="2 12, 16 12;2 9, 16 9;3.5 15, 15 3.5"/><animate class="menu-anim-close" attributeName="points" keyTimes="0;0.5;1" dur="0.24s" begin="indefinite" fill="freeze" calcMode="spline" keySplines="0.42, 0, 1, 1;0, 0, 0.58, 1" values="3.5 15, 15 3.5;2 9, 16 9;2 12, 16 12"/></polyline><polyline class="menu-bread menu-bread-top" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" points="2 5, 16 5"><animate class="menu-anim-open" attributeName="points" keyTimes="0;0.5;1" dur="0.24s" begin="indefinite" fill="freeze" calcMode="spline" keySplines="0.42, 0, 1, 1;0, 0, 0.58, 1" values="2 5, 16 5;2 9, 16 9;3.5 3.5, 15 15"/><animate class="menu-anim-close" attributeName="points" keyTimes="0;0.5;1" dur="0.24s" begin="indefinite" fill="freeze" calcMode="spline" keySplines="0.42, 0, 1, 1;0, 0, 0.58, 1" values="3.5 3.5, 15 15;2 9, 16 9;2 5, 16 5"/></polyline></svg></button>
       </div>
     </nav>
   </header>
-  <div class="menu-scrim" hidden></div>
-  <aside class="mobile-menu" aria-hidden="true" inert>
-    <div class="mobile-menu-head"><span data-i18n="menuTitle">Navigate</span><button class="menu-close" type="button" aria-label="Close menu" data-i18n-aria-label="menuClose"><span class="icon icon-close" aria-hidden="true"></span></button></div>
-    <fieldset class="mobile-language language-switch" aria-label="Language" data-i18n-aria-label="languageLabel"><legend data-i18n="languageLabel">Language</legend><label class="language-option"><input class="language-button" type="radio" name="language-mobile" value="en" checked><span>EN</span></label><label class="language-option"><input class="language-button" type="radio" name="language-mobile" value="ja"><span>日本語</span></label></fieldset>
-    <nav class="mobile-nav" aria-label="Mobile navigation" data-i18n-aria-label="mobileNavLabel"><a href="index.html"><span data-i18n="navHome">Home</span><span>01</span></a><a class="is-active" href="projects.html" aria-current="page"><span data-i18n="navProjects">Projects</span><span>02</span></a><a href="contact.html"><span data-i18n="navContact">Contact</span><span>03</span></a></nav>
-    <p class="mobile-menu-note" data-i18n="menuNote">Stuff I like and stuff I've made.</p>
-  </aside>
+  <div class="mobile-menu" id="mobile-menu" aria-hidden="true" inert>
+    <nav class="mobile-nav" aria-label="Mobile navigation" data-i18n-aria-label="mobileNavLabel">
+      <ul>
+        <li><a href="index.html"><span data-i18n="navHome">Home</span></a></li>
+        <li><a class="is-active" aria-current="page" href="projects.html"><span data-i18n="navProjects">Projects</span></a></li>
+        <li><a href="contact.html"><span data-i18n="navContact">Contact</span></a></li>
+      </ul>
+    </nav>
+    <div class="mobile-menu-group">
+      <h2 data-i18n="languageLabel">Language</h2>
+      <fieldset class="mobile-language language-switch" aria-label="Language" data-i18n-aria-label="languageLabel"><legend data-i18n="languageLabel">Language</legend><label class="language-option"><input class="language-button" type="radio" name="language-mobile" value="en" checked><span>English</span></label><label class="language-option"><input class="language-button" type="radio" name="language-mobile" value="ja"><span>日本語</span></label></fieldset>
+    </div>
+  </div>
 
   <main class="product-main">
     <header class="product-intro shell reveal"><p class="eyebrow" data-i18n="projectsEyebrow">Projects</p><h1 data-i18n="productTitle">Things I've made.</h1><p data-i18n="projectsIntro">Mostly small tools for flight sim and air traffic control, plus a Discord bot.</p></header>

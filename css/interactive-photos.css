@@ -88,8 +88,7 @@
   mix-blend-mode: soft-light;
   opacity: var(--sheen-strength);
 }
-.portrait-caption { display: none; }
-/* Caption: small system type, like the label under a product shot. */
+/* Caption: handwritten on the print, Caramel for English and 851 MkPOP for Japanese. */
 .portrait-reference {
   position: absolute;
   left: 18px;
@@ -98,10 +97,11 @@
   align-items: baseline;
   gap: 4px;
   color: #86868b;
-  font: 400 13px/1 var(--font);
-  letter-spacing: -.005em;
+  font: 400 24px/1 "Caramel", var(--font);
+  letter-spacing: 0;
   transition: color .2s ease;
 }
+html[lang="ja"] .portrait-reference { font: 400 15px/1 "851 MkPOP", "GenShin Gothic", sans-serif; }
 .portrait-reference:hover { color: var(--blue); }
 
 /* Push pin: fixed to the wall, the one thing that never moves. */
@@ -259,7 +259,8 @@
 @media (max-width: 734px) {
   .portrait-stage { --pin-y: 6px; --pin-size: 19px; width: min(78%, 340px); }
   .portrait-card { padding: 10px 10px 50px; }
-  .portrait-reference { left: 12px; bottom: 18px; font-size: 12px; }
+  .portrait-reference { left: 12px; bottom: 18px; font-size: 22px; }
+  html[lang="ja"] .portrait-reference { font-size: 14px; }
 
   .retro-section { margin: 8px auto 72px; padding: 32px 18px 34px; }
   .retro-head { padding-inline: 6px; align-items: flex-start; flex-direction: column; gap: 10px; }

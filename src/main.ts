@@ -1,0 +1,508 @@
+type Language = "en" | "ja";
+type Theme = "light" | "dark";
+type ThemePreference = Theme | "system";
+type Translation = Record<string, string>;
+
+const translations: Record<Language, Translation> = {
+  en: {
+    brand: "Jurina's Homepage", navHome: "Home", navProjects: "Projects", navContact: "Contact",
+    themeLabel: "Switch color theme", menuOpen: "Open menu", menuClose: "Close menu",
+    homeTitle: "Jurina's Homepage", projectsPageTitle: "Projects | Jurina's Homepage", contactPageTitle: "Contact | Jurina's Homepage",
+    heroTitle: "Hello.<br><span>I'm Jurina.</span>",
+    pronouns: "She/Her or They/Them",
+    localTime: "Your time", utcTime: "UTC",
+    reiwaEyebrow: "Reiwa", reiwaTitle: "Recent photos.", reiwaBody: "Pictures from the last few years.",
+    lightboxClose: "Close image viewer", lightboxPrevious: "Previous image", lightboxNext: "Next image",
+    friendName: "Someone special",
+    interestsEyebrow: "Interests", interestsTitle: "What I'm into.",
+    musicKicker: "Now playing", musicTitle: "MUSIC",
+    musicBody: "J-Pop, especially <a href=\"https://www.universal-music.co.jp/yuika/\" target=\"_blank\" rel=\"noopener noreferrer\">Yuika <span class=\"icon icon-external\" aria-hidden=\"true\"></span></a>.",
+    flightKicker: "Flight simulation", flightTitle: "FLIGHT",
+    flightBody: "Flying and controlling on VATSIM and IVAO.",
+    gamesKicker: "Gaming", gamesTitle: "GAME",
+    gamesBody: "FPS games, mostly Overwatch.", gamesAlt: "Overwatch 2 logo",
+    playlistAlt: "Longing for Navy Blue album artwork", albumLinkLabel: "Open Longing for Navy Blue on Apple Music",
+    musicShowcaseLabel: "Music picks", musicControlsLabel: "Choose a music page", previousSlide: "Previous page", nextSlide: "Next page",
+    yuikaEyebrow: "Favorite artist", yuikaTitle: "Yuika", yuikaBody: "<strong>Longing for Navy Blue</strong> is the album I keep coming back to.",
+    yuikaButton: "Official site", albumLink: "Listen on Apple Music",
+    naotaroEyebrow: "Another favorite", naotaroTitle: "Naotaro Moriyama", naotaroBody: "A playlist of his songs I listen to the most.",
+    naotaroButton: "Listen to my picks", naotaroLinkLabel: "Open my Naotaro Moriyama playlist", naotaroAlt: "Subarashii Sekai album artwork",
+    recentEyebrow: "Updated often", recentTitle: "Recently<br>liked.", recentBody: "Songs I've had on lately.", recentButton: "Open playlist", recentTab: "Recent",
+    source: "Source on GitHub", pride: "Stands with the LGBTQIA+ community",
+    projectsEyebrow: "Projects", productTitle: "Things I've made.",
+    projectsIntro: "Mostly small tools for flight sim and air traffic control, plus a Discord bot.",
+    vatsysKicker: "For VATSIM controllers", vatsysBody: "Plugins I wrote for the VATSYS ATC client.", explorePlugins: "Explore the plugins",
+    projectOpen: "Open project", projectCode: "View source",
+    dispatcherType: "Flight operations", dispatcherName: "Japan Route Finder",
+    dispatcherBody: "Finds routes for flights within Japan.",
+    znyType: "Air traffic control", znyName: "ZNY Departure Director",
+    znyBody: "Sends clearances automatically for New York departures.",
+    botType: "Community tools", botName: "Jurina's Bot",
+    botBody: "A Discord bot I run for a few online communities.",
+    contactTitle: "Get in touch.",
+    contactIntro: "Email me about anything, even just to say hi.", contactGeneralLabel: "General", contactDevelopmentLabel: "Development",
+    footerTools: "Tools", footerLinks: "Links", footerContact: "Contact",
+    vqaaKicker: "ATC hours by quarter", vqaaBody: "Look up VATSIM controller hours for each quarter, split by division and ARTCC.",
+    primaryNavLabel: "Primary navigation", languageLabel: "Language", mobileNavLabel: "Mobile navigation", footerLabel: "Footer links",
+    transFlagLabel: "Transgender flag", rainbowFlagLabel: "Rainbow flag", avatarInfoLabel: "Avatar information", avatarAlt: "Jurina's avatar",
+    artworkBy: "Artwork by cy h", musicPagesLabel: "Music pages", yuikaTab: "Yuika", naotaroTab: "Naotaro Moriyama",
+    reiwaGalleryLabel: "Reiwa photo gallery", clocksLabel: "Your time and UTC", imageViewerLabel: "Image viewer", heiseiLabel: "Heisei",
+    vatsysName: "VATSYS Plugins", pluginsArt: "PLUGINS", znyArt: "DEPARTURE DIRECTOR",
+    wallLabel: "Heisei photo wall", wallHintPointer: "You can drag the photos around. Click one to see it bigger.", wallHintTouch: "Tap a photo to see it bigger.", wallTidy: "Tidy up",
+  },
+  ja: {
+    brand: "Jurinaのホームページ", navHome: "ホーム", navProjects: "プロジェクト", navContact: "連絡先",
+    themeLabel: "カラーテーマを切り替える", menuOpen: "メニューを開く", menuClose: "メニューを閉じる",
+    homeTitle: "Jurinaのホームページ", projectsPageTitle: "プロジェクト | Jurinaのホームページ", contactPageTitle: "連絡先 | Jurinaのホームページ",
+    heroTitle: "こんにちは。<br><span>Jurinaです。</span>",
+    pronouns: "She/Her または They/Them",
+    localTime: "あなたの時刻", utcTime: "世界標準時",
+    reiwaEyebrow: "令和", reiwaTitle: "最近の写真。", reiwaBody: "ここ数年に撮った写真です。",
+    lightboxClose: "画像を閉じる", lightboxPrevious: "前の画像", lightboxNext: "次の画像",
+    friendName: "大切な人",
+    interestsEyebrow: "趣味", interestsTitle: "好きなもの。",
+    musicKicker: "よく聴く", musicTitle: "音楽",
+    musicBody: "J-POP、特に<a href=\"https://www.universal-music.co.jp/yuika/\" target=\"_blank\" rel=\"noopener noreferrer\">ユイカ <span class=\"icon icon-external\" aria-hidden=\"true\"></span></a>。",
+    flightKicker: "フライトシミュレーション", flightTitle: "フライト",
+    flightBody: "VATSIMとIVAOで、飛んだり管制したり。",
+    gamesKicker: "よく遊ぶ", gamesTitle: "ゲーム",
+    gamesBody: "FPS、特にオーバーウォッチ。", gamesAlt: "オーバーウォッチ2のロゴ",
+    playlistAlt: "アルバム『紺色に憧れて』のアートワーク", albumLinkLabel: "Apple Musicで『紺色に憧れて』を開く",
+    musicShowcaseLabel: "おすすめの音楽", musicControlsLabel: "音楽ページを選ぶ", previousSlide: "前のページ", nextSlide: "次のページ",
+    yuikaEyebrow: "いちばん好きなアーティスト", yuikaTitle: "『ユイカ』", yuikaBody: "<strong>『紺色に憧れて』</strong>は、何度でも聴きたくなるアルバム。",
+    yuikaButton: "公式サイト", albumLink: "Apple Musicで聴く",
+    naotaroEyebrow: "こちらも好き", naotaroTitle: "森山直太朗", naotaroBody: "森山直太朗のよく聴く曲をまとめたプレイリスト。",
+    naotaroButton: "セレクションを聴く", naotaroLinkLabel: "森山直太朗のセレクションを開く", naotaroAlt: "アルバム『素晴らしい世界』のアートワーク",
+    recentEyebrow: "ときどき更新", recentTitle: "最近<br>好きな曲。", recentBody: "最近よく聴いている曲。", recentButton: "プレイリストを開く", recentTab: "最近好き",
+    source: "GitHubでソースを見る", pride: "LGBTQIA+コミュニティと共に",
+    projectsEyebrow: "プロジェクト", productTitle: "作ったもの。",
+    projectsIntro: "フライトシミュレーションと航空管制まわりの小さなツールと、Discordボットです。",
+    vatsysKicker: "VATSIMの管制官向け", vatsysBody: "VATSYS（管制クライアント）用に作ったプラグイン。", explorePlugins: "プラグインを見る",
+    projectOpen: "プロジェクトを開く", projectCode: "ソースを見る",
+    dispatcherType: "フライトオペレーション", dispatcherName: "Japan Route Finder",
+    dispatcherBody: "日本国内線のルートを検索します。",
+    znyType: "航空管制", znyName: "ZNY Departure Director",
+    znyBody: "ニューヨーク出発機へのクリアランスを自動で送ります。",
+    botType: "コミュニティツール", botName: "Jurinaのボット",
+    botBody: "いくつかのオンラインコミュニティで動かしているDiscordボット。",
+    contactTitle: "連絡先",
+    contactIntro: "質問でも雑談でも、気軽にメールしてください。", contactGeneralLabel: "一般", contactDevelopmentLabel: "開発",
+    footerTools: "ツール", footerLinks: "リンク", footerContact: "連絡先",
+    vqaaKicker: "四半期ごとの管制時間", vqaaBody: "VATSIMの管制時間を四半期ごとに、ディビジョン・ARTCC別で調べられます。",
+    primaryNavLabel: "メインナビゲーション", languageLabel: "言語", mobileNavLabel: "モバイルナビゲーション", footerLabel: "フッターのリンク",
+    transFlagLabel: "トランスジェンダーの旗", rainbowFlagLabel: "レインボーフラッグ", avatarInfoLabel: "アバターについて", avatarAlt: "Jurinaのアバター",
+    artworkBy: "イラスト：cy h", musicPagesLabel: "音楽ページ", yuikaTab: "ユイカ", naotaroTab: "森山直太朗",
+    reiwaGalleryLabel: "令和の写真", clocksLabel: "あなたの時刻と世界標準時", imageViewerLabel: "画像ビューア", heiseiLabel: "平成",
+    vatsysName: "VATSYSプラグイン", pluginsArt: "プラグイン", znyArt: "出発管制ディレクター",
+    wallLabel: "平成の写真", wallHintPointer: "写真はドラッグで動かせます。クリックすると大きく表示します。", wallHintTouch: "写真をタップすると大きく表示します。", wallTidy: "片付ける",
+  },
+};
+
+const isLanguage = (value: string | null): value is Language => value !== null && Object.hasOwn(translations, value);
+const isThemePreference = (value: string | null): value is ThemePreference => value === "light" || value === "dark" || value === "system";
+
+const languageButtons = document.querySelectorAll<HTMLInputElement>(".language-button");
+const themeButton = document.querySelector<HTMLElement>(".theme-button");
+const themeColor = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
+let currentLanguage: Language = "en";
+
+const readSetting = (key: string, fallback: string): string => {
+  try {
+    return localStorage.getItem(key) || fallback;
+  } catch (error) {
+    return fallback;
+  }
+};
+
+const saveSetting = (key: string, value: string) => {
+  try {
+    localStorage.setItem(key, value);
+  } catch (error) {
+    // Local files and privacy modes can block storage; the setting still works for this page view.
+  }
+};
+
+const updatePageLinks = () => {
+  document.querySelectorAll<HTMLAnchorElement>('a[href*=".html"]').forEach((link) => {
+    const url = new URL(link.getAttribute("href") ?? "", window.location.href);
+    if (window.location.protocol !== "file:" && url.origin !== window.location.origin) return;
+    url.searchParams.set("lang", currentLanguage);
+    url.searchParams.set("theme", document.documentElement.dataset.themePreference || "system");
+    link.href = url.href;
+  });
+};
+
+document.body.classList.add("reveal-ready");
+document.querySelectorAll("#current-year").forEach((year) => { year.textContent = String(new Date().getFullYear()); });
+
+const setLanguage = (language: string) => {
+  const selected: Language = isLanguage(language) ? language : "en";
+  currentLanguage = selected;
+  const content = translations[selected];
+  document.documentElement.lang = selected;
+  const title = content[document.body.dataset.titleKey || "homeTitle"];
+  if (typeof title === "string") document.title = title;
+  document.querySelectorAll<HTMLElement>("[data-i18n]").forEach((element) => {
+    const value = content[element.dataset.i18n ?? ""];
+    if (typeof value === "string") element.innerHTML = value;
+  });
+  document.querySelectorAll<HTMLImageElement>("[data-i18n-alt]").forEach((element) => {
+    const value = content[element.dataset.i18nAlt ?? ""];
+    if (typeof value === "string") element.alt = value;
+  });
+  document.querySelectorAll<HTMLElement>("[data-i18n-aria-label]").forEach((element) => {
+    const value = content[element.dataset.i18nAriaLabel ?? ""];
+    if (typeof value === "string") element.setAttribute("aria-label", value);
+  });
+  document.querySelectorAll(".language-switch").forEach((switcher) => {
+    const target = switcher.querySelector<HTMLInputElement>(`.language-button[value="${selected}"]`);
+    if (target) {
+      target.checked = true;
+    }
+  });
+  saveSetting("language", selected);
+  updatePageLinks();
+};
+
+const themeIcons: Record<Theme, string> = {
+  dark: '<span class="icon icon-sun"></span>',
+  light: '<span class="icon icon-moon"></span>',
+};
+
+const applyTheme = (theme: ThemePreference) => {
+  const resolved: Theme = theme === "system" ? (systemTheme.matches ? "dark" : "light") : theme;
+  document.documentElement.dataset.theme = resolved;
+  document.documentElement.dataset.themePreference = theme;
+  const themeIcon = themeButton?.querySelector(".theme-icon");
+  if (themeIcon) themeIcon.innerHTML = themeIcons[resolved];
+  if (themeColor) themeColor.content = resolved === "dark" ? "#09090b" : "#f5f5f7";
+  updatePageLinks();
+};
+
+const urlTheme = new URLSearchParams(window.location.search).get("theme");
+const savedTheme = readSetting("theme", "system");
+const initialTheme: ThemePreference = isThemePreference(urlTheme) ? urlTheme : (isThemePreference(savedTheme) ? savedTheme : "system");
+saveSetting("theme", initialTheme);
+applyTheme(initialTheme);
+themeButton?.addEventListener("click", () => {
+  const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+  saveSetting("theme", next);
+  applyTheme(next);
+});
+const handleSystemTheme = () => { if (readSetting("theme", "system") === "system") applyTheme("system"); };
+if (systemTheme.addEventListener) systemTheme.addEventListener("change", handleSystemTheme);
+else systemTheme.addListener(handleSystemTheme);
+
+const urlLanguage = new URLSearchParams(window.location.search).get("lang");
+const savedLanguage = readSetting("language", "");
+const initialLanguage = isLanguage(urlLanguage) ? urlLanguage : (isLanguage(savedLanguage) ? savedLanguage : (navigator.language.toLowerCase().startsWith("ja") ? "ja" : "en"));
+setLanguage(initialLanguage);
+document.querySelectorAll(".language-switch").forEach((switcher) => {
+  switcher.querySelector(".language-button:checked")?.setAttribute("aria-current", "true");
+});
+languageButtons.forEach((button) => button.addEventListener("change", () => {
+  if (!button.checked) return;
+  setLanguage(button.value);
+}));
+
+const updateClocks = () => {
+  const localClock = document.querySelector("#local-clock");
+  const utcClock = document.querySelector("#utc-clock");
+  if (!localClock || !utcClock) return;
+  const now = new Date();
+  const locale = currentLanguage === "ja" ? "ja-JP" : "en-US";
+  const timeOptions: Intl.DateTimeFormatOptions = { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false };
+  const dateOptions: Intl.DateTimeFormatOptions = { year: "numeric", month: "short", day: "numeric", weekday: "short", ...(currentLanguage === "ja" ? { calendar: "japanese", era: "long" } : {}) };
+  localClock.textContent = new Intl.DateTimeFormat(locale, timeOptions).format(now);
+  utcClock.textContent = new Intl.DateTimeFormat(locale, { ...timeOptions, timeZone: "UTC" }).format(now);
+  const localDate = document.querySelector("#local-date");
+  const utcDate = document.querySelector("#utc-date");
+   if (localDate) localDate.textContent = new Intl.DateTimeFormat(locale, dateOptions).format(now);
+   if (utcDate) utcDate.textContent = new Intl.DateTimeFormat(locale, { ...dateOptions, timeZone: "UTC" }).format(now);
+  const era = document.querySelector<HTMLElement>("#local-era");
+  if (era) {
+    era.hidden = true;
+    era.textContent = currentLanguage === "ja" ? new Intl.DateTimeFormat("ja-JP-u-ca-japanese", { era: "long", year: "numeric", month: "long", day: "numeric" }).format(now) : "";
+  }
+};
+
+updateClocks();
+window.setInterval(updateClocks, 1000);
+
+const loadGallery = async (sectionSelector: string, gallerySelector: string, basePath: string, prefix: string, count: number) => {
+  const section = document.querySelector<HTMLElement>(sectionSelector);
+  const gallery = document.querySelector(gallerySelector);
+  if (!section || !gallery) return;
+
+  const images = await Promise.all(Array.from({ length: count }, async (_, index) => {
+    const number = String(index + 1).padStart(2, "0");
+    const candidates = ["jpg", "jpeg", "png", "webp"];
+    for (const extension of candidates) {
+      const source = `${basePath}/${prefix}-${number}.${extension}`;
+      try {
+        const response = await fetch(source, { method: "HEAD" });
+        if (response.ok) return source;
+      } catch (error) {
+        // A missing optional gallery must not affect the rest of the page.
+      }
+    }
+    return null;
+  }));
+
+  images.filter((source): source is string => source !== null).forEach((source) => {
+    const image = document.createElement("img");
+    image.src = source;
+    image.alt = "";
+    image.loading = "lazy";
+    gallery.appendChild(image);
+  });
+
+  if (gallery.children.length) section.hidden = false;
+};
+
+loadGallery(".reiwa-section", ".reiwa-gallery", "img/reiwa", "reiwa", 20);
+
+const musicTrack = document.querySelector<HTMLElement>(".music-track");
+const musicSlides = Array.from(document.querySelectorAll<HTMLElement>(".music-slide"));
+const musicDots = document.querySelectorAll<HTMLElement>(".music-dot");
+const musicPrevious = document.querySelector<HTMLButtonElement>(".music-prev");
+const musicNext = document.querySelector<HTMLButtonElement>(".music-next");
+let activeMusicSlide = -1;
+let musicTarget: number | null = null;
+let musicFrame = 0;
+
+const markMusicSlide = (index: number) => {
+  if (index === activeMusicSlide) return;
+  activeMusicSlide = index;
+  musicDots.forEach((dot, dotIndex) => {
+    const active = dotIndex === index;
+    dot.classList.toggle("is-active", active);
+    dot.setAttribute("aria-selected", String(active));
+    dot.tabIndex = active ? 0 : -1;
+  });
+  if (musicPrevious) musicPrevious.disabled = index === 0;
+  if (musicNext) musicNext.disabled = index === musicSlides.length - 1;
+};
+
+// Positions come from layout offsets, so the dots never wait for a scroll to finish.
+const musicSlideLeft = (track: HTMLElement, index: number): number => {
+  const slide = musicSlides[index];
+  const left = slide.offsetLeft - (track.clientWidth - slide.offsetWidth) / 2;
+  // Edge slides can't always reach the center, so aim for where the scroll can actually stop.
+  return Math.max(0, Math.min(left, track.scrollWidth - track.clientWidth));
+};
+const nearestMusicSlide = (track: HTMLElement): number => {
+  const center = track.scrollLeft + track.clientWidth / 2;
+  return musicSlides.reduce((nearest, slide, index) => {
+    const distance = Math.abs(slide.offsetLeft + slide.offsetWidth / 2 - center);
+    return distance < nearest.distance ? { index, distance } : nearest;
+  }, { index: 0, distance: Infinity }).index;
+};
+
+const goToMusicSlide = (index: number) => {
+  if (!musicTrack || !musicSlides.length) return;
+  const target = Math.max(0, Math.min(index, musicSlides.length - 1));
+  // The dot moves immediately; the scroll catches up underneath it.
+  markMusicSlide(target);
+  musicTarget = target;
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  musicTrack.scrollTo({ left: musicSlideLeft(musicTrack, target), behavior: reduce ? "auto" : "smooth" });
+};
+
+if (musicTrack && musicSlides.length) {
+  markMusicSlide(0);
+  musicTrack.addEventListener("scroll", () => {
+    if (musicFrame) return;
+    musicFrame = requestAnimationFrame(() => {
+      musicFrame = 0;
+      if (musicTarget !== null) {
+        // While a dot-driven scroll is in flight, don't flash the dots it passes over.
+        if (Math.abs(musicTrack.scrollLeft - musicSlideLeft(musicTrack, musicTarget)) < 4) musicTarget = null;
+        return;
+      }
+      markMusicSlide(nearestMusicSlide(musicTrack));
+    });
+  }, { passive: true });
+  musicTrack.addEventListener("scrollend", () => {
+    musicTarget = null;
+    markMusicSlide(nearestMusicSlide(musicTrack));
+  });
+  // Grabbing the rail mid-animation takes over from the dot.
+  (["pointerdown", "wheel", "touchstart"] as const).forEach((name) => musicTrack.addEventListener(name, () => { musicTarget = null; }, { passive: true }));
+  musicDots.forEach((dot) => dot.addEventListener("click", () => goToMusicSlide(Number(dot.dataset.slideTo))));
+  musicPrevious?.addEventListener("click", () => goToMusicSlide(activeMusicSlide - 1));
+  musicNext?.addEventListener("click", () => goToMusicSlide(activeMusicSlide + 1));
+  document.querySelector<HTMLElement>(".music-showcase")?.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft") goToMusicSlide(activeMusicSlide - 1);
+    if (event.key === "ArrowRight") goToMusicSlide(activeMusicSlide + 1);
+  });
+  // Album artwork stays put: no dragging images or links out of the rail.
+  musicTrack.addEventListener("dragstart", (event) => event.preventDefault());
+
+  // Mouse drag: the rail follows the pointer, then settles one slide over in the drag direction.
+  // Touch screens already swipe natively, so only the mouse is handled here.
+  let musicDrag: { id: number; x: number; left: number; from: number; moved: boolean } | null = null;
+  let musicDragEnded = 0;
+  musicTrack.addEventListener("pointerdown", (event) => {
+    if (event.pointerType !== "mouse" || event.button !== 0) return;
+    musicDrag = { id: event.pointerId, x: event.clientX, left: musicTrack.scrollLeft, from: activeMusicSlide, moved: false };
+  });
+  musicTrack.addEventListener("pointermove", (event) => {
+    if (!musicDrag || event.pointerId !== musicDrag.id) return;
+    const dx = event.clientX - musicDrag.x;
+    if (!musicDrag.moved) {
+      if (Math.abs(dx) < 6) return;
+      musicDrag.moved = true;
+      musicTrack.classList.add("is-dragging");
+      musicTrack.setPointerCapture(event.pointerId);
+    }
+    musicTrack.scrollLeft = musicDrag.left - dx;
+  });
+  // Snapping stays off until the glide lands; turning it back on mid-glide made the rail jump to
+  // the nearest slide first and then slide again to the target.
+  let musicSettle = 0;
+  const finishMusicSettle = () => {
+    window.clearTimeout(musicSettle);
+    musicTrack.classList.remove("is-settling");
+  };
+  const endMusicDrag = (event: PointerEvent) => {
+    if (!musicDrag || event.pointerId !== musicDrag.id) return;
+    const { moved, x, from } = musicDrag;
+    musicDrag = null;
+    if (!moved) return;
+    musicTrack.classList.add("is-settling");
+    musicTrack.classList.remove("is-dragging");
+    musicDragEnded = performance.now();
+    const dx = event.clientX - x;
+    goToMusicSlide(Math.abs(dx) > 60 ? from + (dx < 0 ? 1 : -1) : nearestMusicSlide(musicTrack));
+    musicTrack.addEventListener("scrollend", finishMusicSettle, { once: true });
+    // Already on target (no scroll, so no scrollend) or a browser without scrollend.
+    musicSettle = window.setTimeout(finishMusicSettle, 800);
+  };
+  musicTrack.addEventListener("pointerup", endMusicDrag);
+  musicTrack.addEventListener("pointercancel", endMusicDrag);
+  // A drag that ends over a link must not open it.
+  musicTrack.addEventListener("click", (event) => {
+    if (performance.now() - musicDragEnded < 300) { event.preventDefault(); event.stopPropagation(); }
+  }, true);
+}
+
+// The pride flags are decoration: no context menu, dragging or copying.
+document.querySelectorAll(".pride-flags").forEach((flags) => {
+  (["contextmenu", "dragstart", "copy"] as const).forEach((name) => flags.addEventListener(name, (event) => event.preventDefault()));
+});
+
+const lightbox = document.querySelector<HTMLElement>(".gallery-lightbox");
+const lightboxImage = document.querySelector<HTMLImageElement>(".lightbox-image");
+const lightboxCount = document.querySelector(".lightbox-count");
+let activeGalleryImage = 0;
+let lightboxTouchStart = 0;
+
+const getGalleryImages = () => Array.from(document.querySelectorAll<HTMLImageElement>(".retro-gallery img, .reiwa-gallery img"));
+
+const showGalleryImage = (index: number) => {
+  const galleryImages = getGalleryImages();
+  if (!galleryImages.length || !lightboxImage) return;
+  activeGalleryImage = (index + galleryImages.length) % galleryImages.length;
+  lightboxImage.src = galleryImages[activeGalleryImage].src;
+  if (lightboxCount) lightboxCount.textContent = `${activeGalleryImage + 1} / ${galleryImages.length}`;
+};
+
+let lightboxTimer: number | undefined;
+const openLightbox = (index: number) => {
+  if (!lightbox || index < 0) return;
+  window.clearTimeout(lightboxTimer);
+  showGalleryImage(index);
+  lightbox.hidden = false;
+  lightbox.setAttribute("aria-hidden", "false");
+  document.body.classList.add("lightbox-open");
+  document.querySelector<HTMLElement>(".lightbox-close")?.focus({ preventScroll: true });
+};
+
+const closeLightbox = () => {
+  if (!lightbox || lightbox.hidden) return;
+  lightbox.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("lightbox-open");
+  lightboxTimer = window.setTimeout(() => { lightbox.hidden = true; }, 240);
+};
+
+// Heisei prints are <figure class="snap"> wrappers; Reiwa photos are bare images.
+const galleryItem = (target: EventTarget | null) => (target instanceof Element ? target.closest(".snap, .reiwa-gallery img") : null);
+const galleryImage = (item: Element) => (item instanceof HTMLImageElement ? item : item.querySelector("img"));
+const galleryIndex = (item: Element) => {
+  const image = galleryImage(item);
+  return image ? getGalleryImages().indexOf(image) : -1;
+};
+document.querySelectorAll<HTMLElement>(".retro-gallery, .reiwa-gallery").forEach((gallery) => {
+  gallery.querySelectorAll<HTMLElement>(".snap, .reiwa-gallery img").forEach((item) => {
+    item.tabIndex = 0;
+    item.setAttribute("role", "button");
+  });
+  gallery.addEventListener("click", (event) => {
+    const item = galleryItem(event.target);
+    if (item) openLightbox(galleryIndex(item));
+  });
+  gallery.addEventListener("keydown", (event) => {
+    const item = galleryItem(event.target);
+    if (!item || (event.key !== "Enter" && event.key !== " ")) return;
+    event.preventDefault();
+    openLightbox(galleryIndex(item));
+  });
+});
+document.querySelector(".lightbox-close")?.addEventListener("click", closeLightbox);
+document.querySelector(".lightbox-prev")?.addEventListener("click", () => showGalleryImage(activeGalleryImage - 1));
+document.querySelector(".lightbox-next")?.addEventListener("click", () => showGalleryImage(activeGalleryImage + 1));
+document.querySelector(".lightbox-backdrop")?.addEventListener("click", closeLightbox);
+lightbox?.addEventListener("touchstart", (event) => { lightboxTouchStart = event.touches[0].clientX; }, { passive: true });
+lightbox?.addEventListener("touchend", (event) => {
+  const distance = event.changedTouches[0].clientX - lightboxTouchStart;
+  if (Math.abs(distance) > 50) showGalleryImage(activeGalleryImage + (distance < 0 ? 1 : -1));
+}, { passive: true });
+
+
+// Like apple.com's globalnav: one trigger whose two lines fold into an X and back.
+const menuButton = document.querySelector<HTMLButtonElement>(".menu-button");
+const mobileMenu = document.querySelector(".mobile-menu");
+const phoneLayout = window.matchMedia("(max-width: 734px)");
+let menuIsOpen = false;
+const setMenu = (open: boolean) => {
+  if (!menuButton || open === menuIsOpen) return;
+  menuIsOpen = open;
+  document.body.classList.toggle("menu-open", open);
+  menuButton.setAttribute("aria-expanded", String(open));
+  const labelKey = open ? "menuClose" : "menuOpen";
+  menuButton.dataset.i18nAriaLabel = labelKey;
+  menuButton.setAttribute("aria-label", translations[currentLanguage][labelKey]);
+  mobileMenu?.setAttribute("aria-hidden", String(!open));
+  mobileMenu?.toggleAttribute("inert", !open);
+  menuButton.querySelectorAll<SVGAnimationElement>(open ? ".menu-anim-open" : ".menu-anim-close").forEach((animation) => animation.beginElement());
+};
+const closeMenu = () => setMenu(false);
+menuButton?.addEventListener("click", () => setMenu(!menuIsOpen));
+phoneLayout.addEventListener("change", () => { if (!phoneLayout.matches) closeMenu(); });
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    closeMenu();
+    closeLightbox();
+  }
+  if (!lightbox?.hidden && event.key === "ArrowLeft") showGalleryImage(activeGalleryImage - 1);
+  if (!lightbox?.hidden && event.key === "ArrowRight") showGalleryImage(activeGalleryImage + 1);
+});
+
+const header = document.querySelector(".site-header");
+const updateHeader = () => header?.classList.toggle("is-scrolled", window.scrollY > 12);
+updateHeader();
+window.addEventListener("scroll", updateHeader, { passive: true });
+
+const revealItems = document.querySelectorAll(".reveal");
+if ("IntersectionObserver" in window) {
+  const observer = new IntersectionObserver((entries) => entries.forEach((entry) => {
+    if (!entry.isIntersecting) return;
+    entry.target.classList.add("is-visible");
+    observer.unobserve(entry.target);
+  }), { threshold: 0.1, rootMargin: "0px 0px -32px" });
+  revealItems.forEach((item) => observer.observe(item));
+} else {
+  revealItems.forEach((item) => item.classList.add("is-visible"));
+}
