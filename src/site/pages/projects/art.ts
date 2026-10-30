@@ -2,7 +2,6 @@ import { text } from "../../../build/html.ts";
 
 /* Decorative artwork for each project tile (styles: pages/projects). */
 
-export const radarArt = `<div class="product-art radar-art" aria-hidden="true"><svg viewBox="0 0 900 300" fill="none"><path d="M0 240L225 120L405 175L650 65L900 145M130 0L310 300M510 0L425 300M790 0L660 300" stroke="currentColor" stroke-width="1" opacity=".25"/><path d="M90 225L300 137L450 164L700 80" stroke="currentColor" stroke-width="2"/><path d="M300 125L310 143L290 143ZM700 68L710 86L690 86Z" fill="currentColor"/></svg><div class="radar-label"><span>VATSYS</span><span ${text("pluginsArt")}</span></div></div>`;
 
 const bars: Array<[x: number, y: number, height: number, opacity?: string]> = [
   [105, 140, 110, ".32"],

@@ -57,7 +57,7 @@ export const links = {
 export const projects = {
   routeFinder: { site: "https://jprt.jurina.org/", source: "https://github.com/lpxlpx7/japan-route-finder" },
   departureDirector: { site: "https://nydep.jurina.org/", source: "https://github.com/lpxlpx7/ZNY-ATCT-Auto-Delivery" },
-  vatsysPlugins: { site: "https://github.com/Jurinas-vatsys-plugins" },
+  vatsysPlugins: { site: "https://vatsys.jurina.org/", source: "https://github.com/Jurinas-vatsys-plugins" },
   vqaa: { site: "https://vqaa.jurina.org/", source: "https://github.com/lpxlpx7/VATSIM-Quarterly-ATC-Activity" },
   bot: { site: "https://bot.jurina.org/" },
 };

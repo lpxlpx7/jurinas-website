@@ -1,9 +1,9 @@
-import { external, html, text } from "../../../build/html.ts";
+import { html, text } from "../../../build/html.ts";
 import { projects } from "../../config.ts";
-import { icon } from "../../components/icon.ts";
 import { layout, type Assets } from "../../layout.ts";
 import { projectActions } from "./actions.ts";
-import { departureArt, discordArt, quarterlyChartArt, radarArt, routeArt } from "./art.ts";
+import { departureArt, discordArt, quarterlyChartArt, routeArt } from "./art.ts";
+import { vatsysArt } from "./vatsys-art.ts";
 
 const vatsys = html`
     <section class="product-feature product-vatsys reveal" id="vatsys" aria-labelledby="vatsys-title">
@@ -11,9 +11,9 @@ const vatsys = html`
         <p class="eyebrow" ${text("vatsysKicker")}</p>
         <h2 id="vatsys-title" ${text("vatsysName")}</h2>
         <p class="product-tagline" ${text("vatsysBody")}</p>
-        <a class="product-link" ${external(projects.vatsysPlugins.site)}><span ${text("explorePlugins")}</span>${icon("chevron")}</a>
+        ${projectActions(projects.vatsysPlugins, "explorePlugins")}
       </div>
-      ${radarArt}
+      ${vatsysArt}
     </section>`;
 
 const vqaa = html`

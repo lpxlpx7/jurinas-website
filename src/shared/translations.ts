@@ -44,7 +44,7 @@ export const en = {
   transFlagLabel: "Transgender flag", rainbowFlagLabel: "Rainbow flag", avatarInfoLabel: "Avatar information", avatarAlt: "Jurina's avatar",
   artworkBy: "Artwork by cy h", musicPagesLabel: "Music pages", yuikaTab: "Yuika", naotaroTab: "Naotaro Moriyama",
   reiwaGalleryLabel: "Reiwa photo gallery", clocksLabel: "Your time and UTC", imageViewerLabel: "Image viewer", heiseiLabel: "Heisei",
-  vatsysName: "VATSYS Plugins", pluginsArt: "PLUGINS", znyArt: "DEPARTURE DIRECTOR",
+  vatsysName: "VATSYS Plugins", znyArt: "DEPARTURE DIRECTOR",
   wallLabel: "Heisei photo wall", wallHintPointer: "You can drag the photos around. Click one to see it bigger.", wallHintTouch: "Tap a photo to see it bigger.", wallTidy: "Tidy up",
 };
 
@@ -95,7 +95,7 @@ export const ja: Translation = {
   transFlagLabel: "トランスジェンダーの旗", rainbowFlagLabel: "レインボーフラッグ", avatarInfoLabel: "アバターについて", avatarAlt: "Jurinaのアバター",
   artworkBy: "イラスト：cy h", musicPagesLabel: "音楽ページ", yuikaTab: "ユイカ", naotaroTab: "森山直太朗",
   reiwaGalleryLabel: "令和の写真", clocksLabel: "あなたの時刻と世界標準時", imageViewerLabel: "画像ビューア", heiseiLabel: "平成",
-  vatsysName: "VATSYSプラグイン", pluginsArt: "プラグイン", znyArt: "出発管制ディレクター",
+  vatsysName: "VATSYSプラグイン", znyArt: "出発管制ディレクター",
   wallLabel: "平成の写真", wallHintPointer: "写真はドラッグで動かせます。クリックすると大きく表示します。", wallHintTouch: "写真をタップすると大きく表示します。", wallTidy: "片付ける",
 };
 

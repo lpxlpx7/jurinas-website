@@ -13,6 +13,7 @@ import clocks from "./sections/clocks.ts";
 import lightbox from "./sections/lightbox.ts";
 import footer from "./layout/footer.ts";
 import projects from "./pages/projects.ts";
+import vatsysArt from "./pages/vatsys-art.ts";
 import contact from "./pages/contact.ts";
 import reveal from "./base/reveal.ts";
 import icons from "./base/icons.ts";
@@ -28,7 +29,7 @@ export const stylesheets = {
   "css/style.css": [
     fonts, tokens, reset, header, mobileMenu, buttons,
     hero, interests, music, reiwa, clocks, lightbox,
-    footer, projects, contact, reveal, icons,
+    footer, projects, vatsysArt, contact, reveal, icons,
     tablet, phone, reducedMotion,
   ],
   /** Home page only: the hanging polaroid and the Heisei photo wall. */

@@ -21,15 +21,9 @@ export default css`
 .product-vatsys { background: #eaf3fa; }
 .product-vatsys .product-copy h2 { color: #1d1d1f; }
 .product-vatsys .eyebrow, .product-vatsys .product-tagline { color: #6e6e73; }
-.radar-art { color: #2fbf95; }
-.radar-art svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-.radar-label { display: flex; flex-direction: column; gap: 12px; text-align: center; }
-.radar-label span:first-child { font: 700 clamp(60px, 12vw, 130px)/1 var(--display-font); letter-spacing: -.05em; }
-.radar-label span:last-child { font-size: 15px; letter-spacing: .4em; }
 [data-theme="dark"] .product-vatsys { background: #0f2132; }
 [data-theme="dark"] .product-vatsys .product-copy h2 { color: #f5f5f7; }
 [data-theme="dark"] .product-vatsys .eyebrow, [data-theme="dark"] .product-vatsys .product-tagline { color: #a1a1a6; }
-[data-theme="dark"] .radar-art { color: #6ddcba; }
 
 /* VATSIM Quarterly ATC Activity: a calm quarterly bar chart. */
 .product-vqaa { background: linear-gradient(180deg, #f3f0ff 0%, #ebe6fd 100%); }
