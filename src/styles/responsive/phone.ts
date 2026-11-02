@@ -13,7 +13,6 @@ export default css`
   .hero { padding-block: 44px 64px; gap: 40px; }
   .hero h1 { font-size: clamp(46px, 13.5vw, 64px); }
   .actions { margin-top: 26px; }
-  .identity-note { margin-top: 20px; font-size: 13px; }
 
   .interests { padding-block: 64px 80px; }
   .section-heading { margin-bottom: 28px; }

@@ -12,7 +12,7 @@ export default css`
 @media (max-width: 900px) {
   .hero { grid-template-columns: 1fr; gap: 56px; text-align: center; }
   .hero h1 { margin-inline: auto; }
-  .actions, .identity-note { justify-content: center; }
+  .actions { justify-content: center; }
   .music-card, .flight-card { grid-column: 1 / -1; }
   .product-pair { grid-template-columns: 1fr; }
 }

@@ -2,7 +2,7 @@ import { alt, external, html, label, text } from "../../../build/html.ts";
 import { links } from "../../config.ts";
 import { icon } from "../../components/icon.ts";
 
-/** Greeting, social buttons, pronouns, and the hanging polaroid (scripted by client/photos/portrait). */
+/** Greeting, social buttons, and the hanging polaroid (scripted by client/photos/portrait). */
 export const hero = (): string => html`
     <section class="hero shell" id="about">
       <div class="hero-copy reveal">
@@ -15,11 +15,6 @@ export const hero = (): string => html`
           <a class="button button-secondary" ${external(links.x)}>
             X / Twitter ${icon("chevron")}
           </a>
-        </div>
-
-        <div class="identity-note">
-          <span class="trans-mark" aria-hidden="true"></span>
-          <span ${text("pronouns")}</span>
         </div>
       </div>
 

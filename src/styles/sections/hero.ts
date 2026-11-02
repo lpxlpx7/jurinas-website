@@ -18,6 +18,4 @@ html[lang="ja"] .hero h1 { letter-spacing: -.02em; line-height: 1.12; }
   animation: name-drift 9s ease-in-out infinite alternate;
 }
 @keyframes name-drift { to { background-position: 100% 0; } }
-.identity-note { margin-top: 26px; display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 14px; }
-.trans-mark { width: 24px; height: 14px; flex: none; border-radius: 3px; background: linear-gradient(180deg,#5bcefa 0 20%,#f5a9b8 20% 40%,#fff 40% 60%,#f5a9b8 60% 80%,#5bcefa 80%); box-shadow: 0 0 0 1px rgba(0,0,0,.06); }
 `;
