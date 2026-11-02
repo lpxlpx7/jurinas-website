@@ -17,4 +17,6 @@ export default css`
 .pride-flag { width: 27px; height: 18px; border-radius: 3px; display: block; box-shadow: 0 0 0 1px rgba(0,0,0,.08); }
 [data-theme="dark"] .pride-flag { box-shadow: 0 0 0 1px rgba(255,255,255,.15); }
 .pride-flag-lgbt { background: linear-gradient(180deg,#e40303 0 16.6%,#ff8c00 16.6% 33.2%,#ffed00 33.2% 49.8%,#008026 49.8% 66.4%,#004dff 66.4% 83%,#750787 83%); }
+.pride-flag-trans { background: linear-gradient(180deg,#5bcefa 0 20%,#f5a9b8 20% 40%,#fff 40% 60%,#f5a9b8 60% 80%,#5bcefa 80%); }
+.pride-flag-bi { background: linear-gradient(180deg,#d60270 0 40%,#9b4f96 40% 60%,#0038a8 60%); }
 `;

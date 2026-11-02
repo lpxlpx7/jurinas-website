@@ -30,7 +30,7 @@ export const footer = (): string => html`
       <p>© <span id="current-year">${new Date().getFullYear()}</span> Jurina</p>
       <div class="pride-note">
         <span ${text("pride")}</span>
-        <span class="pride-flags"><span class="pride-flag pride-flag-lgbt" role="img" ${label("rainbowFlagLabel")}></span></span>
+        <span class="pride-flags"><span class="pride-flag pride-flag-lgbt" role="img" ${label("rainbowFlagLabel")}></span><span class="pride-flag pride-flag-trans" role="img" ${label("transFlagLabel")}></span><span class="pride-flag pride-flag-bi" role="img" ${label("biFlagLabel")}></span></span>
       </div>
     </div>
   </footer>`;
