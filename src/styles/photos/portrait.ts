@@ -6,6 +6,8 @@ export default css`
   --card-angle: -1.2deg;
   --card-twist: 0deg;
   --card-lift: 1;
+  --card-tilt-x: 0deg;   /* the card turns to face the pointer */
+  --card-tilt-y: 0deg;
   --shadow-x: 0px;
   --shadow-y: 14px;
   --shadow-blur: 26px;
@@ -33,7 +35,7 @@ export default css`
     #fbf8f1;
   /* The card turns around the pin. */
   transform-origin: 50% var(--pin-y);
-  transform: rotate(var(--card-angle)) rotateY(var(--card-twist)) scale(var(--card-lift));
+  transform: rotate(var(--card-angle)) rotateX(var(--card-tilt-x)) rotateY(calc(var(--card-twist) + var(--card-tilt-y))) scale(var(--card-lift));
   cursor: grab;
   /* Vertical swipes still scroll the page on touch screens; sideways drags swing the photo. */
   touch-action: pan-y;
@@ -62,6 +64,9 @@ export default css`
 }
 .portrait-frame { position: relative; aspect-ratio: 1; overflow: hidden; background: #e7e2d8; }
 .portrait-frame img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+/* 3D photo (client/photos/depth-photo): drawn over the <img>, faded in once it can render. */
+.portrait-depth { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; pointer-events: none; transition: opacity .6s ease; }
+.portrait-frame.has-depth .portrait-depth { opacity: 1; }
 .portrait-frame::after {
   content: "";
   position: absolute;
@@ -146,7 +151,8 @@ html[lang="ja"] .portrait-reference { font: 400 15px/1 "851 MkPOP", "GenShin Got
     calc(var(--shadow-x) * .3) calc(var(--shadow-y) * .3) calc(var(--shadow-blur) * .35) rgba(0,0,0,.45),
     var(--shadow-x) var(--shadow-y) var(--shadow-blur) rgba(0,0,0,.55);
 }
-[data-theme="dark"] .portrait-frame img { filter: brightness(.88); }
+[data-theme="dark"] .portrait-frame img,
+[data-theme="dark"] .portrait-depth { filter: brightness(.88); }
 [data-theme="dark"] .portrait-sheen { opacity: .6; }
 [data-theme="dark"] .portrait-reference { color: #8e8e93; }
 [data-theme="dark"] .portrait-reference:hover { color: var(--blue); }

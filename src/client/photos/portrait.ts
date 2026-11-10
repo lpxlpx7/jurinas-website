@@ -1,4 +1,5 @@
 import { clamp, coarsePointer, phoneLayout, reduceMotion } from "../core/motion.ts";
+import { createDepthPhoto } from "./depth-photo.ts";
 import { bindDrag, type Point } from "./drag.ts";
 
 // iOS Safari gates motion sensors behind a permission prompt that lib.dom doesn't describe.
@@ -22,7 +23,15 @@ export const initPortrait = () => {
   const GYRO_RANGE = 3.5 * DEG; // phones only lean the photo a little
   const limit = () => (phoneLayout.matches ? 10 : 18) * DEG;
 
-  const state = { angle: REST, velocity: 0, lift: 0, liftVelocity: 0, lean: 0, glint: 0 };
+  const state = { angle: REST, velocity: 0, lift: 0, liftVelocity: 0, lean: 0, glint: 0, viewX: 0, viewY: 0 };
+  // Where the photo is looked at from, -1..1: the pointer on desktop, the gyroscope on phones.
+  // Until either speaks up the viewpoint drifts by itself, so the depth still shows.
+  const view = { x: 0, y: 0, driven: false };
+  const photoFrame = card.querySelector<HTMLElement>(".portrait-frame");
+  let hasDepth = false;
+  const depthPhoto = photoFrame && !reduceMotion.matches
+    ? createDepthPhoto(photoFrame, "img/avatar-depth.png", () => { hasDepth = true; wake(); })
+    : null;
   let dragging = false;
   let target = REST;
   let leanTarget = 0;
@@ -58,8 +67,13 @@ export const initPortrait = () => {
     set("--pin-shadow", `${(3 + state.lift * 3).toFixed(2)}px`);
     // The glint follows the light: it slides with the swing and the phone's tilt.
     const strength = clamp(Math.abs(swing) * 4 + Math.abs(state.velocity) * .35 + state.lift * .5 + state.glint, 0, 1);
-    set("--sheen-x", `${(50 - swingDeg * 4.5 - state.lean / DEG * 9).toFixed(2)}%`);
-    set("--sheen-strength", strength.toFixed(3));
+    set("--sheen-x", `${(50 - swingDeg * 4.5 - state.lean / DEG * 9 - state.viewX * 22).toFixed(2)}%`);
+    set("--sheen-strength", clamp(strength + Math.hypot(state.viewX, state.viewY) * .3, 0, 1).toFixed(3));
+    // The card turns to face the viewer, and the picture inside shifts with the same viewpoint.
+    set("--card-tilt-x", `${(-state.viewY * 4).toFixed(3)}deg`);
+    set("--card-tilt-y", `${(state.viewX * 6).toFixed(3)}deg`);
+    // A swinging card is seen from a changing side too.
+    depthPhoto?.draw(clamp(state.viewX + swingDeg * .07, -1.5, 1.5), state.viewY);
   };
 
   const step = (dt: number) => {
@@ -78,15 +92,23 @@ export const initPortrait = () => {
     // Gyroscope input is smoothed so the photo leans, never jitters.
     state.lean += (leanTarget - state.lean) * Math.min(1, dt * 4);
     state.glint += (glintTarget - state.glint) * Math.min(1, dt * 3);
+    state.viewX += (view.x - state.viewX) * Math.min(1, dt * 6);
+    state.viewY += (view.y - state.viewY) * Math.min(1, dt * 6);
   };
 
-  const settled = () => !dragging
+  const drifting = () => hasDepth && !view.driven;
+  const settled = () => !dragging && !drifting()
+    && Math.abs(view.x - state.viewX) < 1e-3 && Math.abs(view.y - state.viewY) < 1e-3
     && Math.abs(state.angle - REST - state.lean) < 1e-4 && Math.abs(state.velocity) < 1e-3
     && Math.abs(state.lift) < .002 && Math.abs(state.liftVelocity) < .002
     && Math.abs(leanTarget - state.lean) < 1e-4 && Math.abs(glintTarget - state.glint) < 1e-3;
   const frame = (time: number) => {
     const elapsed = Math.min((time - (lastTime || time)) / 1000, .05);
     lastTime = time;
+    if (drifting()) {
+      view.x = Math.sin(time / 1700) * .6;
+      view.y = Math.cos(time / 2300) * .35;
+    }
     const steps = Math.max(1, Math.ceil(elapsed * 240));
     for (let i = 0; i < steps; i += 1) step(elapsed / steps);
     render();
@@ -119,6 +141,24 @@ export const initPortrait = () => {
     },
   });
 
+  /* Pointer: the viewpoint follows the mouse anywhere on the page, strongest near the photo. */
+  if (depthPhoto) {
+    window.addEventListener("pointermove", (event) => {
+      if (event.pointerType === "touch") return;
+      const rect = stage.getBoundingClientRect();
+      view.driven = true;
+      view.x = clamp((event.clientX - rect.left - rect.width / 2) / (window.innerWidth * .4), -1, 1);
+      view.y = clamp((event.clientY - rect.top - rect.height / 2) / (window.innerHeight * .5), -1, 1);
+      wake();
+    }, { passive: true });
+    // Once the mouse leaves the window the photo turns back to face straight out.
+    document.documentElement.addEventListener("mouseleave", () => {
+      if (!view.driven) return;
+      view.x = view.y = 0;
+      wake();
+    });
+  }
+
   /* Gyroscope: on phones the photo leans slightly as the device tilts. */
   let neutral: { gamma: number; beta: number } | null = null;
   const onOrientation = (event: DeviceOrientationEvent) => {
@@ -135,6 +175,12 @@ export const initPortrait = () => {
     // Hanging photos stay level with the world, so they counter-rotate against the roll.
     leanTarget = clamp(-roll * .16 * DEG, -GYRO_RANGE, GYRO_RANGE);
     glintTarget = clamp((Math.abs(roll) + Math.abs(pitch) * .6) / 30, 0, .55);
+    if (depthPhoto) {
+      // Tilting the phone looks around inside the photo.
+      view.driven = true;
+      view.x = clamp(roll / 16, -1, 1);
+      view.y = clamp(pitch / 16, -1, 1);
+    }
     wake();
   };
   let motionStarted = false;
