@@ -1,13 +1,8 @@
 # Jurina's Homepage
 
-Just a small corner of the internet where I share a little about myself, my interests, and the music I enjoy.
-
 Thanks for stopping by :D
 
 ## Development
-
-Everything is TypeScript. `npm run build` turns it into a static site in `dist/`, and GitHub Actions
-builds and publishes that to GitHub Pages on every push to `main`.
 
 ```bash
 npm install
