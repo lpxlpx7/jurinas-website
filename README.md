@@ -6,7 +6,7 @@ Thanks for stopping by :D
 
 ```bash
 npm install
-npm run dev     # rebuild dist/ whenever src/ changes
+npm run dev     # rebuild dist/ whenever src/ changes; adds a season switcher in the corner
 npm run build   # one-off build
 npm run check   # type-check everything
 ```

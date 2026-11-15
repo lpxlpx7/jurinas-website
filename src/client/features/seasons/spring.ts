@@ -1,4 +1,4 @@
-import type { Decor, FallEffect, Scene } from "./layer.ts";
+import { newLive, type DecorItem, type FallEffect, type Scene } from "./layer.ts";
 import { easeOut, headerHeight, pick, random, seeded, sprite } from "./util.ts";
 
 type Point = { x: number; y: number };
@@ -95,20 +95,21 @@ const sakuraArt = () => art ??= {
 
 /**
  * March and April: a cherry branch reaches over the top-right of the page from under the header and stays
- * there, rocking a little in the breeze. On a fresh visit it reaches in and sheds petals once.
- * The branch is drawn with the corner at (0, 0), reaching left and down.
+ * there, rocking a little in the breeze. On a fresh visit it reaches in and sheds petals once. Visitors can
+ * slide it along the top of the page or hide it.
+ * The branch is drawn with its root corner at (0, 0), reaching left and down.
  */
 export const createSpring = ({ intro }: { intro: boolean }): Scene => {
   let time = 0;
   let scale = 300;
-  let top = 48;
-  let width = 0;
+  let boxWidth = 0;
   let twigs: Twig[] = [];
   let blossoms: Blossom[] = [];
 
   const reach = () => (intro ? easeOut(time / REACH_SECONDS) : 1);
   const sway = () => (Math.sin(time * 1.1) * 0.016 + Math.sin(time * 2.3 + 1) * 0.005) * reach();
-  const origin = () => ({ x: width + (1 - reach()) * scale * 1.1, y: top - (1 - reach()) * scale * 0.5 });
+  /** The root corner inside the item's box: the top-right, or off beyond it while reaching in. */
+  const origin = () => ({ x: boxWidth + (1 - reach()) * scale * 1.1, y: -(1 - reach()) * scale * 0.5 });
 
   const build = () => {
     const s = scale;
@@ -145,17 +146,24 @@ export const createSpring = ({ intro }: { intro: boolean }): Scene => {
     const { x, y } = pick(blossoms.filter((blossom) => !blossom.bud));
     const o = origin();
     const a = sway();
-    return { x: o.x + x * Math.cos(a) - y * Math.sin(a), y: o.y + x * Math.sin(a) + y * Math.cos(a) - window.scrollY };
+    return {
+      x: branch.live.x + o.x + x * Math.cos(a) - y * Math.sin(a) - window.scrollX,
+      y: branch.live.y + o.y + x * Math.sin(a) + y * Math.cos(a) - window.scrollY,
+    };
   };
 
-  const decor: Decor = {
-    layout(w) {
-      width = w;
-      top = headerHeight() - 6;
-      scale = Math.min(Math.max(w * 0.3, 170), 380);
-      build();
-      return top + scale * 0.56;
+  const branch: DecorItem = {
+    id: "branch",
+    layer: "front",
+    drag: "x",
+    live: newLive(),
+    place(width) {
+      const next = Math.min(Math.max(width * 0.3, 170), 380);
+      if (next !== scale || !twigs.length) { scale = next; build(); }
+      boxWidth = scale * 1.2;
+      return { x: width - boxWidth, y: headerHeight() - 6, w: boxWidth, h: scale * 0.58 };
     },
+    grip: (box) => ({ x: box.w * 0.08, y: 0, w: box.w * 0.92, h: box.h * 0.85 }),
 
     step(dt) { time += dt; },
 
@@ -208,8 +216,8 @@ export const createSpring = ({ intro }: { intro: boolean }): Scene => {
       resize(w) { rate = w < 735 ? 0.14 : 0.08; },
       step(dt, _w, height) {
         elapsed += dt;
-        // Petals start once the branch is mostly in, and stop after a few seconds.
-        if (reach() > 0.75 && elapsed < REACH_SECONDS + SHED_SECONDS) {
+        // Petals start once the branch is mostly in, and stop after a few seconds (or if the branch is hidden).
+        if (branch.live.shown && reach() > 0.75 && elapsed < REACH_SECONDS + SHED_SECONDS) {
           clock += dt;
           while (clock > rate) {
             clock -= rate;
@@ -235,7 +243,7 @@ export const createSpring = ({ intro }: { intro: boolean }): Scene => {
           petal.x += (Math.cos(petal.phase) * petal.swing - 16) * dt;
         }
         petals = petals.filter((petal) => petal.y - petal.size <= height && petal.x > -40);
-        return elapsed < REACH_SECONDS + SHED_SECONDS || petals.length > 0;
+        return (branch.live.shown && elapsed < REACH_SECONDS + SHED_SECONDS) || petals.length > 0;
       },
       draw(ctx) {
         for (const petal of petals) {
@@ -250,5 +258,5 @@ export const createSpring = ({ intro }: { intro: boolean }): Scene => {
     };
   };
 
-  return { decor, fall: petalFall() };
+  return { items: [branch], fall: petalFall() };
 };

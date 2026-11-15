@@ -1,16 +1,15 @@
-import { isDark, type Decor, type FallEffect, type Scene } from "./layer.ts";
+import { isDark, newLive, type DecorItem, type FallEffect, type Scene } from "./layer.ts";
 import { glowSprite, headerHeight, random } from "./util.ts";
 
 /**
  * Summer in the Japanese countryside: a glass wind chime (fūrin) with its paper strip hangs from the top of
  * the page and swings in the breeze. On a fresh visit a gust sets it swinging harder, and in the dark theme
- * fireflies (hotaru) rise and blink for a little while.
+ * fireflies (hotaru) rise and blink for a little while. Visitors can slide the chime along the top or hide it.
  */
 export const createSummer = ({ intro }: { intro: boolean }): Scene => {
   let time = 0;
-  let top = 48;
-  let x = 0;
   let r = 18;
+  const BOX_WIDTH = 170; // room for the swing on both sides
   // Two linked pendulums: the bell swings from its string, the paper strip from the bell.
   let bell = 0, bellSpeed = 0, strip = 0, stripSpeed = 0;
 
@@ -80,13 +79,17 @@ export const createSummer = ({ intro }: { intro: boolean }): Scene => {
     ctx.stroke();
   };
 
-  const decor: Decor = {
-    layout(width) {
-      top = headerHeight();
+  const chime: DecorItem = {
+    id: "chime",
+    layer: "front",
+    drag: "x",
+    live: newLive(),
+    place(width) {
       r = width < 735 ? 15 : 19;
-      x = width - (width >= 1200 ? Math.min(140, (width - 1120) / 4 + 30) : width < 735 ? 30 : 48);
-      return top + r * 1.3 + 140;
+      const x = width - (width >= 1200 ? Math.min(140, (width - 1120) / 4 + 30) : width < 735 ? 30 : 48);
+      return { x: x - BOX_WIDTH / 2, y: headerHeight() - 6, w: BOX_WIDTH, h: r * 1.3 + 146 };
     },
+    grip: (box) => ({ x: box.w / 2 - r * 1.6, y: 12, w: r * 3.2, h: box.h - 24 }),
 
     step(dt) {
       time += dt;
@@ -104,7 +107,7 @@ export const createSummer = ({ intro }: { intro: boolean }): Scene => {
       const string = 22;
       const rim = string + r * 1.15;
       ctx.save();
-      ctx.translate(x, top - 6);
+      ctx.translate(BOX_WIDTH / 2, 0);
       ctx.rotate(bell);
 
       ctx.strokeStyle = dark ? "rgba(235,235,240,.7)" : "rgba(60,60,65,.7)";
@@ -151,7 +154,7 @@ export const createSummer = ({ intro }: { intro: boolean }): Scene => {
     },
   };
 
-  return { decor, fall: fireflies() };
+  return { items: [chime], fall: fireflies() };
 };
 
 type Firefly = { x: number; y: number; heading: number; turn: number; speed: number; born: number; life: number; blink: number; rate: number };
