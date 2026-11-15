@@ -1,6 +1,7 @@
 import { external, html, label, text } from "../../build/html.ts";
-import { links, projects } from "../config.ts";
+import { copyrightStartYear, links, projects } from "../config.ts";
 import { icon } from "./icon.ts";
+import { copyrightYears } from "../../shared/copyright.ts";
 
 export const footer = (): string => html`
   <footer class="site-footer shell">
@@ -27,7 +28,7 @@ export const footer = (): string => html`
     </div>
     <div class="footer-top"><a ${external(links.source)}><span ${text("source")}</span> ${icon("external")}</a></div>
     <div class="footer-bottom">
-      <p>© <span id="current-year">${new Date().getFullYear()}</span> Jurina</p>
+      <p>© <span class="copyright-years" data-start-year="${copyrightStartYear}">${copyrightYears(copyrightStartYear, new Date().getFullYear())}</span> Jurina</p>
       <div class="pride-note">
         <span ${text("pride")}</span>
         <span class="pride-flags"><span class="pride-flag pride-flag-lgbt" role="img" ${label("rainbowFlagLabel")}></span><span class="pride-flag pride-flag-trans" role="img" ${label("transFlagLabel")}></span><span class="pride-flag pride-flag-bi" role="img" ${label("biFlagLabel")}></span></span>

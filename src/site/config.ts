@@ -61,3 +61,6 @@ export const projects = {
   vqaa: { site: "https://vqaa.jurina.org/", source: "https://github.com/lpxlpx7/VATSIM-Quarterly-ATC-Activity" },
   bot: { site: "https://bot.jurina.org/" },
 };
+
+/** First year in the footer's copyright range ("© 2025–<this year>"). */
+export const copyrightStartYear = 2025;
