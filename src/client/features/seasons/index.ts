@@ -7,7 +7,8 @@
  * With reduced motion the decor is still drawn, but stays still, and nothing falls.
  *
  * The season follows the visitor's local date. `?season=christmas` (or winter / spring / summer / autumn / off)
- * forces one for previewing, and always counts as a fresh visit.
+ * forces one for previewing, and always counts as a fresh visit. Under `npm run dev` the switcher in the
+ * corner picks one for the whole tab instead (see dev-switcher.ts).
  */
 import { reduceMotion } from "../../core/motion.ts";
 import { startDecorLayer, startFallLayer, type Scene } from "./layer.ts";
@@ -43,10 +44,23 @@ const scenes: Record<Season, (options: { intro: boolean }) => Scene> = {
   autumn: createAutumn,
 };
 
+export const seasons = Object.keys(scenes) as Season[];
+
 const isSeason = (value: string | null): value is Season => value !== null && value in scenes;
 
+/** Session key the dev switcher stores its choice under. */
+export const DEV_SEASON_KEY = "devSeason";
+
+const devSeason = (): string | null => {
+  try {
+    return sessionStorage.getItem(DEV_SEASON_KEY);
+  } catch {
+    return null;
+  }
+};
+
 const currentSeason = (): Season | null => {
-  const forced = new URLSearchParams(window.location.search).get("season");
+  const forced = new URLSearchParams(window.location.search).get("season") ?? (__DEV__ ? devSeason() : null);
   if (forced === "off") return null;
   if (isSeason(forced)) return forced;
   return seasonOn(new Date());

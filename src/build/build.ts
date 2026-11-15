@@ -20,6 +20,9 @@ const root = fileURLToPath(new URL("../../", import.meta.url));
 const dist = join(root, "dist");
 const client = join(root, "src/client");
 
+/** `npm run dev` passes --dev: browser scripts then include dev-only tools such as the season switcher. */
+const dev = process.argv.includes("--dev");
+
 /** Browser targets for both scripts and styles. */
 const target = ["chrome111", "edge111", "firefox114", "safari16.4"];
 
@@ -37,6 +40,7 @@ const bundle = async (entry: string): Promise<string> => {
     target,
     write: false,
     legalComments: "none",
+    define: { __DEV__: String(dev) },
   });
   return result.outputFiles[0].text;
 };
@@ -69,4 +73,4 @@ const pages = { "index.html": homePage, "projects.html": projectsPage, "contact.
 for (const [file, render] of Object.entries(pages)) await write(file, render(assets));
 
 const summary = [...files.keys(), ...Object.keys(pages)].map((path) => `  ${path}`).join("\n");
-console.log(`Built dist/ in ${Math.round(performance.now() - started)} ms\n${summary}`);
+console.log(`Built dist/${dev ? " (dev)" : ""} in ${Math.round(performance.now() - started)} ms\n${summary}`);
