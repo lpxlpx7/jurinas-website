@@ -1,78 +1,143 @@
 import type { FallEffect } from "./layer.ts";
-import { glowSprite, random } from "./util.ts";
+import { clamp01, glowSprite, offscreen, random } from "./util.ts";
 
-type Flake = { x: number; y: number; size: number; speed: number; sway: number; phase: number; drift: number; alpha: number };
+type Flake = {
+  x: number; y: number; size: number; speed: number; sway: number; phase: number; drift: number;
+  alpha: number; kind: "dot" | "crystal" | "blur"; angle: number; spin: number; shimmer: number;
+};
 
 export type SnowOptions = {
   /** One flake per this many square pixels of screen… */
   areaPerFlake?: number;
   /** …but never more than this. */
   maxFlakes?: number;
-  /** Seconds over which the flakes are let go; after that the snow just falls out of view. */
-  release?: number;
+  /** Seconds of steady snowfall before it thins out and fades away (which takes a few seconds more). */
+  duration?: number;
 };
 
-/** Soft-edged flakes: white on dark; on light, a pale core with an icy blue rim so they still show. */
-let sprites: { dark: HTMLCanvasElement; light: HTMLCanvasElement } | null = null;
-const flakeSprites = () => sprites ??= {
-  dark: glowSprite(32, [[0, "rgba(255,255,255,1)"], [0.3, "rgba(255,255,255,.95)"], [0.55, "rgba(255,255,255,.35)"], [1, "rgba(255,255,255,0)"]]),
-  light: glowSprite(32, [[0, "rgba(255,255,255,1)"], [0.28, "rgba(232,240,250,1)"], [0.5, "rgba(170,192,222,.6)"], [1, "rgba(170,192,222,0)"]]),
+const FADE_IN = 1.2;
+const FADE_OUT = 3.5;
+
+/** A six-armed snow crystal with little side branches, softened so it doesn't look drawn. */
+const crystal = (color: string, glow: string) => {
+  const { canvas, ctx } = offscreen(48, 48);
+  ctx.translate(24, 24);
+  ctx.shadowColor = glow;
+  ctx.shadowBlur = 5;
+  ctx.strokeStyle = color;
+  ctx.lineCap = "round";
+  for (let arm = 0; arm < 6; arm++) {
+    ctx.save();
+    ctx.rotate((arm * Math.PI) / 3);
+    ctx.lineWidth = 1.9;
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(0, -17);
+    ctx.stroke();
+    ctx.lineWidth = 1.4;
+    for (const [at, len] of [[-7, 4.5], [-12, 3.4]]) {
+      for (const side of [-1, 1]) {
+        ctx.beginPath();
+        ctx.moveTo(0, at);
+        ctx.lineTo(side * len, at - len * 0.9);
+        ctx.stroke();
+      }
+    }
+    ctx.restore();
+  }
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.arc(0, 0, 2.2, 0, Math.PI * 2);
+  ctx.fill();
+  return canvas;
+};
+
+type SnowArt = Record<Flake["kind"], HTMLCanvasElement>;
+let artByTheme: { dark: SnowArt; light: SnowArt } | null = null;
+/** White on the dark page. On the light page flakes get a cool blue-grey edge, or they'd vanish. */
+const art = () => artByTheme ??= {
+  dark: {
+    dot: glowSprite(32, [[0, "rgba(255,255,255,1)"], [0.32, "rgba(255,255,255,.92)"], [0.6, "rgba(255,255,255,.28)"], [1, "rgba(255,255,255,0)"]]),
+    blur: glowSprite(64, [[0, "rgba(255,255,255,.75)"], [0.5, "rgba(255,255,255,.4)"], [1, "rgba(255,255,255,0)"]]),
+    crystal: crystal("rgba(255,255,255,.95)", "rgba(190,220,255,.9)"),
+  },
+  light: {
+    dot: glowSprite(32, [[0, "rgba(176,198,230,1)"], [0.3, "rgba(160,186,224,.95)"], [0.6, "rgba(150,178,218,.4)"], [1, "rgba(150,178,218,0)"]]),
+    blur: glowSprite(64, [[0, "rgba(165,190,226,.75)"], [0.5, "rgba(165,190,226,.4)"], [1, "rgba(165,190,226,0)"]]),
+    crystal: crystal("rgba(120,154,204,1)", "rgba(120,150,200,.6)"),
+  },
 };
 
 /**
- * A short snowfall that drifts down once and is gone. Flakes sit at different depths: far ones are small,
- * faint and slow; near ones bigger and quicker; a few very close ones are large, blurry and see-through.
+ * Snow that drifts rather than drops. Far flakes are small, faint and slow; nearer ones are larger, and the
+ * largest are six-armed crystals that turn as they fall; a few very close ones are big soft blurs. It fades
+ * in, snows for a while, then thins out and fades away.
  */
-export const createSnow = ({ areaPerFlake = 8000, maxFlakes = 180, release = 3 }: SnowOptions = {}): FallEffect => {
+export const createSnow = ({ areaPerFlake = 5200, maxFlakes = 260, duration = 9 }: SnowOptions = {}): FallEffect => {
   let flakes: Flake[] = [];
-  let total = 0;
-  let released = 0;
   let time = 0;
 
-  const makeFlake = (width: number, height: number): Flake => {
-    const close = Math.random() < 0.05;
-    const depth = close ? 1 : Math.random() ** 1.6;
-    const size = close ? random(16, 26) : 3 + depth * 7;
+  const makeFlake = (width: number, height: number, anywhere: boolean): Flake => {
+    const roll = Math.random();
+    const kind: Flake["kind"] = roll < 0.05 ? "blur" : roll < 0.2 ? "crystal" : "dot";
+    const depth = kind === "blur" ? 1 : kind === "crystal" ? random(0.55, 1) : Math.random() ** 1.5;
+    const size = kind === "blur" ? random(22, 36) : kind === "crystal" ? 12 + depth * 14 : 4 + depth * 8;
     return {
-      x: random(-0.05, 1.05) * width,
-      y: -size - random(0, height * 0.15),
+      x: random(-0.08, 1.08) * width,
+      y: anywhere ? random(-0.15, 0.7) * height : -size - random(0, 40),
       size,
-      speed: close ? random(190, 240) : 55 + depth * 120 + random(-10, 10),
-      sway: 6 + depth * 22,
+      speed: (kind === "blur" ? 105 : 26 + depth * 62) + random(-6, 6),
+      sway: 10 + depth * 26,
       phase: random(0, Math.PI * 2),
-      drift: random(0.5, 1.3),
-      alpha: close ? random(0.18, 0.3) : 0.45 + depth * 0.5,
+      drift: random(0.45, 1.1),
+      alpha: kind === "blur" ? random(0.2, 0.34) : kind === "crystal" ? 0.55 + depth * 0.4 : 0.4 + depth * 0.55,
+      kind,
+      angle: random(0, Math.PI),
+      spin: random(-0.7, 0.7),
+      shimmer: random(0, 10),
     };
   };
 
   return {
     resize(width, height) {
-      if (time === 0) total = Math.min(maxFlakes, Math.round((width * height) / areaPerFlake));
+      if (flakes.length) return;
+      const total = Math.min(maxFlakes, Math.round((width * height) / areaPerFlake));
+      flakes = Array.from({ length: total }, () => makeFlake(width, height, true));
     },
 
     step(dt, width, height) {
       time += dt;
-      const due = Math.min(total, Math.round(total * (time / release)));
-      while (released < due) { flakes.push(makeFlake(width, height)); released++; }
-
-      const wind = Math.sin(time * 0.35) * 14 + Math.sin(time * 0.9 + 1) * 6;
-      for (const flake of flakes) {
+      // A lazy breeze that changes direction, with the odd stronger breath.
+      const wind = Math.sin(time * 0.31) * 16 + Math.sin(time * 0.83 + 1.3) * 8;
+      for (let i = 0; i < flakes.length; i++) {
+        const flake = flakes[i];
         flake.phase += dt * flake.drift;
+        flake.angle += dt * flake.spin;
         flake.y += flake.speed * dt;
-        flake.x += (wind * (flake.size / 8) + Math.sin(flake.phase) * flake.sway) * dt;
+        flake.x += (wind * (flake.size / 10) + Math.sin(flake.phase) * flake.sway) * dt;
+        if (flake.y - flake.size > height && time < duration) flakes[i] = makeFlake(width, height, false);
       }
-      flakes = flakes.filter((flake) => flake.y - flake.size <= height);
-      return released < total || flakes.length > 0;
+      return time < duration + FADE_OUT;
     },
 
     draw(ctx, dark) {
-      const image = flakeSprites()[dark ? "dark" : "light"];
+      const sprites = art()[dark ? "dark" : "light"];
+      const envelope = clamp01(time / FADE_IN) * clamp01((duration + FADE_OUT - time) / FADE_OUT);
       for (const flake of flakes) {
-        ctx.globalAlpha = flake.alpha;
-        ctx.drawImage(image, flake.x - flake.size / 2, flake.y - flake.size / 2, flake.size, flake.size);
+        ctx.globalAlpha = envelope * flake.alpha * (0.85 + 0.15 * Math.sin(time * 2 + flake.shimmer));
+        if (flake.kind === "crystal") {
+          ctx.save();
+          ctx.translate(flake.x, flake.y);
+          ctx.rotate(flake.angle);
+          // Crystals tumble: squashing one axis reads as turning in the air.
+          ctx.scale(1, 0.55 + 0.45 * Math.abs(Math.cos(flake.phase * 0.8)));
+          ctx.drawImage(sprites.crystal, -flake.size / 2, -flake.size / 2, flake.size, flake.size);
+          ctx.restore();
+        } else {
+          ctx.drawImage(sprites[flake.kind], flake.x - flake.size / 2, flake.y - flake.size / 2, flake.size, flake.size);
+        }
       }
       ctx.globalAlpha = 1;
     },
   };
 };
-

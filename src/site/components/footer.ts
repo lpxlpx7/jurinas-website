@@ -26,7 +26,10 @@ export const footer = (): string => html`
         <a href="mailto:${links.mailDevelopment}">${links.mailDevelopment}</a>
       </div>
     </div>
-    <div class="footer-top"><a ${external(links.source)}><span ${text("source")}</span> ${icon("external")}</a></div>
+    <div class="footer-top">
+      <a ${external(links.source)}><span ${text("source")}</span> ${icon("external")}</a>
+      <button class="season-toggle" type="button" hidden ${text("seasonHide")}</button>
+    </div>
     <div class="footer-bottom">
       <p>© <span class="copyright-years" data-start-year="${copyrightStartYear}">${copyrightYears(copyrightStartYear, new Date().getFullYear())}</span> Jurina</p>
       <div class="pride-note">

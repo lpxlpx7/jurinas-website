@@ -15,8 +15,14 @@ export const seeded = (seed: number) => () => {
   return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
 };
 
-/** Height of the sticky header, so decorations can hang just below it. */
-export const headerHeight = (): number => document.querySelector<HTMLElement>(".site-header")?.offsetHeight ?? 48;
+/** Height of the sticky header, so decorations can hang just below it. (`||`: an unstyled header measures 0.) */
+export const headerHeight = (): number => document.querySelector<HTMLElement>(".site-header")?.offsetHeight || 48;
+
+/** An element's box in page coordinates, as laid out right now. */
+export const pageBox = (element: Element) => {
+  const rect = element.getBoundingClientRect();
+  return { x: rect.left + window.scrollX, y: rect.top + window.scrollY, w: rect.width, h: rect.height };
+};
 
 /** Draws once into an offscreen canvas of `size` × `size` CSS pixels (at 2× for sharpness), centred on (0, 0). */
 export const sprite = (size: number, paint: (ctx: CanvasRenderingContext2D) => void, height = size): HTMLCanvasElement => {
@@ -43,3 +49,19 @@ export const glowSprite = (size: number, stops: Array<[number, string]>) => spri
 /** Draws a sprite centred at the current origin, `w` wide (and `h` tall). */
 export const drawSprite = (ctx: CanvasRenderingContext2D, image: HTMLCanvasElement, w: number, h = (w * image.height) / image.width) =>
   ctx.drawImage(image, -w / 2, -h / 2, w, h);
+
+/** A blank offscreen canvas of `width` × `height` CSS pixels at 2× density, origin at the top left. */
+export const offscreen = (width: number, height: number) => {
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.ceil(width * 2);
+  canvas.height = Math.ceil(height * 2);
+  const ctx = canvas.getContext("2d")!;
+  ctx.scale(2, 2);
+  return { canvas, ctx };
+};
+
+/** Mixes two [r, g, b] colours; t = 0 gives `a`, 1 gives `b`. */
+export const mix = (a: readonly number[], b: readonly number[], t: number) => {
+  const k = clamp01(t);
+  return `rgb(${Math.round(a[0] + (b[0] - a[0]) * k)},${Math.round(a[1] + (b[1] - a[1]) * k)},${Math.round(a[2] + (b[2] - a[2]) * k)})`;
+};

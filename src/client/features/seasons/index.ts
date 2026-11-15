@@ -1,17 +1,22 @@
 /*
  * Seasonal touches. Each season is a Scene with up to two parts:
- *   decor  a lasting decoration across the top of the page (lights and a tree, a cherry branch, a wind chime).
- *          It sits under the header, scrolls away with the page and never takes clicks. Shown on every page.
+ *   items  lasting decorations, each on its own canvas placed on the page (lights and a tree, a cherry branch,
+ *          a wind chime). They scroll with the page, never block clicks, and are shown on every page. Visitors
+ *          can drag the movable ones and hide any of them; that's remembered (see layer.ts and prefs.ts).
  *   fall   a one-off overlay (snow, leaves, petals, fireflies) that plays only on a fresh visit or a reload,
  *          not when moving between pages of the site.
- * With reduced motion the decor is still drawn, but stays still, and nothing falls.
+ * With reduced motion the items are still drawn, but stay still, and nothing falls.
+ * The button in the footer turns everything off, or brings back whatever was hidden or moved.
  *
  * The season follows the visitor's local date. `?season=christmas` (or winter / spring / summer / autumn / off)
  * forces one for previewing, and always counts as a fresh visit. Under `npm run dev` the switcher in the
  * corner picks one for the whole tab instead (see dev-switcher.ts).
  */
 import { reduceMotion } from "../../core/motion.ts";
-import { startDecorLayer, startFallLayer, type Scene } from "./layer.ts";
+import { currentLanguage } from "../../core/language.ts";
+import { translations } from "../../../shared/translations.ts";
+import { mountDecor, startFallLayer, type Scene } from "./layer.ts";
+import { readPrefs, savePrefs, seasonPrefs } from "./prefs.ts";
 import { createChristmas } from "./christmas.ts";
 import { createSnow } from "./snow.ts";
 import { createSpring } from "./spring.ts";
@@ -84,8 +89,42 @@ export const initSeasons = () => {
   if (!season) return;
   document.documentElement.dataset.season = season;
   const still = reduceMotion.matches;
-  const fresh = !still && isFreshVisit();
-  const scene = scenes[season]({ intro: fresh });
-  if (scene.decor) startDecorLayer(scene.decor, !still);
-  if (scene.fall && fresh) startFallLayer(scene.fall);
+  const toggle = document.querySelector<HTMLButtonElement>(".season-toggle");
+  let stop: Array<() => void> = [];
+
+  /** Anything switched off or hidden? Then the footer button offers to bring it all back (in its original place). */
+  const changed = () => {
+    const prefs = readPrefs();
+    return prefs.off || seasonPrefs(prefs, season).hidden.length > 0;
+  };
+  const updateToggle = () => {
+    if (!toggle) return;
+    const key = changed() ? "seasonShow" : "seasonHide";
+    toggle.dataset.i18n = key;
+    toggle.textContent = translations[currentLanguage()][key];
+    toggle.hidden = false;
+  };
+
+  const start = (fresh: boolean) => {
+    if (readPrefs().off) return;
+    const scene: Scene = scenes[season]({ intro: fresh });
+    if (scene.items?.length) stop.push(mountDecor(season, scene.items, !still, updateToggle));
+    if (scene.fall && fresh) stop.push(startFallLayer(scene.fall));
+  };
+
+  toggle?.addEventListener("click", () => {
+    const prefs = readPrefs();
+    const restore = changed();
+    stop.forEach((end) => end());
+    stop = [];
+    // Either put everything back where it started, or switch the lot off (for every season).
+    prefs.off = !restore;
+    if (restore) delete prefs.seasons[season];
+    savePrefs(prefs);
+    if (restore) start(!still);
+    updateToggle();
+  });
+
+  start(!still && isFreshVisit());
+  updateToggle();
 };

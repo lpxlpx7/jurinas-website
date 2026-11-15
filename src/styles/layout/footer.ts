@@ -10,6 +10,8 @@ export default css`
 .footer-column a:hover, .footer-top a:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
 .footer-top, .footer-bottom { display: flex; align-items: center; justify-content: space-between; gap: 16px 24px; }
 .footer-top { padding-block: 18px; border-bottom: 1px solid var(--line); }
+.season-toggle { padding: 0; border: 0; background: none; color: inherit; font: inherit; letter-spacing: inherit; cursor: pointer; }
+.season-toggle:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
 .footer-bottom { padding-top: 18px; }
 .footer-bottom p { margin: 0; }
 .pride-note { display: flex; align-items: center; gap: 10px; }
