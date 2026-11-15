@@ -8,6 +8,7 @@ import { initMusicRail } from "./features/music-rail.ts";
 import { initLightbox } from "./features/lightbox.ts";
 import { initMobileMenu } from "./features/mobile-menu.ts";
 import { initSeasons } from "./features/seasons/index.ts";
+import { initSeasonSwitcher } from "./features/seasons/dev-switcher.ts";
 
 initPageChrome();
 initTheme();
@@ -18,6 +19,7 @@ initMusicRail();
 initLightbox();
 initMobileMenu();
 initSeasons();
+if (__DEV__) initSeasonSwitcher();
 
 // Start-up state (language switch, music arrows, theme icon) is now final. Flush styles while
 // transitions are still off, then turn them on, so nothing fades in from the HTML defaults.
