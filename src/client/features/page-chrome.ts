@@ -1,7 +1,12 @@
+import { copyrightYears } from "../../shared/copyright.ts";
+
 /** Small page-wide touches: header shadow on scroll, reveal-on-scroll, footer year, decorative flags. */
 export const initPageChrome = () => {
   document.body.classList.add("reveal-ready");
-  document.querySelectorAll("#current-year").forEach((year) => { year.textContent = String(new Date().getFullYear()); });
+  // Baked in at build time; refreshed here so the range stays current between deploys.
+  document.querySelectorAll<HTMLElement>(".copyright-years").forEach((years) => {
+    years.textContent = copyrightYears(Number(years.dataset.startYear), new Date().getFullYear());
+  });
 
   // The pride flags are decoration: no context menu, dragging or copying.
   document.querySelectorAll(".pride-flags").forEach((flags) => {

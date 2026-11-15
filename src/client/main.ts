@@ -7,6 +7,7 @@ import { initReiwaGallery } from "./features/reiwa-gallery.ts";
 import { initMusicRail } from "./features/music-rail.ts";
 import { initLightbox } from "./features/lightbox.ts";
 import { initMobileMenu } from "./features/mobile-menu.ts";
+import { initSeasons } from "./features/seasons/index.ts";
 
 initPageChrome();
 initTheme();
@@ -16,6 +17,7 @@ initReiwaGallery();
 initMusicRail();
 initLightbox();
 initMobileMenu();
+initSeasons();
 
 // Start-up state (language switch, music arrows, theme icon) is now final. Flush styles while
 // transitions are still off, then turn them on, so nothing fades in from the HTML defaults.

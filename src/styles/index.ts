@@ -17,6 +17,7 @@ import vatsysArt from "./pages/vatsys-art.ts";
 import contact from "./pages/contact.ts";
 import reveal from "./base/reveal.ts";
 import icons from "./base/icons.ts";
+import seasons from "./base/seasons.ts";
 import tablet from "./responsive/tablet.ts";
 import phone from "./responsive/phone.ts";
 import reducedMotion from "./responsive/reduced-motion.ts";
@@ -29,7 +30,7 @@ export const stylesheets = {
   "css/style.css": [
     fonts, tokens, reset, header, mobileMenu, buttons,
     hero, interests, music, reiwa, clocks, lightbox,
-    footer, projects, vatsysArt, contact, reveal, icons,
+    footer, projects, vatsysArt, contact, reveal, icons, seasons,
     tablet, phone, reducedMotion,
   ],
   /** Home page only: the hanging polaroid and the Heisei photo wall. */
