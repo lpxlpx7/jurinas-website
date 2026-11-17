@@ -73,7 +73,7 @@ export const initPortrait = () => {
     set("--card-tilt-x", `${(-state.viewY * 4).toFixed(3)}deg`);
     set("--card-tilt-y", `${(state.viewX * 6).toFixed(3)}deg`);
     // A swinging card is seen from a changing side too.
-    depthPhoto?.draw(clamp(state.viewX + swingDeg * .07, -1.5, 1.5), state.viewY);
+    depthPhoto?.draw(clamp(state.viewX + swingDeg * .05, -1.2, 1.2), state.viewY);
   };
 
   const step = (dt: number) => {

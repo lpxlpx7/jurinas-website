@@ -18,18 +18,21 @@ uniform sampler2D photo;
 uniform sampler2D depth;
 uniform vec2 shift;
 varying vec2 v;
-const float FOCUS = .42;   // depth that stays put: nearer slides one way, farther the other
+const float FOCUS = .5;    // depth that stays put (about the girl): nearer slides one way, farther the other
+const float NEAREST = .68; // the fan is far nearer than anything else; flattened to just in front of the girl,
+                           // or it slides so far that the street around it smears into a fan-shaped streak
 const float ZOOM = .962;   // slight crop, so the shifted edges never run out of picture
+float near(vec2 at) { return min(texture2D(depth, at).r, NEAREST) - FOCUS; }
 void main() {
   vec2 uv = (v - .5) * ZOOM + .5;
   // Each pass looks the depth up again where the last one landed, which keeps edges tight.
   vec2 s = uv;
-  for (int i = 0; i < 3; i++) s = uv + shift * (texture2D(depth, s).r - FOCUS);
+  for (int i = 0; i < 5; i++) s = uv + shift * near(s);
   gl_FragColor = texture2D(photo, s);
 }`;
 
-/** How far the nearest thing travels, as a share of the photo's width. */
-const STRENGTH = .034;
+/** How far the picture travels at full viewpoint, as a share of the photo's width per unit of depth. */
+const STRENGTH = .028;
 
 const load = (url: string): Promise<HTMLImageElement> => new Promise((resolve, reject) => {
   const image = new Image();
