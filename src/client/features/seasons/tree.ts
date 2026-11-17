@@ -82,7 +82,7 @@ export const paintTree = (W: number, H: number): TreeArt => {
   const rand = seeded(11);
   const u1 = W / 220; // one "unit": everything scales with the tree
   const cx = W / 2;
-  const top = H * 0.1;
+  const top = H * 0.15; // leaves headroom above the crown for the leader and the star
   const bottom = H * 0.8;
   const halfAt = (y: number) => Math.max(0, (y - top) / (bottom - top)) ** 0.82 * W * 0.46;
 
@@ -135,6 +135,8 @@ export const paintTree = (W: number, H: number): TreeArt => {
   ctx.fill();
 
   const tips: Point[] = [];
+  // The highest needle near the trunk line: the star sits on it rather than sinking into the top boughs.
+  let crown = top;
   const inside: Point[] = [];
   ctx.lineCap = "round";
   const tiers = 9;
@@ -171,6 +173,7 @@ export const paintTree = (W: number, H: number): TreeArt => {
           ctx.moveTo(x, y);
           ctx.lineTo(x + Math.cos(a) * needle, y + Math.sin(a) * needle);
           ctx.stroke();
+          if (Math.abs(x - cx) < 10 * u1) crown = Math.min(crown, y, y + Math.sin(a) * needle);
         }
         // Snow lies on the upper side of the outer half of some boughs.
         if (snowy && s > 0.55 && rand() < 0.45) {
@@ -215,8 +218,89 @@ export const paintTree = (W: number, H: number): TreeArt => {
   ctx.closePath();
   ctx.fill();
 
-  // Faceted gold star: each point has a light and a dark half.
-  const star = { x: cx, y: top - 1 * u1, r: 13 * u1 };
+  // The topper, as on a real tree: the leader (the top shoot) rises a little above the last tier, a gold
+  // sleeve slides over its tip, and the star sits on the sleeve. If the picture is too short for all of it,
+  // everything moves down together so the star is never cut off and never floats free of the leader.
+  const starR = 12 * u1;
+  const leaderLength = 11 * u1;
+  const sleeveLength = 7 * u1;
+  const drop = Math.max(0, starR + 2 * u1 - (crown - leaderLength - sleeveLength * 0.55 - starR * 0.3));
+  const leaderTip = crown - leaderLength + drop;
+  const sleeveTop = leaderTip - sleeveLength * 0.55; // the lower part of the sleeve covers the leader's tip
+  const star = { x: cx, y: sleeveTop - starR * 0.3, r: starR };
+
+  // Leader: a short stem with needles angled upwards, lighter and finer towards the new growth at the top.
+  const leaderBase = crown + 8 * u1;
+  ctx.strokeStyle = mix(DARK, MID, 0.4);
+  ctx.lineWidth = 1.6 * u1;
+  ctx.beginPath();
+  ctx.moveTo(cx, leaderBase);
+  ctx.lineTo(cx, leaderTip);
+  ctx.stroke();
+  const leaderSteps = Math.round((leaderBase - leaderTip) / (1.3 * u1));
+  for (let k = 0; k <= leaderSteps; k++) {
+    const s = k / leaderSteps; // 0 at the base, 1 at the tip
+    const y = leaderBase + (leaderTip - leaderBase) * s;
+    const tone = 0.35 + s * 0.5 + (rand() - 0.5) * 0.25;
+    for (const side of [-1, 1]) {
+      const a = -Math.PI / 2 + side * (0.55 + rand() * 0.45) * (1 - s * 0.35);
+      const needle = (5.5 - s * 2.8 + rand() * 1.5) * u1;
+      ctx.strokeStyle = tone < 0.5 ? mix(DARK, MID, tone * 2) : mix(MID, LIGHT, (tone - 0.5) * 2);
+      ctx.lineWidth = (0.8 + rand() * 0.4) * u1;
+      ctx.beginPath();
+      ctx.moveTo(cx, y);
+      ctx.lineTo(cx + Math.cos(a) * needle, y + Math.sin(a) * needle);
+      ctx.stroke();
+    }
+  }
+
+  // Sleeve: a tapered gold tube, shaded as a cylinder, with a rolled rim at the bottom.
+  const sleeveBottom = sleeveTop + sleeveLength;
+  const metal = ctx.createLinearGradient(cx - 2.4 * u1, 0, cx + 2.4 * u1, 0);
+  metal.addColorStop(0, "#8a5d10");
+  metal.addColorStop(0.35, "#ffe9a0");
+  metal.addColorStop(0.6, "#d9a32a");
+  metal.addColorStop(1, "#7a520e");
+  ctx.fillStyle = metal;
+  ctx.beginPath();
+  ctx.moveTo(cx - 1.5 * u1, sleeveTop);
+  ctx.lineTo(cx + 1.5 * u1, sleeveTop);
+  ctx.lineTo(cx + 2.4 * u1, sleeveBottom);
+  ctx.lineTo(cx - 2.4 * u1, sleeveBottom);
+  ctx.closePath();
+  ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(cx, sleeveBottom, 2.7 * u1, 0.9 * u1, 0, 0, Math.PI * 2);
+  ctx.fill();
+  // A few needles in front of the rim, so the sleeve sits among them rather than on top.
+  for (const side of [-1, 1]) {
+    ctx.strokeStyle = mix(MID, LIGHT, 0.5);
+    ctx.lineWidth = 0.9 * u1;
+    ctx.beginPath();
+    ctx.moveTo(cx, sleeveBottom + 2.5 * u1);
+    ctx.lineTo(cx + side * 3.4 * u1, sleeveBottom - 0.8 * u1);
+    ctx.stroke();
+  }
+
+  // Faceted gold star: each point has a light and a dark half, with a soft shadow on the tree behind it
+  // and a fine dark edge so it reads clearly against the glow.
+  const starPath = () => {
+    ctx.beginPath();
+    for (let i = 0; i < 10; i++) {
+      const a = (i * Math.PI) / 5 - Math.PI / 2;
+      const r = i % 2 ? star.r * 0.42 : star.r;
+      ctx.lineTo(star.x + Math.cos(a) * r, star.y + Math.sin(a) * r);
+    }
+    ctx.closePath();
+  };
+  ctx.save();
+  ctx.shadowColor = "rgba(40,25,0,.35)";
+  ctx.shadowBlur = 3 * u1;
+  ctx.shadowOffsetY = 1.2 * u1;
+  ctx.fillStyle = "#e2a51a";
+  starPath();
+  ctx.fill();
+  ctx.restore();
   for (let i = 0; i < 10; i++) {
     const a0 = (i * Math.PI) / 5 - Math.PI / 2;
     const a1 = ((i + 1) * Math.PI) / 5 - Math.PI / 2;
@@ -230,6 +314,11 @@ export const paintTree = (W: number, H: number): TreeArt => {
     ctx.closePath();
     ctx.fill();
   }
+  ctx.strokeStyle = "rgba(120,74,8,.55)";
+  ctx.lineWidth = 0.6 * u1;
+  ctx.lineJoin = "round";
+  starPath();
+  ctx.stroke();
 
   // Fairy lights: mostly warm white, a few coloured, kept apart from each other.
   const lights: TreeArt["lights"] = [];
