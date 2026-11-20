@@ -20,7 +20,7 @@ export const pages: Record<PageId, PageMeta> = {
     file: "index.html",
     navKey: "navHome",
     titleKey: "homeTitle",
-    description: "Jurina's personal homepage, interests, music, and a small hello from the internet.",
+    description: "Jurina's homepage: music, flight sim, games, and photos.",
     extraStyles: ["css/interactive-photos.css"],
     extraScripts: ["js/home.js"],
   },
@@ -29,14 +29,14 @@ export const pages: Record<PageId, PageMeta> = {
     file: "projects.html",
     navKey: "navProjects",
     titleKey: "projectsPageTitle",
-    description: "Explore Jurina's VATSYS plugins, VATSIM tools, and aviation and community projects.",
+    description: "Jurina's VATSYS plugins, VATSIM tools, and a Discord bot.",
   },
   contact: {
     id: "contact",
     file: "contact.html",
     navKey: "navContact",
     titleKey: "contactPageTitle",
-    description: "Get in touch with Jurina at contact@jurina.org.",
+    description: "Email Jurina at contact@jurina.org.",
   },
 };
 

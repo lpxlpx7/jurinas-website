@@ -28,7 +28,7 @@ export const en = {
   seasonHide: "Hide seasonal decorations", seasonShow: "Show seasonal decorations", seasonHideOne: "Hide this decoration",
   projectsEyebrow: "Projects", productTitle: "Things I've made.",
   projectsIntro: "Mostly small tools for flight sim and air traffic control, plus a Discord bot.",
-  vatsysKicker: "For VATSIM controllers", vatsysBody: "Plugins I wrote for the VATSYS ATC client.", explorePlugins: "Explore the plugins",
+  vatsysKicker: "For VATSIM controllers", vatsysBody: "Plugins I wrote for the VATSYS ATC client.", explorePlugins: "See the plugins",
   projectOpen: "Open project", projectCode: "View source",
   dispatcherType: "Flight operations", dispatcherName: "Japan Route Finder",
   dispatcherBody: "Finds routes for flights within Japan.",
